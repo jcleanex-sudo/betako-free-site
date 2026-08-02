@@ -56,6 +56,31 @@ function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]);
 }
 
+function renderLongshots(longshots) {
+  const longshotGrid = document.querySelector("#longshotGrid");
+  const checks = window.betakoExhibition?.longshots || [];
+  longshotGrid.innerHTML = longshots.length ? longshots.map((item) => {
+    const check = checks.find((candidate) => candidate.venue === item.venue && String(candidate.race) === String(item.race) && String(candidate.boat) === String(item.boat));
+    const deadlineAt = check?.deadline ? new Date(`${dateInput.value}T${check.deadline}:00+09:00`) : null;
+    const remaining = deadlineAt && !Number.isNaN(deadlineAt.getTime()) ? (deadlineAt.getTime() - Date.now()) / 60000 : null;
+    const cutoffReached = remaining !== null && remaining < 5;
+    const status = cutoffReached ? "WATCH" : (check?.status || item.status || "WATCH");
+    const message = cutoffReached ? "締切5分前を過ぎたため新規判定を停止" : (check?.message || item.condition);
+    const realtime = check
+      ? `展示順位 ${check.time_rank || "--"}位｜最低オッズ ${check.min_odds ? `${check.min_odds}倍` : "--"}｜net edge ${check.net_edge == null ? "--" : `${check.net_edge}%`}｜残り ${remaining == null ? "--" : `${Math.max(0, remaining).toFixed(0)}分`}`
+      : "展示・オッズ条件を確認中";
+    return `<article class="longshotCard">
+      <span>${escapeHtml(status)}</span>
+      <h3>${escapeHtml(item.venue)} ${escapeHtml(item.race)}R <small>${escapeHtml(item.boat)}号艇</small></h3>
+      <div class="longshotIndex">穴指数 ${Number(item.hole_index).toFixed(0)}</div>
+      <p>${escapeHtml(item.boat)}号艇 ${escapeHtml(item.name)}（${escapeHtml(item.class)}）｜組み込み候補 ${escapeHtml(item.formation)}</p>
+      <ul>${(item.reasons || []).map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>
+      <p>${escapeHtml(realtime)}</p>
+      <p class="longshotCondition">判定：${escapeHtml(message)}</p>
+    </article>`;
+  }).join("") : `<article class="longshotCard"><span>WATCH</span><h3>穴候補なし</h3><p>条件を満たす人気薄がないため見送ります。</p></article>`;
+}
+
 function renderRankings(payload) {
   window.betakoPredictions = payload;
   const grid = document.querySelector("#rankingGrid");
@@ -88,15 +113,7 @@ function renderRankings(payload) {
     </article>`;
   }).join("");
 
-  const longshotGrid = document.querySelector("#longshotGrid");
-  longshotGrid.innerHTML = longshots.length ? longshots.map((item) => `<article class="longshotCard">
-    <span>${escapeHtml(item.status || "WATCH")}</span>
-    <h3>${escapeHtml(item.venue)} ${escapeHtml(item.race)}R <small>${escapeHtml(item.boat)}号艇</small></h3>
-    <div class="longshotIndex">穴指数 ${Number(item.hole_index).toFixed(0)}</div>
-    <p>${escapeHtml(item.boat)}号艇 ${escapeHtml(item.name)}（${escapeHtml(item.class)}）｜組み込み候補 ${escapeHtml(item.formation)}</p>
-    <ul>${(item.reasons || []).map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>
-    <p class="longshotCondition">条件：${escapeHtml(item.condition)}</p>
-  </article>`).join("") : `<article class="longshotCard"><span>WATCH</span><h3>穴候補なし</h3><p>条件を満たす人気薄がないため見送ります。</p></article>`;
+  renderLongshots(longshots);
 }
 
 document.querySelector("#copyXPost").addEventListener("click", async () => {
@@ -147,5 +164,8 @@ fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
 
 fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((response) => response.ok ? response.json() : Promise.reject())
-  .then((payload) => { window.betakoExhibition = payload; })
+  .then((payload) => {
+    window.betakoExhibition = payload;
+    renderLongshots(window.betakoPredictions?.longshots || []);
+  })
   .catch(() => { window.betakoExhibition = { races: [] }; });
