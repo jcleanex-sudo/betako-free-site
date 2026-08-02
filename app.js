@@ -14,20 +14,30 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const venueIndex = venues.indexOf(venue) + 1;
   document.querySelector("#venueCode").textContent = String(venueIndex).padStart(2, "0");
   const match = window.betakoPredictions?.rankings?.find((item) => item.venue === venue && String(item.race) === raceSelect.value);
-  document.querySelector("#selectionText").textContent = match
-    ? `${venue} ${raceSelect.value}R・期待度指数 ${Math.round(match.score)}（${match.label}）`
+  const finalMode = document.querySelector("#predictionType").value === "展示後AI最終予想";
+  const finalData = window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value);
+  const finalReady = finalMode && finalData?.status === "FINAL";
+  document.querySelector("#selectionText").textContent = finalReady
+    ? `${venue} ${raceSelect.value}R・展示後指数 ${Math.round(finalData.final_score)}（FINAL）`
+    : match
+      ? `${venue} ${raceSelect.value}R・期待度指数 ${Math.round(match.score)}（${finalMode ? finalData?.status || "WAIT" : match.label}）`
     : `${dateInput.value}・${venue} ${raceSelect.value}R・DATA BLOCKED`;
-  document.querySelector("#predictionDetail").textContent = match
-    ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
+  document.querySelector("#predictionDetail").textContent = finalReady
+    ? `展示後本線 ${finalData.final_pick}｜朝予想 ${finalData.morning_pick}｜風速 ${finalData.wind_speed}m｜波高 ${finalData.wave_height}cm`
+    : match
+      ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
     : "現在の公開ランキングにこのレースはありません。根拠不足のため見送ります。";
   const reasons = document.querySelector("#predictionReasons");
-  reasons.replaceChildren(...(match?.reasons || []).map((reason) => {
+  const displayedReasons = finalReady ? finalData.reasons : (match?.reasons || []);
+  reasons.replaceChildren(...displayedReasons.map((reason) => {
     const item = document.createElement("li");
     item.textContent = reason;
     return item;
   }));
-  document.querySelector("#invalidConditions").textContent = match
-    ? `無効条件：${(match.invalid_conditions || []).join("／")}`
+  document.querySelector("#invalidConditions").textContent = finalMode && !finalReady
+    ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}`
+    : match
+      ? `無効条件：${(match.invalid_conditions || []).join("／")}`
     : "見送り条件：ランキング対象外、データ不足、公式情報の取得失敗";
   document.querySelector("#selectionResult").hidden = false;
 });
@@ -102,3 +112,8 @@ fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
     document.querySelector("#learningCi").textContent = summary.hit_rate_ci95 ? `${summary.hit_rate_ci95[0]}%—${summary.hit_rate_ci95[1]}%` : "集計開始待ち";
   })
   .catch(() => {});
+
+fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" })
+  .then((response) => response.ok ? response.json() : Promise.reject())
+  .then((payload) => { window.betakoExhibition = payload; })
+  .catch(() => { window.betakoExhibition = { races: [] }; });
