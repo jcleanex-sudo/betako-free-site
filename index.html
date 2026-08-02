@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="全国24場を複数モデルで分析するボートレースAI BETAKO">
+  <title>BETAKO | データで選ぶボートレースAI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="top">
+  <header class="topbar">
+    <a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO <small>BOATRACE AI</small></span></a>
+    <nav><a href="#predict">予想する</a><a href="#ranking">ランキング</a><a href="#logic">ロジック</a><a href="#operations">運用状態</a></nav>
+    <span class="freeBadge">FREE MODE</span>
+  </header>
+
+  <section class="hero">
+    <div class="heroCopy">
+      <p class="eyebrow"><span></span> DATA DRIVEN BOATRACE</p>
+      <h1>全レースを追わない。<br><em>期待できる一戦</em>を選ぶ。</h1>
+      <p class="lead">全国24場のデータを複数モデルで分析。期待度の高いレースだけを選び、根拠が弱いレースは迷わず見送ります。</p>
+      <div class="heroActions"><a class="primaryButton" href="#predict">開催場を選んで予想 <b>→</b></a><a class="secondaryButton" href="#ranking">今日の期待度を見る</a></div>
+      <div class="proof"><span>全国24場</span><span>展示後再評価</span><span>期待度ランキング</span><span>X自動投稿</span></div>
+    </div>
+    <aside class="modelPanel">
+      <div class="panelTop"><span>BETAKO MODEL V2</span><span class="live">FREE MIGRATION</span></div>
+      <div class="scoreBlock"><div><small>過去データ検証精度</small><strong>86.6<sup>%</sup></strong></div><span>AUC 0.830</span></div>
+      <div class="miniStats"><div><small>学習データ</small><strong>262,851</strong></div><div><small>分析因子</small><strong>29</strong></div><div><small>対象開催場</small><strong>24</strong></div><div><small>モデル</small><strong>3</strong></div></div>
+      <p class="disclaimer">過去の検証値であり、将来の的中や利益を保証するものではありません。</p>
+    </aside>
+  </section>
+
+  <section class="predictCard" id="predict">
+    <div class="sectionHead"><div><p class="eyebrow">RACE SELECT</p><h2>開催場を選んで予想</h2></div><p>日付・開催場・レースを選択。無料版の画面で候補を確認できます。</p></div>
+    <form id="predictionForm">
+      <label>開催日<input id="raceDate" type="date" required></label>
+      <label>開催場<select id="venue"></select></label>
+      <label>レース<select id="race"></select></label>
+      <label>予想タイプ<select id="predictionType"><option>朝AI予想</option><option>展示後AI最終予想</option></select></label>
+      <button type="submit">このレースを分析 <span>→</span></button>
+    </form>
+    <div class="selectionResult" id="selectionResult" role="status" hidden><span id="venueCode">01</span><div><strong id="selectionText"></strong><small>現在は無料画面確認モードです。実データ接続を順次追加します。</small></div></div>
+  </section>
+
+  <section class="rankingSection" id="ranking">
+    <div class="sectionHead"><div><p class="eyebrow">EXPECTATION RANKING</p><h2>期待度指数ランキング</h2></div><p><span class="demoTag">表示サンプル</span> 実データ接続後、毎日自動更新します。</p></div>
+    <div class="rankingGrid">
+      <article class="rankCard cyan"><div class="rankTop"><span class="rankNumber">01</span><span class="candidate">厳格候補</span></div><h3>大村 <small>10R</small></h3><div class="index"><span>期待度指数</span><strong>82</strong></div><div class="pick"><span>本線候補</span><b>1-2-4</b></div><div class="meter"><i style="width:82%"></i></div></article>
+      <article class="rankCard blue"><div class="rankTop"><span class="rankNumber">02</span><span class="candidate">厳格候補</span></div><h3>住之江 <small>12R</small></h3><div class="index"><span>期待度指数</span><strong>76</strong></div><div class="pick"><span>本線候補</span><b>1-3-2</b></div><div class="meter"><i style="width:76%"></i></div></article>
+      <article class="rankCard gold"><div class="rankTop"><span class="rankNumber">03</span><span class="candidate">検証候補</span></div><h3>蒲郡 <small>9R</small></h3><div class="index"><span>期待度指数</span><strong>68</strong></div><div class="pick"><span>本線候補</span><b>3-1-5</b></div><div class="meter"><i style="width:68%"></i></div></article>
+    </div>
+  </section>
+
+  <section class="logicSection" id="logic">
+    <div class="sectionHead"><div><p class="eyebrow">PREDICTION LOGIC</p><h2>単一ロジックに頼らない</h2></div><p>5段階の複合評価で、予想の根拠と見送り条件を明確にします。</p></div>
+    <div class="logicFlow"><article><b>01</b><h3>基礎能力</h3><p>級別、全国・当地成績、近況を評価</p></article><article><b>02</b><h3>水面適性</h3><p>コース別成績、風・波・潮位を補正</p></article><article><b>03</b><h3>機力評価</h3><p>モーター、ボート、ST傾向を比較</p></article><article><b>04</b><h3>展示後再計算</h3><p>展示タイムと直前気配で更新</p></article><article><b>05</b><h3>期待度指数</h3><p>複数モデルの一致度から見送り判定</p></article></div>
+  </section>
+
+  <section class="operations" id="operations">
+    <article><div class="articleIcon">↗</div><p class="eyebrow">LEARNING</p><h2>学習機能</h2><p>結果を蓄積し、モデル更新時に再学習。成績悪化を確認したモデルは自動採用しません。</p><dl><div><dt>現在の学習データ</dt><dd>262,851件</dd></div><div><dt>学習対象期間</dt><dd>2025.07—2026.05</dd></div><div><dt>モデル構成</dt><dd>3モデル複合</dd></div></dl></article>
+    <article><div class="articleIcon">𝕏</div><p class="eyebrow">AUTO PUBLISH</p><h2>X自動投稿</h2><p>無料実行基盤への移行後、朝の厳選予想と結果報告を自動配信します。</p><dl><div><dt>朝AI厳選予想</dt><dd>毎日 8:00</dd></div><div><dt>展示後更新</dt><dd>随時</dd></div><div><dt>現在の状態</dt><dd class="migrating">無料版へ移行中</dd></div></dl></article>
+  </section>
+
+  <footer><a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO</span></a><p>勝つことより先に、大きく負けないこと。</p><small>AI予想は検証中の分析情報です。舟券購入は自己責任で行ってください。</small></footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
