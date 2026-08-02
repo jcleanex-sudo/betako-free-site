@@ -12,6 +12,52 @@ PREDICTIONS = ROOT / "data" / "predictions.json"
 OUTPUT = ROOT / "data" / "exhibition.json"
 
 
+def ordered_trifecta_probability(contenders, pick):
+    """Conservative Plackett-Luce approximation for one exact trifecta."""
+    weights = {str(item["boat"]): max(0.1, float(item["relative_win_probability"])) for item in contenders}
+    boats = pick.split("-")
+    if len(boats) != 3 or any(boat not in weights for boat in boats):
+        return None
+    remaining_total = 100.0
+    probability = 1.0
+    for boat in boats:
+        weight = min(weights[boat], remaining_total)
+        probability *= weight / remaining_total
+        remaining_total -= weight
+        if remaining_total <= 0:
+            break
+    return round(max(0.0, min(1.0, probability)) * 100, 2)
+
+
+def value_judgement(contenders, pick, realtime):
+    odds_payload = realtime.get("odds") or {}
+    odds = (odds_payload.get("odds") or {}).get(pick)
+    model_probability = ordered_trifecta_probability(contenders, pick)
+    if not odds or model_probability is None:
+        return {
+            "status": "DATA BLOCKED", "odds": odds, "model_probability": model_probability,
+            "market_probability": None, "net_edge": None,
+            "message": "3連単オッズ未公開のため期待値判定なし",
+            "source_url": odds_payload.get("source_url"),
+        }
+
+    market_probability = 100 / float(odds)
+    # 直前変動・モデル誤差の安全余白として2ポイントを控除する。
+    net_edge = model_probability - market_probability - 2.0
+    status = "WATCH"
+    message = "安全余白控除後の優位性が基準未満のため見送り"
+    if net_edge >= 5:
+        status = "UP"
+        message = "検証用候補（実購入を推奨するものではありません）"
+    return {
+        "status": status, "odds": round(float(odds), 1),
+        "model_probability": round(model_probability, 2),
+        "market_probability": round(market_probability, 2),
+        "net_edge": round(net_edge, 2), "message": message,
+        "source_url": odds_payload.get("source_url"),
+    }
+
+
 def final_prediction(prediction, realtime):
     valid_times = [item for item in realtime.get("exhibition", []) if item.get("time") is not None]
     if len(valid_times) < 4:
@@ -49,11 +95,13 @@ def final_prediction(prediction, realtime):
         f"風速{wind:g}m・波高{wave:g}cm・天候{realtime.get('weather') or '不明'}",
         "朝の能力評価に展示順位とST展示順位を加えて再計算",
     ]
+    value = value_judgement([item[0] for item in adjusted], final_pick, realtime)
     return {
         "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
         "status": "FINAL", "message": "展示後再計算済み", "morning_pick": prediction["pick"],
         "final_pick": final_pick, "final_score": round(final_score, 1), "reasons": reasons,
         "weather": realtime.get("weather"), "wind_speed": wind, "wave_height": wave,
+        "value": value,
         "fetched_at": realtime.get("fetched_at"), "source_url": realtime.get("source_url"),
     }
 

@@ -233,6 +233,53 @@ def _parse_exhibition_table(soup):
     return [exhibition[boat] for boat in sorted(exhibition)]
 
 
+def trifecta_combinations_in_page_order():
+    """Return the 120 combinations in the order used by the official odds table."""
+    combinations = []
+    for second_index in range(5):
+        for third_index in range(4):
+            for first in range(1, 7):
+                remaining_for_second = [boat for boat in range(1, 7) if boat != first]
+                second = remaining_for_second[second_index]
+                remaining_for_third = [boat for boat in range(1, 7) if boat not in (first, second)]
+                third = remaining_for_third[third_index]
+                combinations.append(f"{first}-{second}-{third}")
+    return combinations
+
+
+def _parse_trifecta_odds(soup):
+    points = soup.select(".oddsPoint")
+    combinations = trifecta_combinations_in_page_order()
+    if len(points) != len(combinations):
+        return {}
+
+    odds = {}
+    for combination, point in zip(combinations, points):
+        value = safe_float(point.get_text(" ", strip=True))
+        if value is not None and value > 1:
+            odds[combination] = value
+    return odds
+
+
+def fetch_trifecta_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
+    stadium_id = str(stadium_id).zfill(2)
+    race_number = int(race_number)
+    race_date_compact = normalize_race_date(race_date)
+    params = {"jcd": stadium_id, "hd": race_date_compact, "rno": race_number}
+    source_url = f"{BASE_URL}/odds3t?jcd={stadium_id}&hd={race_date_compact}&rno={race_number}"
+    try:
+        soup = BeautifulSoup(_fetch_html("/odds3t", params), "lxml")
+        odds = _parse_trifecta_odds(soup)
+        return {
+            "status": "OK" if len(odds) == 120 else "DATA BLOCKED",
+            "odds": odds,
+            "source_url": source_url,
+            "error": None,
+        }
+    except Exception as exc:
+        return {"status": "DATA BLOCKED", "odds": {}, "source_url": source_url, "error": str(exc)}
+
+
 def evaluate_exhibition(realtime):
     exhibition = realtime.get("exhibition") or []
     valid_times = [item for item in exhibition if item.get("time") is not None]
@@ -333,7 +380,7 @@ def fetch_exhibition(stadium_id: str, race_number: int, race_date: str) -> dict:
             "wave_height": weather.get("wave_height"),
             "temperature": weather.get("temperature"),
             "water_temperature": weather.get("water_temperature"),
-            "odds": None,
+            "odds": fetch_trifecta_odds(stadium_id, race_number, race_date_compact),
             "exhibition": exhibition,
             "fetched_at": datetime.now().isoformat(timespec="seconds"),
             "source": "boatrace_beforeinfo",

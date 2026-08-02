@@ -2,7 +2,8 @@ name: Update exhibition predictions
 
 on:
   schedule:
-    - cron: "15 1,3,5,7,9 * * *"
+    # 09:00-21:45 JST. 展示・オッズの直前変化を15分間隔で確認する。
+    - cron: "*/15 0-12 * * *"
   workflow_dispatch:
 
 permissions:
