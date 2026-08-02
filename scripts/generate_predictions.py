@@ -70,8 +70,9 @@ def parse_entry(tbody, stadium_id: str):
                 racer_name = candidate
                 break
     if not racer_name:
-        name_match = re.search(r"(?:\d{4}\s+)?(?:A1|A2|B1|B2)?\s*(.+?)\s+\S+/\S+", source)
+        name_match = re.search(r"\d{4}\s*/\s*(?:A1|A2|B1|B2)\s+(.+?)\s+[^\s/]+/[^\s/]+", source)
         racer_name = name_match.group(1).strip() if name_match else f"{boat}号艇"
+    racer_name = re.sub(r"[\s　]+", " ", racer_name).strip()
 
     def floats(index):
         return [number(value) for value in re.findall(r"\d+\.\d+", cells[index] if len(cells) > index else "")]
