@@ -61,9 +61,11 @@ def value_judgement(contenders, pick, realtime):
 def final_prediction(prediction, realtime):
     valid_times = [item for item in realtime.get("exhibition", []) if item.get("time") is not None]
     if len(valid_times) < 4:
+        value = value_judgement(prediction.get("contenders", []), prediction["pick"], realtime)
         return {
             "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
             "status": "WAIT", "message": "展示データ不足のため朝予想を維持", "morning_pick": prediction["pick"],
+            "value": value,
             "source_url": realtime.get("source_url"),
         }
 
@@ -77,9 +79,11 @@ def final_prediction(prediction, realtime):
         adjusted.append((contender, adjusted_score, exhibition))
     adjusted.sort(key=lambda item: item[1], reverse=True)
     if len(adjusted) < 3:
+        value = value_judgement(prediction.get("contenders", []), prediction["pick"], realtime)
         return {
             "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
             "status": "WAIT", "message": "候補艇の展示データ不足", "morning_pick": prediction["pick"],
+            "value": value,
             "source_url": realtime.get("source_url"),
         }
 

@@ -38,7 +38,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   document.querySelector("#invalidConditions").textContent = finalReady
     ? `期待値判定：${value?.message || "オッズ未公開のため判定なし"}｜無効条件：オッズ急変、展示データ欠損、公式情報取得失敗`
     : finalMode && !finalReady
-    ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}`
+    ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}｜期待値判定 ${value?.status || "DATA BLOCKED"}：${value?.message || "3連単オッズ未公開"}`
     : match
       ? `無効条件：${(match.invalid_conditions || []).join("／")}`
     : "見送り条件：ランキング対象外、データ不足、公式情報の取得失敗";
