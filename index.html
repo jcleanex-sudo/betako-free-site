@@ -44,11 +44,9 @@
   </section>
 
   <section class="rankingSection" id="ranking">
-    <div class="sectionHead"><div><p class="eyebrow">EXPECTATION RANKING</p><h2>期待度指数ランキング</h2></div><p><span class="demoTag">表示サンプル</span> 実データ接続後、毎日自動更新します。</p></div>
-    <div class="rankingGrid">
-      <article class="rankCard cyan"><div class="rankTop"><span class="rankNumber">01</span><span class="candidate">厳格候補</span></div><h3>大村 <small>10R</small></h3><div class="index"><span>期待度指数</span><strong>82</strong></div><div class="pick"><span>本線候補</span><b>1-2-4</b></div><div class="meter"><i style="width:82%"></i></div></article>
-      <article class="rankCard blue"><div class="rankTop"><span class="rankNumber">02</span><span class="candidate">厳格候補</span></div><h3>住之江 <small>12R</small></h3><div class="index"><span>期待度指数</span><strong>76</strong></div><div class="pick"><span>本線候補</span><b>1-3-2</b></div><div class="meter"><i style="width:76%"></i></div></article>
-      <article class="rankCard gold"><div class="rankTop"><span class="rankNumber">03</span><span class="candidate">検証候補</span></div><h3>蒲郡 <small>9R</small></h3><div class="index"><span>期待度指数</span><strong>68</strong></div><div class="pick"><span>本線候補</span><b>3-1-5</b></div><div class="meter"><i style="width:68%"></i></div></article>
+    <div class="sectionHead"><div><p class="eyebrow">EXPECTATION RANKING</p><h2>期待度指数ランキング</h2></div><p><span class="demoTag" id="dataStatus">データ取得中</span> <span id="dataUpdated">毎朝8時ごろ更新</span></p></div>
+    <div class="rankingGrid" id="rankingGrid" aria-live="polite">
+      <article class="rankCard cyan"><div class="rankTop"><span class="rankNumber">--</span><span class="candidate">読み込み中</span></div><h3>公式データを確認中</h3><div class="index"><span>期待度指数</span><strong>--</strong></div><div class="pick"><span>本線候補</span><b>--</b></div><div class="meter"><i style="width:0"></i></div></article>
     </div>
   </section>
 
