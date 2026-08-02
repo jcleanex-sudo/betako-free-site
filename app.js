@@ -18,8 +18,17 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? `${venue} ${raceSelect.value}R・期待度指数 ${Math.round(match.score)}（${match.label}）`
     : `${dateInput.value}・${venue} ${raceSelect.value}R・DATA BLOCKED`;
   document.querySelector("#predictionDetail").textContent = match
-    ? `本線候補 ${match.pick}｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
+    ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
     : "現在の公開ランキングにこのレースはありません。根拠不足のため見送ります。";
+  const reasons = document.querySelector("#predictionReasons");
+  reasons.replaceChildren(...(match?.reasons || []).map((reason) => {
+    const item = document.createElement("li");
+    item.textContent = reason;
+    return item;
+  }));
+  document.querySelector("#invalidConditions").textContent = match
+    ? `無効条件：${(match.invalid_conditions || []).join("／")}`
+    : "見送り条件：ランキング対象外、データ不足、公式情報の取得失敗";
   document.querySelector("#selectionResult").hidden = false;
 });
 
@@ -46,11 +55,13 @@ function renderRankings(payload) {
 
   grid.innerHTML = rankings.slice(0, 3).map((item, index) => {
     const tone = index === 0 ? "cyan" : index === 1 ? "blue" : "gold";
+    const lead = item.contenders?.[0];
     return `<article class="rankCard ${tone}">
       <div class="rankTop"><span class="rankNumber">${String(index + 1).padStart(2, "0")}</span><span class="candidate">${escapeHtml(item.label)}</span></div>
       <h3>${escapeHtml(item.venue)} <small>${escapeHtml(item.race)}R</small></h3>
       <div class="index"><span>期待度指数</span><strong>${Number(item.score).toFixed(0)}</strong></div>
       <div class="pick"><span>本線候補</span><b>${escapeHtml(item.pick)}</b></div>
+      <p class="rankLead">軸：${escapeHtml(lead ? `${lead.boat}号艇 ${lead.name}（${lead.class}）` : "データ確認中")}</p>
       <div class="meter"><i style="width:${Math.max(0, Math.min(100, Number(item.score)))}%"></i></div>
       <p class="disclaimer">一致度 ${Number(item.agreement).toFixed(0)}%・データ取得率 ${Number(item.data_rate).toFixed(0)}%</p>
     </article>`;

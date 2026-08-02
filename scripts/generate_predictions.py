@@ -120,6 +120,31 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     top_probability = ranked[0][1]
     score = min(90.0, 25.0 + top_probability * 45.0 + agreement * 0.15 + data_rate * 0.03)
     label = "厳格候補" if score >= 70 else "検証候補" if score >= 60 else "見送り"
+    top_entry = ranked[0][0]
+    top_factor_count = factor_winners.count(top_boat)
+    contenders = [
+        {
+            "boat": entry["boat"],
+            "name": entry["name"],
+            "class": entry["class"],
+            "relative_win_probability": round(probability * 100, 1),
+            "national_win_rate": entry["national"],
+            "local_win_rate": entry["local"],
+            "motor_2rate": entry["motor"],
+            "avg_st": entry["st"],
+        }
+        for entry, probability in ranked[:3]
+    ]
+    reasons = [
+        f"{top_boat}号艇 {top_entry['name']}（{top_entry['class']}）を1着軸に評価",
+        f"全国勝率 {number(top_entry['national'], 0):.2f}・当地勝率 {number(top_entry['local'], 0):.2f}・モーター2連率 {number(top_entry['motor'], 0):.1f}%",
+        f"能力・当地・モーター・STの4因子中 {top_factor_count}因子が軸艇と一致",
+    ]
+    invalid_conditions = [
+        "展示タイム・進入・欠場に大きな変化が出た場合",
+        "強風・高波など朝データ取得後に水面条件が急変した場合",
+        "データ取得率が90%未満または公式情報を再取得できない場合",
+    ]
     return {
         "venue_id": stadium_id,
         "venue": STADIUMS[stadium_id],
@@ -132,6 +157,9 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         "estimated_probability": round(top_probability * 100, 1),
         "generation_mode": "公開用複合因子ロジック",
         "logic": "基礎能力・当地適性・モーター・ST・コース補正",
+        "contenders": contenders,
+        "reasons": reasons,
+        "invalid_conditions": invalid_conditions,
     }
 
 
