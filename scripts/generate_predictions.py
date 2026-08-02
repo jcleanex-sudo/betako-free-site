@@ -118,7 +118,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     agreement = factor_winners.count(top_boat) / len(factor_winners) * 100
     data_rate = sum(completeness) / len(completeness) * 100
     top_probability = ranked[0][1]
-    score = min(88.0, 48.0 + top_probability * 45.0 + agreement * 0.12 + data_rate * 0.05)
+    score = min(90.0, 25.0 + top_probability * 45.0 + agreement * 0.15 + data_rate * 0.03)
     label = "厳格候補" if score >= 70 else "検証候補" if score >= 60 else "見送り"
     return {
         "venue_id": stadium_id,
@@ -129,7 +129,8 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         "pick": "-".join(str(entry["boat"]) for entry, _ in ranked[:3]),
         "agreement": round(agreement, 1),
         "data_rate": round(data_rate, 1),
-        "model_probability": round(top_probability * 100, 1),
+        "estimated_probability": round(top_probability * 100, 1),
+        "generation_mode": "公開用複合因子ロジック",
         "logic": "基礎能力・当地適性・モーター・ST・コース補正",
     }
 
