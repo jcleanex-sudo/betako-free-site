@@ -13,7 +13,13 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const venue = venueSelect.value;
   const venueIndex = venues.indexOf(venue) + 1;
   document.querySelector("#venueCode").textContent = String(venueIndex).padStart(2, "0");
-  document.querySelector("#selectionText").textContent = `${dateInput.value}・${venue} ${raceSelect.value}R・${document.querySelector("#predictionType").value}`;
+  const match = window.betakoPredictions?.rankings?.find((item) => item.venue === venue && String(item.race) === raceSelect.value);
+  document.querySelector("#selectionText").textContent = match
+    ? `${venue} ${raceSelect.value}R・期待度指数 ${Math.round(match.score)}（${match.label}）`
+    : `${dateInput.value}・${venue} ${raceSelect.value}R・DATA BLOCKED`;
+  document.querySelector("#predictionDetail").textContent = match
+    ? `本線候補 ${match.pick}｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
+    : "現在の公開ランキングにこのレースはありません。根拠不足のため見送ります。";
   document.querySelector("#selectionResult").hidden = false;
 });
 
@@ -34,6 +40,9 @@ function renderRankings(payload) {
     grid.innerHTML = `<article class="rankCard gold"><div class="rankTop"><span class="rankNumber">--</span><span class="candidate">見送り</span></div><h3>公開できる候補なし</h3><div class="index"><span>状態</span><strong>--</strong></div><div class="pick"><span>理由</span><b>${escapeHtml(payload.message || "データ不足")}</b></div><div class="meter"><i style="width:0"></i></div></article>`;
     return;
   }
+
+  venueSelect.value = rankings[0].venue;
+  raceSelect.value = String(rankings[0].race);
 
   grid.innerHTML = rankings.slice(0, 3).map((item, index) => {
     const tone = index === 0 ? "cyan" : index === 1 ? "blue" : "gold";
@@ -71,3 +80,14 @@ fetch(`data/predictions.json?ts=${Date.now()}`, { cache: "no-store" })
   })
   .then(renderRankings)
   .catch(() => renderRankings({ status: "DATA BLOCKED", message: "予想データを取得できませんでした", rankings: [] }));
+
+fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
+  .then((response) => response.ok ? response.json() : Promise.reject())
+  .then((payload) => {
+    const summary = payload.summary || {};
+    document.querySelector("#learningSamples").textContent = `${summary.samples || 0}件`;
+    document.querySelector("#learningNet").textContent = `${Number(summary.net_profit_yen || 0).toLocaleString("ja-JP")}円`;
+    document.querySelector("#learningRisk").textContent = `${summary.profit_factor ?? "--"} / ${Number(summary.max_drawdown_yen || 0).toLocaleString("ja-JP")}円`;
+    document.querySelector("#learningCi").textContent = summary.hit_rate_ci95 ? `${summary.hit_rate_ci95[0]}%—${summary.hit_rate_ci95[1]}%` : "集計開始待ち";
+  })
+  .catch(() => {});

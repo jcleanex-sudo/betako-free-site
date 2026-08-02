@@ -162,6 +162,9 @@ def main():
     target = Path(__file__).resolve().parents[1] / "data" / "predictions.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    history = target.parent / "history" / f"{date}.json"
+    history.parent.mkdir(parents=True, exist_ok=True)
+    history.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"status": output["status"], "count": len(output["rankings"]), "target": str(target)}, ensure_ascii=False))
 
 
