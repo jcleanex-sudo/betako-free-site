@@ -22,6 +22,7 @@ function escapeHtml(value) {
 }
 
 function renderRankings(payload) {
+  window.betakoPredictions = payload;
   const grid = document.querySelector("#rankingGrid");
   const status = document.querySelector("#dataStatus");
   const updated = document.querySelector("#dataUpdated");
@@ -46,6 +47,22 @@ function renderRankings(payload) {
     </article>`;
   }).join("");
 }
+
+document.querySelector("#copyXPost").addEventListener("click", async () => {
+  const top = window.betakoPredictions?.rankings?.[0];
+  const status = document.querySelector("#copyStatus");
+  if (!top) {
+    status.textContent = "投稿できる予想データがありません。";
+    return;
+  }
+  const post = `🌊水面ベタ子の厳選予想\n${top.venue} ${top.race}R\n期待度指数 ${Math.round(top.score)}\n本線候補 ${top.pick}\n一致度 ${Math.round(top.agreement)}%\n\n※検証中の分析情報です。的中・利益を保証しません。\nhttps://jcleanex-sudo.github.io/betako-free-site/`;
+  try {
+    await navigator.clipboard.writeText(post);
+    status.textContent = "コピーしました。Xへ貼り付けられます。";
+  } catch {
+    status.textContent = "コピーできませんでした。ブラウザの許可を確認してください。";
+  }
+});
 
 fetch(`data/predictions.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((response) => {
