@@ -161,6 +161,39 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         "強風・高波など朝データ取得後に水面条件が急変した場合",
         "データ取得率が90%未満または公式情報を再取得できない場合",
     ]
+    longshot = None
+    longshot_pool = []
+    for entry, probability in ranked[1:]:
+        probability_pct = probability * 100
+        motor = number(entry["motor"], 0)
+        local = number(entry["local"], 0)
+        national = number(entry["national"], 0)
+        st = number(entry["st"], 0.20)
+        signals = sum((motor >= 35, local >= 5.5, national >= 5.5, st <= 0.16))
+        if probability_pct <= 25 and signals:
+            upside = (
+                max(0, motor - 32) * 0.55
+                + max(0, local - 5) * 2.2
+                + max(0, national - 5) * 2.0
+                + max(0, 0.18 - st) * 60
+                + (3 if entry["boat"] >= 4 else 0)
+            )
+            hole_index = min(79.0, 35 + probability_pct * 0.8 + upside)
+            longshot_pool.append((entry, probability_pct, hole_index, signals))
+    if longshot_pool:
+        entry, probability_pct, hole_index, signals = max(longshot_pool, key=lambda item: item[2])
+        longshot = {
+            "boat": entry["boat"], "name": entry["name"], "class": entry["class"],
+            "hole_index": round(hole_index, 1), "status": "WATCH",
+            "relative_probability": round(probability_pct, 1),
+            "formation": f"{top_boat}-{entry['boat']}-流し",
+            "reasons": [
+                f"相対モデル確率 {probability_pct:.1f}%の人気薄候補",
+                f"当地勝率 {number(entry['local'], 0):.2f}・モーター2連率 {number(entry['motor'], 0):.1f}%・平均ST {number(entry['st'], 0.20):.2f}",
+                f"穴評価4因子のうち {signals}因子が基準を通過",
+            ],
+            "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認",
+        }
     return {
         "venue_id": stadium_id,
         "venue": STADIUMS[stadium_id],
@@ -176,13 +209,14 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         "contenders": contenders,
         "reasons": reasons,
         "invalid_conditions": invalid_conditions,
+        "longshot": longshot,
     }
 
 
 def main():
     now = datetime.now(JST)
     date = now.strftime("%Y%m%d")
-    output = {"status": "DATA BLOCKED", "updated_at": now.strftime("%Y-%m-%d %H:%M JST"), "message": "公式データ不足", "rankings": []}
+    output = {"status": "DATA BLOCKED", "updated_at": now.strftime("%Y-%m-%d %H:%M JST"), "message": "公式データ不足", "rankings": [], "longshots": []}
     try:
         venues = discover_venues(date)
         predictions = []
@@ -197,7 +231,17 @@ def main():
                     print(f"{STADIUMS[stadium_id]} {race}R: {exc}")
         predictions.sort(key=lambda item: item["score"], reverse=True)
         if predictions:
-            output.update(status="OK", message="公式出走表から自動生成", rankings=predictions[:8])
+            selected = predictions[:8]
+            longshots = [
+                {
+                    "venue_id": prediction["venue_id"], "venue": prediction["venue"],
+                    "race": prediction["race"], "main_pick": prediction["pick"],
+                    **prediction["longshot"],
+                }
+                for prediction in selected if prediction.get("longshot")
+            ]
+            longshots.sort(key=lambda item: item["hole_index"], reverse=True)
+            output.update(status="OK", message="公式出走表から自動生成", rankings=selected, longshots=longshots[:3])
         else:
             output["message"] = "開催情報または出走表を取得できませんでした"
     except Exception as exc:

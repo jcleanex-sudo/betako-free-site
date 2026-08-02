@@ -72,7 +72,7 @@ h1 em { color: var(--cyan); font-style: normal; }
 .proof { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 26px; }
 .proof span { padding: 7px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 10px; font-weight: 700; }
 
-.modelPanel, .predictCard, .rankCard, .logicSection, .operations article {
+.modelPanel, .predictCard, .rankCard, .longshotCard, .logicSection, .operations article {
   border: 1px solid var(--line); background: linear-gradient(145deg, rgba(16, 27, 40, .95), rgba(8, 13, 20, .92)); box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
 }
 .modelPanel { padding: 18px; border-radius: 21px; }
@@ -112,7 +112,7 @@ form button span { float: right; }
 #invalidConditions { padding-top: 8px; border-top: 1px solid var(--line); color: var(--gold); line-height: 1.6; }
 .rankLead { min-height: 1.3em; margin: 10px 0 0; color: #bdcad7; font-size: 10px; }
 
-.rankingSection, .logicSection, .operations { padding: 90px 4px 0; scroll-margin-top: 40px; }
+.rankingSection, .longshotSection, .logicSection, .operations { padding: 90px 4px 0; scroll-margin-top: 40px; }
 .demoTag { padding: 5px 7px; border: 1px solid rgba(231,199,110,.25); border-radius: 999px; color: var(--gold); font-size: 9px; }
 .rankingGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .rankCard { position: relative; overflow: hidden; padding: 20px; border-radius: 17px; }
@@ -134,6 +134,15 @@ form button span { float: right; }
 .meter i { display: block; height: 100%; background: var(--cyan); }
 .blue .meter i { background: var(--blue); }
 .gold .meter i { background: var(--gold); }
+.longshotGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.longshotCard { position: relative; padding: 20px; border-radius: 17px; border-color: rgba(231,199,110,.26); }
+.longshotCard > span { display: inline-block; padding: 5px 8px; border: 1px solid rgba(231,199,110,.32); border-radius: 999px; color: var(--gold); font: 800 9px monospace; }
+.longshotCard h3 { margin: 16px 0 7px; font-size: 20px; }
+.longshotCard h3 small { color: var(--muted); font: 700 11px monospace; }
+.longshotIndex { margin: 14px 0; color: var(--gold); font: 900 29px monospace; }
+.longshotCard p, .longshotCard li { color: var(--muted); font-size: 10px; line-height: 1.65; }
+.longshotCard ul { margin: 10px 0; padding-left: 17px; }
+.longshotCondition { padding-top: 9px; border-top: 1px solid var(--line); color: #d7c98d !important; }
 
 .logicSection { margin-top: 90px; padding: 28px; border-radius: 20px; }
 .logicFlow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; }
@@ -178,7 +187,7 @@ footer small { color: #576778; font-size: 9px; text-align: right; }
   .tierGrid { grid-template-columns: 1fr; }
   .sectionHead { align-items: start; flex-direction: column; gap: 10px; }
   .sectionHead > p { text-align: left; }
-  form, .rankingGrid, .logicFlow, .operations { grid-template-columns: 1fr; }
+  form, .rankingGrid, .longshotGrid, .logicFlow, .operations { grid-template-columns: 1fr; }
   form button { grid-column: auto; }
   .rankingSection, .logicSection { padding-top: 64px; }
   .logicSection { margin-top: 64px; }

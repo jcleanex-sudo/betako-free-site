@@ -62,6 +62,7 @@ function renderRankings(payload) {
   const status = document.querySelector("#dataStatus");
   const updated = document.querySelector("#dataUpdated");
   const rankings = Array.isArray(payload.rankings) ? payload.rankings : [];
+  const longshots = Array.isArray(payload.longshots) ? payload.longshots : [];
   status.textContent = payload.status === "OK" ? "公式データ反映" : "DATA BLOCKED";
   updated.textContent = payload.updated_at ? `${payload.updated_at} 更新` : "更新時刻不明";
 
@@ -86,6 +87,16 @@ function renderRankings(payload) {
       <p class="disclaimer">一致度 ${Number(item.agreement).toFixed(0)}%・データ取得率 ${Number(item.data_rate).toFixed(0)}%</p>
     </article>`;
   }).join("");
+
+  const longshotGrid = document.querySelector("#longshotGrid");
+  longshotGrid.innerHTML = longshots.length ? longshots.map((item) => `<article class="longshotCard">
+    <span>${escapeHtml(item.status || "WATCH")}</span>
+    <h3>${escapeHtml(item.venue)} ${escapeHtml(item.race)}R <small>${escapeHtml(item.boat)}号艇</small></h3>
+    <div class="longshotIndex">穴指数 ${Number(item.hole_index).toFixed(0)}</div>
+    <p>${escapeHtml(item.boat)}号艇 ${escapeHtml(item.name)}（${escapeHtml(item.class)}）｜組み込み候補 ${escapeHtml(item.formation)}</p>
+    <ul>${(item.reasons || []).map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>
+    <p class="longshotCondition">条件：${escapeHtml(item.condition)}</p>
+  </article>`).join("") : `<article class="longshotCard"><span>WATCH</span><h3>穴候補なし</h3><p>条件を満たす人気薄がないため見送ります。</p></article>`;
 }
 
 document.querySelector("#copyXPost").addEventListener("click", async () => {
