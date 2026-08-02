@@ -151,6 +151,11 @@ dl div { display: flex; justify-content: space-between; gap: 12px; padding: 12px
 dt { color: var(--muted); font-size: 10px; }
 dd { margin: 0; font: 800 12px monospace; }
 .migrating { color: var(--gold); }
+.tierGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.tierGrid section { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.025); }
+.tierGrid span, .tierGrid small { display: block; color: var(--muted); font: 700 9px/1.5 monospace; }
+.tierGrid strong { display: block; margin: 7px 0 4px; color: var(--cyan); font: 900 17px monospace; }
+.tierGrid section:last-child strong { color: var(--gold); }
 footer { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 20px; margin-top: 80px; padding: 26px 0 38px; border-top: 1px solid var(--line); }
 footer p { margin: 0; text-align: center; color: var(--muted); font-size: 12px; }
 footer small { color: #576778; font-size: 9px; text-align: right; }
@@ -170,6 +175,7 @@ footer small { color: #576778; font-size: 9px; text-align: right; }
   h1 { font-size: 43px; }
   .heroActions a { width: 100%; }
   .predictCard, .logicSection, .operations article { padding: 20px; }
+  .tierGrid { grid-template-columns: 1fr; }
   .sectionHead { align-items: start; flex-direction: column; gap: 10px; }
   .sectionHead > p { text-align: left; }
   form, .rankingGrid, .logicFlow, .operations { grid-template-columns: 1fr; }

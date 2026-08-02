@@ -120,6 +120,13 @@ fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
     document.querySelector("#learningNet").textContent = `${Number(summary.net_profit_yen || 0).toLocaleString("ja-JP")}円`;
     document.querySelector("#learningRisk").textContent = `${summary.profit_factor ?? "--"} / ${Number(summary.max_drawdown_yen || 0).toLocaleString("ja-JP")}円`;
     document.querySelector("#learningCi").textContent = summary.hit_rate_ci95 ? `${summary.hit_rate_ci95[0]}%—${summary.hit_rate_ci95[1]}%` : "集計開始待ち";
+    const renderTier = (name, tier) => {
+      const ci = tier.hit_rate_ci95 ? `${tier.hit_rate_ci95[0]}%—${tier.hit_rate_ci95[1]}%` : "--";
+      document.querySelector(`#${name}Samples`).textContent = `${tier.samples || 0}件`;
+      document.querySelector(`#${name}Metrics`).textContent = `純損益 ${Number(tier.net_profit_yen || 0).toLocaleString("ja-JP")}円｜PF ${tier.profit_factor ?? 0}｜DD ${Number(tier.max_drawdown_yen || 0).toLocaleString("ja-JP")}円｜95%CI ${ci}`;
+    };
+    renderTier("strict", payload.tiers?.strict || {});
+    renderTier("experimental", payload.tiers?.experimental || {});
   })
   .catch(() => {});
 

@@ -68,6 +68,18 @@ def summarize(records):
     }
 
 
+def score_tier(score):
+    try:
+        value = float(score)
+    except (TypeError, ValueError):
+        return "unclassified"
+    if value >= 70:
+        return "strict"
+    if value >= 60:
+        return "experimental"
+    return "watch"
+
+
 def main():
     yesterday = (datetime.now(JST) - timedelta(days=1)).strftime("%Y%m%d")
     history_file = DATA / "history" / f"{yesterday}.json"
@@ -92,9 +104,14 @@ def main():
                 "key": key, "venue": prediction["venue"], "race": prediction["race"],
                 "predicted": prediction["pick"], "actual": actual, "hit": hit,
                 "payout_yen": payout, "profit_yen": payout - 100 if hit else -100,
+                "score": prediction.get("score"), "tier": score_tier(prediction.get("score")),
             }
     payload["updated_at"] = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
     payload["summary"] = summarize(records)
+    payload["tiers"] = {
+        "strict": summarize({key: item for key, item in records.items() if item.get("tier") == "strict"}),
+        "experimental": summarize({key: item for key, item in records.items() if item.get("tier") == "experimental"}),
+    }
     PERFORMANCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(payload["summary"], ensure_ascii=False))
 
