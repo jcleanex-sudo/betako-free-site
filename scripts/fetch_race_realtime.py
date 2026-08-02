@@ -4,7 +4,7 @@
 import os
 import re
 import urllib.parse
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 import requests
 from bs4 import BeautifulSoup
@@ -13,6 +13,7 @@ from urllib3.util.retry import Retry
 
 
 BASE_URL = "https://www.boatrace.jp/owpc/pc/race"
+JST = timezone(timedelta(hours=9))
 REQUEST_TIMEOUT = int(os.environ.get(
     "BOATRACE_REALTIME_TIMEOUT",
     os.environ.get("BOATRACE_REQUEST_TIMEOUT", "20"),
@@ -261,6 +262,17 @@ def _parse_trifecta_odds(soup):
     return odds
 
 
+def _parse_deadline(soup, race_number):
+    for row in soup.select("table tr"):
+        text = row.get_text(" ", strip=True)
+        if "締切予定時刻" not in text:
+            continue
+        times = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d\b", text)
+        if len(times) >= int(race_number):
+            return times[int(race_number) - 1]
+    return None
+
+
 def fetch_trifecta_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
     stadium_id = str(stadium_id).zfill(2)
     race_number = int(race_number)
@@ -273,11 +285,17 @@ def fetch_trifecta_odds(stadium_id: str, race_number: int, race_date: str) -> di
         return {
             "status": "OK" if len(odds) == 120 else "DATA BLOCKED",
             "odds": odds,
+            "deadline": _parse_deadline(soup, race_number),
+            "fetched_at": datetime.now(JST).isoformat(timespec="seconds"),
             "source_url": source_url,
             "error": None,
         }
     except Exception as exc:
-        return {"status": "DATA BLOCKED", "odds": {}, "source_url": source_url, "error": str(exc)}
+        return {
+            "status": "DATA BLOCKED", "odds": {}, "deadline": None,
+            "fetched_at": datetime.now(JST).isoformat(timespec="seconds"),
+            "source_url": source_url, "error": str(exc),
+        }
 
 
 def evaluate_exhibition(realtime):
@@ -382,7 +400,7 @@ def fetch_exhibition(stadium_id: str, race_number: int, race_date: str) -> dict:
             "water_temperature": weather.get("water_temperature"),
             "odds": fetch_trifecta_odds(stadium_id, race_number, race_date_compact),
             "exhibition": exhibition,
-            "fetched_at": datetime.now().isoformat(timespec="seconds"),
+            "fetched_at": datetime.now(JST).isoformat(timespec="seconds"),
             "source": "boatrace_beforeinfo",
             "source_url": source_url,
             "error": None,

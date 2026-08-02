@@ -18,13 +18,20 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const finalData = window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value);
   const finalReady = finalMode && finalData?.status === "FINAL";
   const value = finalData?.value;
+  const deadlineAt = value?.deadline ? new Date(`${dateInput.value}T${value.deadline}:00+09:00`) : null;
+  const liveRemaining = deadlineAt && !Number.isNaN(deadlineAt.getTime())
+    ? (deadlineAt.getTime() - Date.now()) / 60000
+    : null;
+  const cutoffReached = liveRemaining !== null && liveRemaining < 5;
+  const valueStatus = cutoffReached ? "WATCH" : (value?.status || "DATA BLOCKED");
+  const valueMessage = cutoffReached ? "締切5分前を過ぎたため新規判定を停止" : value?.message;
   document.querySelector("#selectionText").textContent = finalReady
     ? `${venue} ${raceSelect.value}R・展示後指数 ${Math.round(finalData.final_score)}（FINAL）`
     : match
       ? `${venue} ${raceSelect.value}R・期待度指数 ${Math.round(match.score)}（${finalMode ? finalData?.status || "WAIT" : match.label}）`
     : `${dateInput.value}・${venue} ${raceSelect.value}R・DATA BLOCKED`;
   document.querySelector("#predictionDetail").textContent = finalReady
-    ? `展示後本線 ${finalData.final_pick}｜3連単オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜判定 ${value?.status || "DATA BLOCKED"}`
+    ? `展示後本線 ${finalData.final_pick}｜3連単オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜残り ${liveRemaining == null ? "--" : `${Math.max(0, liveRemaining).toFixed(0)}分`}｜判定 ${valueStatus}`
     : match
       ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
     : "現在の公開ランキングにこのレースはありません。根拠不足のため見送ります。";
@@ -36,9 +43,9 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     return item;
   }));
   document.querySelector("#invalidConditions").textContent = finalReady
-    ? `期待値判定：${value?.message || "オッズ未公開のため判定なし"}｜無効条件：オッズ急変、展示データ欠損、公式情報取得失敗`
+    ? `期待値判定：${valueMessage || "オッズ未公開のため判定なし"}｜無効条件：締切5分未満、オッズ急変、展示データ欠損、公式情報取得失敗`
     : finalMode && !finalReady
-    ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}｜期待値判定 ${value?.status || "DATA BLOCKED"}：${value?.message || "3連単オッズ未公開"}`
+    ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}｜締切 ${value?.deadline || "未取得"}｜期待値判定 ${valueStatus}：${valueMessage || "3連単オッズ未公開"}`
     : match
       ? `無効条件：${(match.invalid_conditions || []).join("／")}`
     : "見送り条件：ランキング対象外、データ不足、公式情報の取得失敗";

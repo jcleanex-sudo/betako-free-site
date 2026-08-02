@@ -33,11 +33,29 @@ def value_judgement(contenders, pick, realtime):
     odds_payload = realtime.get("odds") or {}
     odds = (odds_payload.get("odds") or {}).get(pick)
     model_probability = ordered_trifecta_probability(contenders, pick)
+    deadline = odds_payload.get("deadline")
+    remaining_minutes = None
+    if deadline:
+        try:
+            deadline_at = datetime.combine(datetime.now(JST).date(), datetime.strptime(deadline, "%H:%M").time(), JST)
+            remaining_minutes = round((deadline_at - datetime.now(JST)).total_seconds() / 60, 1)
+        except ValueError:
+            deadline = None
     if not odds or model_probability is None:
         return {
             "status": "DATA BLOCKED", "odds": odds, "model_probability": model_probability,
             "market_probability": None, "net_edge": None,
+            "deadline": deadline, "remaining_minutes": remaining_minutes,
             "message": "3連単オッズ未公開のため期待値判定なし",
+            "source_url": odds_payload.get("source_url"),
+        }
+
+    if remaining_minutes is None:
+        return {
+            "status": "DATA BLOCKED", "odds": round(float(odds), 1),
+            "model_probability": model_probability, "market_probability": round(100 / float(odds), 2),
+            "net_edge": None, "deadline": deadline, "remaining_minutes": None,
+            "message": "締切時刻を確認できないため見送り",
             "source_url": odds_payload.get("source_url"),
         }
 
@@ -49,11 +67,15 @@ def value_judgement(contenders, pick, realtime):
     if net_edge >= 5:
         status = "UP"
         message = "検証用候補（実購入を推奨するものではありません）"
+    if remaining_minutes < 5:
+        status = "WATCH"
+        message = "締切5分前を過ぎたため新規判定を停止"
     return {
         "status": status, "odds": round(float(odds), 1),
         "model_probability": round(model_probability, 2),
         "market_probability": round(market_probability, 2),
-        "net_edge": round(net_edge, 2), "message": message,
+        "net_edge": round(net_edge, 2), "deadline": deadline,
+        "remaining_minutes": remaining_minutes, "message": message,
         "source_url": odds_payload.get("source_url"),
     }
 
