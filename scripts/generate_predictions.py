@@ -58,7 +58,20 @@ def parse_entry(tbody, stadium_id: str):
     source = " ".join(racer_link.stripped_strings) if racer_link else (cells[2] if len(cells) > 2 else "")
     racer_class = next((value for value in ("A1", "A2", "B1", "B2") if value in source), "B2")
     name_node = racer_link.select_one(".is-fs18") if racer_link else None
-    racer_name = name_node.get_text(" ", strip=True) if name_node else f"{boat}号艇"
+    racer_name = name_node.get_text(" ", strip=True) if name_node else ""
+    if not racer_name and racer_link:
+        for part in racer_link.stripped_strings:
+            candidate = re.sub(r"\s+", " ", str(part)).strip()
+            if (
+                re.search(r"[一-龯々〆ヵヶぁ-んァ-ヶ]", candidate)
+                and "/" not in candidate
+                and not re.fullmatch(r"(?:A1|A2|B1|B2|\d{4}|\d+歳|[\d.]+kg)", candidate)
+            ):
+                racer_name = candidate
+                break
+    if not racer_name:
+        name_match = re.search(r"(?:\d{4}\s+)?(?:A1|A2|B1|B2)?\s*(.+?)\s+\S+/\S+", source)
+        racer_name = name_match.group(1).strip() if name_match else f"{boat}号艇"
 
     def floats(index):
         return [number(value) for value in re.findall(r"\d+\.\d+", cells[index] if len(cells) > index else "")]
