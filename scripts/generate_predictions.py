@@ -55,7 +55,9 @@ def parse_entry(tbody, stadium_id: str):
         return None
     boat = boat_map[cells[0]]
     racer_link = tbody.select_one('a[href*="toban="]')
-    source = " ".join(racer_link.stripped_strings) if racer_link else (cells[2] if len(cells) > 2 else "")
+    racer_cell = cells[2] if len(cells) > 2 else ""
+    racer_link_text = " ".join(racer_link.stripped_strings) if racer_link else ""
+    source = racer_link_text or racer_cell
     racer_class = next((value for value in ("A1", "A2", "B1", "B2") if value in source), "B2")
     name_node = racer_link.select_one(".is-fs18") if racer_link else None
     racer_name = name_node.get_text(" ", strip=True) if name_node else ""
