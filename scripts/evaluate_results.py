@@ -85,6 +85,7 @@ def main():
     history_file = DATA / "history" / f"{yesterday}.json"
     payload = json.loads(PERFORMANCE.read_text(encoding="utf-8")) if PERFORMANCE.exists() else {"evaluated": {}}
     records = payload.setdefault("evaluated", {})
+    longshot_records = payload.setdefault("longshot_evaluated", {})
     if history_file.exists():
         history = json.loads(history_file.read_text(encoding="utf-8"))
         for prediction in history.get("rankings", []):
@@ -106,12 +107,36 @@ def main():
                 "payout_yen": payout, "profit_yen": payout - 100 if hit else -100,
                 "score": prediction.get("score"), "tier": score_tier(prediction.get("score")),
             }
+        for candidate in history.get("longshots", []):
+            key = f"{yesterday}-{candidate['venue_id']}-{candidate['race']}-longshot"
+            if key in longshot_records:
+                continue
+            try:
+                result = fetch_result(yesterday, candidate["venue_id"], candidate["race"])
+            except requests.RequestException as exc:
+                print(f"{key}: {exc}")
+                continue
+            if not result:
+                continue
+            actual, payout = result
+            formation = candidate.get("formation", "")
+            prefix = formation.removesuffix("流し")
+            hit = bool(prefix) and actual.startswith(prefix)
+            stake = 400
+            longshot_records[key] = {
+                "key": key, "venue": candidate["venue"], "race": candidate["race"],
+                "candidate_boat": candidate["boat"], "candidate_name": candidate["name"],
+                "formation": formation, "actual": actual, "hit": hit,
+                "payout_yen": payout, "stake_yen": stake,
+                "profit_yen": payout - stake if hit else -stake,
+            }
     payload["updated_at"] = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
     payload["summary"] = summarize(records)
     payload["tiers"] = {
         "strict": summarize({key: item for key, item in records.items() if item.get("tier") == "strict"}),
         "experimental": summarize({key: item for key, item in records.items() if item.get("tier") == "experimental"}),
     }
+    payload["longshot_summary"] = summarize(longshot_records)
     PERFORMANCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(payload["summary"], ensure_ascii=False))
 

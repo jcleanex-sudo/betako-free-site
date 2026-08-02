@@ -143,6 +143,10 @@ form button span { float: right; }
 .longshotCard p, .longshotCard li { color: var(--muted); font-size: 10px; line-height: 1.65; }
 .longshotCard ul { margin: 10px 0; padding-left: 17px; }
 .longshotCondition { padding-top: 9px; border-top: 1px solid var(--line); color: #d7c98d !important; }
+.longshotPerformance { display: flex; align-items: center; gap: 18px; margin-top: 12px; padding: 14px 16px; border: 1px solid rgba(231,199,110,.22); border-radius: 13px; background: rgba(231,199,110,.045); }
+.longshotPerformance span { color: var(--gold); font: 800 10px monospace; }
+.longshotPerformance strong { margin-left: auto; font: 900 17px monospace; }
+.longshotPerformance small { color: var(--muted); font: 700 9px/1.5 monospace; }
 
 .logicSection { margin-top: 90px; padding: 28px; border-radius: 20px; }
 .logicFlow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; }
@@ -185,6 +189,8 @@ footer small { color: #576778; font-size: 9px; text-align: right; }
   .heroActions a { width: 100%; }
   .predictCard, .logicSection, .operations article { padding: 20px; }
   .tierGrid { grid-template-columns: 1fr; }
+  .longshotPerformance { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .longshotPerformance strong { margin-left: 0; }
   .sectionHead { align-items: start; flex-direction: column; gap: 10px; }
   .sectionHead > p { text-align: left; }
   form, .rankingGrid, .longshotGrid, .logicFlow, .operations { grid-template-columns: 1fr; }

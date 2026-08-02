@@ -138,6 +138,10 @@ fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
     };
     renderTier("strict", payload.tiers?.strict || {});
     renderTier("experimental", payload.tiers?.experimental || {});
+    const longshot = payload.longshot_summary || {};
+    const longshotCi = longshot.hit_rate_ci95 ? `${longshot.hit_rate_ci95[0]}%—${longshot.hit_rate_ci95[1]}%` : "--";
+    document.querySelector("#longshotSamples").textContent = `${longshot.samples || 0}件`;
+    document.querySelector("#longshotMetrics").textContent = `純損益 ${Number(longshot.net_profit_yen || 0).toLocaleString("ja-JP")}円｜PF ${longshot.profit_factor ?? 0}｜最大DD ${Number(longshot.max_drawdown_yen || 0).toLocaleString("ja-JP")}円｜95%CI ${longshotCi}`;
   })
   .catch(() => {});
 
