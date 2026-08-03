@@ -132,6 +132,29 @@ document.querySelector("#copyXPost").addEventListener("click", async () => {
   }
 });
 
+document.querySelector("#copyStaffShare").addEventListener("click", async () => {
+  const rankings = window.betakoPredictions?.rankings || [];
+  const longshots = window.betakoPredictions?.longshots || [];
+  const checks = window.betakoExhibition?.longshots || [];
+  const status = document.querySelector("#staffShareStatus");
+  if (!rankings.length) {
+    status.textContent = "共有できる予想データがありません。";
+    return;
+  }
+  const mainLines = rankings.slice(0, 3).map((item, index) => `${index + 1}. ${item.venue}${item.race}R ${item.pick}｜指数${Math.round(item.score)} ${item.label}`);
+  const holeLines = longshots.slice(0, 3).map((item) => {
+    const check = checks.find((candidate) => candidate.venue === item.venue && String(candidate.race) === String(item.race) && String(candidate.boat) === String(item.boat));
+    return `${item.venue}${item.race}R ${item.boat}号艇 ${item.name}｜${check?.status || "WATCH"}`;
+  });
+  const shareText = `【水面ベタ子・本日の共有】\n\n本命ランキング\n${mainLines.join("\n")}\n\n穴党WATCH\n${holeLines.length ? holeLines.join("\n") : "候補なし"}\n\nUP=仮想検証候補／WATCH=見送り監視／DATA BLOCKED=データ不足\n※的中・利益を保証する情報ではありません。\nhttps://jcleanex-sudo.github.io/betako-free-site/`;
+  try {
+    await navigator.clipboard.writeText(shareText);
+    status.textContent = "スタッフ共有文をコピーしました。LINEやメールへ貼り付けられます。";
+  } catch {
+    status.textContent = "コピーできませんでした。ブラウザのクリップボード許可を確認してください。";
+  }
+});
+
 fetch(`data/predictions.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((response) => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);

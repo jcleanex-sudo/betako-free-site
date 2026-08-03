@@ -11,7 +11,7 @@
 <main id="top">
   <header class="topbar">
     <a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO <small>BOATRACE AI</small></span></a>
-    <nav><a href="#predict">予想する</a><a href="#ranking">ランキング</a><a href="#longshot">穴党</a><a href="#logic">ロジック</a><a href="#operations">運用状態</a></nav>
+    <nav><a href="#predict">予想する</a><a href="#ranking">ランキング</a><a href="#longshot">穴党</a><a href="#guide">見方</a><a href="#logic">ロジック</a><a href="#operations">運用状態</a></nav>
     <span class="freeBadge">FREE MODE</span>
   </header>
 
@@ -54,6 +54,12 @@
     <div class="sectionHead"><div><p class="eyebrow">LONGSHOT WATCH</p><h2>穴党コーナー</h2></div><p>人気薄の中から機力・当地適性・STに上振れ余地がある艇だけを抽出。朝段階では買い推奨にせず、展示とオッズが揃うまでWATCHします。</p></div>
     <div class="longshotGrid" id="longshotGrid" aria-live="polite"><article class="longshotCard"><span>WATCH</span><h3>穴候補を確認中</h3><p>公式データを読み込んでいます。</p></article></div>
     <div class="longshotPerformance"><span>穴党仮想検証（4点×100円）</span><strong id="longshotSamples">0件</strong><small id="longshotMetrics">純損益 0円｜PF 0｜最大DD 0円｜95%CI --</small></div>
+  </section>
+
+  <section class="guideSection" id="guide">
+    <div class="sectionHead"><div><p class="eyebrow">STAFF GUIDE</p><h2>ベタ子の見方</h2></div><p>スタッフへ共有するときは、判定・根拠・無効条件をセットで確認してください。</p></div>
+    <div class="guideGrid"><article><b>UP</b><h3>仮想検証候補</h3><p>展示・オッズ・残り時間まで基準通過。購入保証ではなく検証対象です。</p></article><article><b>WATCH</b><h3>見送り・監視</h3><p>根拠不足、期待値不足、締切直前など。条件が改善するまで動きません。</p></article><article><b>DATA BLOCKED</b><h3>データ停止</h3><p>公式情報・展示・オッズの不足や取得失敗。数値を推測で補いません。</p></article><article><b>穴党</b><h3>別枠で検証</h3><p>人気薄の上振れ候補。本命成績と混ぜず4点×100円の仮想枠で検証します。</p></article></div>
+    <button class="copyButton staffShareButton" id="copyStaffShare" type="button">今日のスタッフ共有文をコピー</button><small id="staffShareStatus" role="status"></small>
   </section>
 
   <section class="logicSection" id="logic">
