@@ -16,14 +16,37 @@ function buildBetPlan(contenders = [], leadingPick = "") {
   const ticket = (first, second, third) => `${boats[first]}-${boats[second]}-${boats[third]}`;
   return {
     main: [ticket(0, 1, 2), ticket(0, 2, 1), ticket(0, 1, 3), ticket(0, 2, 3), ticket(0, 3, 1), ticket(0, 3, 2)],
-    cover: [ticket(1, 0, 2), ticket(2, 0, 1), ticket(0, 1, 4), ticket(0, 2, 4)],
+    cover: [ticket(1, 0, 2), ticket(2, 0, 1), ticket(1, 0, 3), ticket(2, 0, 3), ticket(0, 1, 4), ticket(0, 2, 4)],
   };
 }
 
-function formatTicket(ticket) {
-  if (typeof ticket === "string") return ticket;
-  const edge = ticket?.net_edge;
-  return `${ticket?.pick || "--"}${edge == null ? "" : ` (${edge >= 0 ? "+" : ""}${Number(edge).toFixed(1)}%)`}`;
+function renderFormation(target, tickets) {
+  if (!tickets.length) {
+    target.textContent = "--";
+    return;
+  }
+  const labels = ["1着", "2着", "3着"];
+  target.replaceChildren(...tickets.map((ticket) => {
+    const pick = typeof ticket === "string" ? ticket : ticket?.pick || "--";
+    const boats = pick.split("-");
+    const row = document.createElement("div");
+    row.className = "formationRow";
+    labels.forEach((label, index) => {
+      const position = document.createElement("span");
+      const caption = document.createElement("small");
+      const boat = document.createElement("b");
+      caption.textContent = label;
+      boat.textContent = boats[index] || "--";
+      position.append(caption, boat);
+      row.append(position);
+    });
+    if (typeof ticket !== "string" && ticket?.net_edge != null) {
+      const edge = document.createElement("em");
+      edge.textContent = `edge ${ticket.net_edge >= 0 ? "+" : ""}${Number(ticket.net_edge).toFixed(1)}%`;
+      row.append(edge);
+    }
+    return row;
+  }));
 }
 
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
@@ -55,8 +78,8 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const candidatePlan = buildBetPlan(match?.contenders, finalReady ? finalData.final_pick : match?.pick);
   const betPlan = finalMode && finalData?.ticket_plan ? finalData.ticket_plan : candidatePlan;
   document.querySelector("#mainLabel").textContent = betPlan.ranked_by_edge ? "期待値上位6点" : "本線候補6点";
-  document.querySelector("#mainPicks").textContent = betPlan.main.length ? betPlan.main.map(formatTicket).join("　") : "--";
-  document.querySelector("#coverPicks").textContent = betPlan.cover.length ? betPlan.cover.map(formatTicket).join("　") : "--";
+  renderFormation(document.querySelector("#mainPicks"), betPlan.main);
+  renderFormation(document.querySelector("#coverPicks"), betPlan.cover);
   document.querySelector("#selectionText").textContent = finalReady
     ? `${venue} ${raceSelect.value}R・展示後指数 ${Math.round(finalData.final_score)}（FINAL）`
     : match

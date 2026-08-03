@@ -89,7 +89,8 @@ def ticket_plan(contenders, leading_pick, realtime):
 
     patterns = [
         (0, 1, 2), (0, 2, 1), (0, 1, 3), (0, 2, 3), (0, 3, 1),
-        (0, 3, 2), (1, 0, 2), (2, 0, 1), (0, 1, 4), (0, 2, 4),
+        (0, 3, 2), (1, 0, 2), (2, 0, 1), (1, 0, 3), (2, 0, 3),
+        (0, 1, 4), (0, 2, 4),
     ]
     odds_map = ((realtime.get("odds") or {}).get("odds") or {})
     rows = []
@@ -110,7 +111,7 @@ def ticket_plan(contenders, leading_pick, realtime):
     ranked_by_edge = all(item["net_edge"] is not None for item in rows)
     if ranked_by_edge:
         rows.sort(key=lambda item: item["net_edge"], reverse=True)
-    return {"main": rows[:6], "cover": rows[6:10], "ranked_by_edge": ranked_by_edge}
+    return {"main": rows[:6], "cover": rows[6:12], "ranked_by_edge": ranked_by_edge}
 
 
 def longshot_judgement(prediction, realtime):
