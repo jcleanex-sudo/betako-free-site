@@ -1,47 +1,47 @@
 {
-  "updated_at": "2026-08-04 01:58 JST",
-  "status": "COLLECTING",
-  "reason": "安全な自動調整には最低800レース必要",
-  "samples": 576,
+  "updated_at": "2026-08-04 02:30 JST",
+  "status": "ACTIVATED",
+  "reason": "時系列検証log lossを0.1776改善",
+  "samples": 1030,
   "date_range": [
-    "20260729",
+    "20260726",
     "20260803"
   ],
   "minimum_activation_samples": 800,
-  "train_samples": 460,
-  "validation_samples": 116,
+  "train_samples": 824,
+  "validation_samples": 206,
   "baseline_validation": {
-    "samples": 116,
-    "log_loss": 1.34689,
-    "top1_accuracy": 54.31,
-    "brier": 0.6245
+    "samples": 206,
+    "log_loss": 1.38689,
+    "top1_accuracy": 51.46,
+    "brier": 0.63664
   },
   "candidate_validation": {
-    "samples": 116,
-    "log_loss": 1.34689,
-    "top1_accuracy": 54.31,
-    "brier": 0.6245
+    "samples": 206,
+    "log_loss": 1.20928,
+    "top1_accuracy": 58.74,
+    "brier": 0.56875
   },
   "active_weights": {
-    "national": 7.5,
-    "local": 4.0,
-    "motor": 0.28,
-    "boat_rate": 0.1,
-    "course": 24.0,
-    "class": 1.0,
-    "st": 80.0,
-    "temperature": 12.0
+    "national": 5.043,
+    "local": 2.6896,
+    "motor": 0.27093,
+    "boat_rate": 0.118,
+    "course": 33.4176,
+    "class": 0.6724,
+    "st": 77.408,
+    "temperature": 14.16
   },
   "candidate_weights": {
-    "national": 7.5,
-    "local": 4.0,
-    "motor": 0.28,
-    "boat_rate": 0.1,
-    "course": 24.0,
-    "class": 1.0,
-    "st": 80.0,
-    "temperature": 12.0
+    "national": 5.043,
+    "local": 2.6896,
+    "motor": 0.27093,
+    "boat_rate": 0.118,
+    "course": 33.4176,
+    "class": 0.6724,
+    "st": 77.408,
+    "temperature": 14.16
   },
-  "logic_transition": "変更なし",
+  "logic_transition": "v3 → v4 historical calibration",
   "source": "BOAT RACE公式 出走表・結果一覧"
 }
