@@ -139,6 +139,9 @@ def final_prediction(prediction, realtime):
     valid_times = [item for item in realtime.get("exhibition", []) if item.get("time") is not None]
     if len(valid_times) < 4:
         value = value_judgement(prediction.get("contenders", []), prediction["pick"], realtime)
+        if value.get("status") == "UP":
+            value["status"] = "WATCH"
+            value["message"] = "期待値条件は通過したが展示不足のためUPを保留"
         return {
             "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
             "status": "WAIT", "message": "展示データ不足のため朝予想を維持", "morning_pick": prediction["pick"],
@@ -157,6 +160,9 @@ def final_prediction(prediction, realtime):
     adjusted.sort(key=lambda item: item[1], reverse=True)
     if len(adjusted) < 3:
         value = value_judgement(prediction.get("contenders", []), prediction["pick"], realtime)
+        if value.get("status") == "UP":
+            value["status"] = "WATCH"
+            value["message"] = "期待値条件は通過したが候補艇の展示不足のためUPを保留"
         return {
             "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
             "status": "WAIT", "message": "候補艇の展示データ不足", "morning_pick": prediction["pick"],
