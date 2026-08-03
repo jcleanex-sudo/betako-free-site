@@ -1,14 +1,27 @@
 {
-  "updated_at": null,
+  "updated_at": "2026-08-04 01:58 JST",
   "status": "COLLECTING",
-  "reason": "過去レース収集開始待ち",
-  "samples": 0,
-  "date_range": null,
+  "reason": "安全な自動調整には最低800レース必要",
+  "samples": 576,
+  "date_range": [
+    "20260729",
+    "20260803"
+  ],
   "minimum_activation_samples": 800,
-  "train_samples": 0,
-  "validation_samples": 0,
-  "baseline_validation": null,
-  "candidate_validation": null,
+  "train_samples": 460,
+  "validation_samples": 116,
+  "baseline_validation": {
+    "samples": 116,
+    "log_loss": 1.34689,
+    "top1_accuracy": 54.31,
+    "brier": 0.6245
+  },
+  "candidate_validation": {
+    "samples": 116,
+    "log_loss": 1.34689,
+    "top1_accuracy": 54.31,
+    "brier": 0.6245
+  },
   "active_weights": {
     "national": 7.5,
     "local": 4.0,
@@ -19,7 +32,16 @@
     "st": 80.0,
     "temperature": 12.0
   },
-  "candidate_weights": null,
+  "candidate_weights": {
+    "national": 7.5,
+    "local": 4.0,
+    "motor": 0.28,
+    "boat_rate": 0.1,
+    "course": 24.0,
+    "class": 1.0,
+    "st": 80.0,
+    "temperature": 12.0
+  },
   "logic_transition": "変更なし",
   "source": "BOAT RACE公式 出走表・結果一覧"
 }
