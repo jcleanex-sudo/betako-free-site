@@ -149,7 +149,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
             "motor_2rate": entry["motor"],
             "avg_st": entry["st"],
         }
-        for entry, probability in ranked[:3]
+        for entry, probability in ranked
     ]
     reasons = [
         f"{top_boat}号艇 {top_entry['name']}（{top_entry['class']}）を1着軸に評価",
@@ -204,7 +204,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         "agreement": round(agreement, 1),
         "data_rate": round(data_rate, 1),
         "estimated_probability": round(top_probability * 100, 1),
-        "generation_mode": "公開用複合因子ロジック",
+        "generation_mode": "公開用複合因子ロジック v3",
         "logic": "基礎能力・当地適性・モーター・ST・コース補正",
         "contenders": contenders,
         "reasons": reasons,
@@ -221,17 +221,20 @@ def main():
         venues = discover_venues(date)
         predictions = []
         for stadium_id in venues:
-            for race in (8, 6, 10):
+            for race in (6, 8, 10):
                 try:
                     prediction = make_prediction(stadium_id, race, fetch_race(date, stadium_id, race))
                     if prediction:
                         predictions.append(prediction)
-                        break
                 except requests.RequestException as exc:
                     print(f"{STADIUMS[stadium_id]} {race}R: {exc}")
-        predictions.sort(key=lambda item: item["score"], reverse=True)
-        if predictions:
-            selected = predictions[:8]
+        eligible = [
+            prediction for prediction in predictions
+            if prediction["score"] >= 60 and prediction["data_rate"] >= 95
+        ]
+        eligible.sort(key=lambda item: (item["score"], item["agreement"], item["data_rate"]), reverse=True)
+        if eligible:
+            selected = eligible[:8]
             longshots = [
                 {
                     "venue_id": prediction["venue_id"], "venue": prediction["venue"],
@@ -241,9 +244,15 @@ def main():
                 for prediction in selected if prediction.get("longshot")
             ]
             longshots.sort(key=lambda item: item["hole_index"], reverse=True)
-            output.update(status="OK", message="公式出走表から自動生成", rankings=selected, longshots=longshots[:3])
+            output.update(
+                status="OK",
+                message="6R・8R・10Rを全比較し、データ取得率95%以上から自動選抜",
+                rankings=selected,
+                longshots=longshots[:3],
+                selection_policy="score>=60, data_rate>=95, compare=6R/8R/10R",
+            )
         else:
-            output["message"] = "開催情報または出走表を取得できませんでした"
+            output["message"] = "品質基準を満たす候補がないため全レース見送り"
     except Exception as exc:
         output["message"] = f"データ更新失敗: {type(exc).__name__}"
         print(exc)
