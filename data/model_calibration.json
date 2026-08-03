@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-04 02:30 JST",
+  "updated_at": "2026-08-04 05:11 JST",
   "status": "ACTIVATED",
-  "reason": "時系列検証log lossを0.1776改善",
+  "reason": "時系列検証log lossを0.0257改善",
   "samples": 1030,
   "date_range": [
     "20260726",
@@ -12,33 +12,33 @@
   "validation_samples": 206,
   "baseline_validation": {
     "samples": 206,
-    "log_loss": 1.38689,
-    "top1_accuracy": 51.46,
-    "brier": 0.63664
-  },
-  "candidate_validation": {
-    "samples": 206,
     "log_loss": 1.20928,
     "top1_accuracy": 58.74,
     "brier": 0.56875
   },
+  "candidate_validation": {
+    "samples": 206,
+    "log_loss": 1.18359,
+    "top1_accuracy": 59.71,
+    "brier": 0.55836
+  },
   "active_weights": {
-    "national": 5.043,
-    "local": 2.6896,
+    "national": 4.87961,
+    "local": 1.80849,
     "motor": 0.27093,
     "boat_rate": 0.118,
-    "course": 33.4176,
-    "class": 0.6724,
+    "course": 39.43277,
+    "class": 0.45212,
     "st": 77.408,
     "temperature": 14.16
   },
   "candidate_weights": {
-    "national": 5.043,
-    "local": 2.6896,
+    "national": 4.87961,
+    "local": 1.80849,
     "motor": 0.27093,
     "boat_rate": 0.118,
-    "course": 33.4176,
-    "class": 0.6724,
+    "course": 39.43277,
+    "class": 0.45212,
     "st": 77.408,
     "temperature": 14.16
   },
