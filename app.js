@@ -29,6 +29,11 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const cutoffReached = liveRemaining !== null && liveRemaining < 5;
   const valueStatus = cutoffReached ? "WATCH" : (value?.status || "DATA BLOCKED");
   const valueMessage = cutoffReached ? "締切5分前を過ぎたため新規判定を停止" : value?.message;
+  const morningSkip = !match || match.label === "見送り" || Number(match.score) < 60 || Number(match.data_rate) < 95;
+  const skipTarget = finalMode ? !finalReady || valueStatus !== "UP" : morningSkip;
+  const decisionBadge = document.querySelector("#decisionBadge");
+  decisionBadge.hidden = !skipTarget;
+  decisionBadge.textContent = "見送り対象";
   document.querySelector("#selectionText").textContent = finalReady
     ? `${venue} ${raceSelect.value}R・展示後指数 ${Math.round(finalData.final_score)}（FINAL）`
     : match
