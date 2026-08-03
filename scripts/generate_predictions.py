@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -21,8 +24,16 @@ STADIUMS = {
 COURSE_PRIOR = {1: 1.00, 2: 0.43, 3: 0.36, 4: 0.32, 5: 0.22, 6: 0.15}
 CLASS_BONUS = {"A1": 12.0, "A2": 7.0, "B1": 2.0, "B2": -3.0}
 HEADERS = {"User-Agent": "Mozilla/5.0 BETAKO-Free/1.0", "Accept-Language": "ja-JP,ja;q=0.9"}
-SESSION = requests.Session()
-SESSION.headers.update(HEADERS)
+REQUEST_TIMEOUT = int(os.environ.get("BOATRACE_REQUEST_TIMEOUT", "15"))
+MAX_WORKERS = max(1, min(4, int(os.environ.get("BOATRACE_MAX_WORKERS", "3"))))
+_THREAD_LOCAL = threading.local()
+
+
+def session():
+    if not hasattr(_THREAD_LOCAL, "session"):
+        _THREAD_LOCAL.session = requests.Session()
+        _THREAD_LOCAL.session.headers.update(HEADERS)
+    return _THREAD_LOCAL.session
 
 
 def number(value, default=0.0):
@@ -33,7 +44,7 @@ def number(value, default=0.0):
 
 
 def discover_venues(date: str) -> list[str]:
-    response = SESSION.get(f"{BASE}/index", params={"hd": date}, timeout=30)
+    response = session().get(f"{BASE}/index", params={"hd": date}, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, "lxml")
     found = []
@@ -95,7 +106,11 @@ def parse_entry(tbody, stadium_id: str):
 
 
 def fetch_race(date: str, stadium_id: str, race: int):
-    response = SESSION.get(f"{BASE}/racelist", params={"jcd": stadium_id, "hd": date, "rno": race}, timeout=30)
+    response = session().get(
+        f"{BASE}/racelist",
+        params={"jcd": stadium_id, "hd": date, "rno": race},
+        timeout=REQUEST_TIMEOUT,
+    )
     response.raise_for_status()
     soup = BeautifulSoup(response.text, "lxml")
     entries = [parse_entry(tbody, stadium_id) for tbody in soup.find_all("tbody", class_="is-fs12")]
@@ -213,6 +228,13 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     }
 
 
+def fetch_prediction(date, stadium_id, race):
+    try:
+        return make_prediction(stadium_id, race, fetch_race(date, stadium_id, race)), None
+    except Exception as exc:
+        return None, f"{STADIUMS[stadium_id]} {race}R: {type(exc).__name__}"
+
+
 def main():
     now = datetime.now(JST)
     date = now.strftime("%Y%m%d")
@@ -220,19 +242,26 @@ def main():
     try:
         venues = discover_venues(date)
         predictions = []
-        for stadium_id in venues:
-            for race in (6, 8, 10):
-                try:
-                    prediction = make_prediction(stadium_id, race, fetch_race(date, stadium_id, race))
-                    if prediction:
-                        predictions.append(prediction)
-                except requests.RequestException as exc:
-                    print(f"{STADIUMS[stadium_id]} {race}R: {exc}")
+        jobs = [(stadium_id, race) for stadium_id in venues for race in range(1, 13)]
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {
+                executor.submit(fetch_prediction, date, stadium_id, race): (stadium_id, race)
+                for stadium_id, race in jobs
+            }
+            for future in as_completed(futures):
+                prediction, error = future.result()
+                if prediction:
+                    predictions.append(prediction)
+                elif error:
+                    print(error)
         eligible = [
             prediction for prediction in predictions
             if prediction["score"] >= 60 and prediction["data_rate"] >= 95
         ]
-        eligible.sort(key=lambda item: (item["score"], item["agreement"], item["data_rate"]), reverse=True)
+        eligible.sort(key=lambda item: (
+            -item["score"], -item["agreement"], -item["data_rate"],
+            int(item["venue_id"]), item["race"],
+        ))
         if eligible:
             selected = eligible[:8]
             longshots = [
@@ -246,10 +275,10 @@ def main():
             longshots.sort(key=lambda item: item["hole_index"], reverse=True)
             output.update(
                 status="OK",
-                message="6R・8R・10Rを全比較し、データ取得率95%以上から自動選抜",
+                message="全1R〜12Rを比較し、データ取得率95%以上から自動選抜",
                 rankings=selected,
                 longshots=longshots[:3],
-                selection_policy="score>=60, data_rate>=95, compare=6R/8R/10R",
+                selection_policy=f"score>=60, data_rate>=95, compare=1R-12R, workers={MAX_WORKERS}",
             )
         else:
             output["message"] = "品質基準を満たす候補がないため全レース見送り"
