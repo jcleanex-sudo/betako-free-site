@@ -20,6 +20,12 @@ function buildBetPlan(contenders = [], leadingPick = "") {
   };
 }
 
+function formatTicket(ticket) {
+  if (typeof ticket === "string") return ticket;
+  const edge = ticket?.net_edge;
+  return `${ticket?.pick || "--"}${edge == null ? "" : ` (${edge >= 0 ? "+" : ""}${Number(edge).toFixed(1)}%)`}`;
+}
+
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const venue = venueSelect.value;
@@ -46,16 +52,18 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const decisionBadge = document.querySelector("#decisionBadge");
   decisionBadge.hidden = !skipTarget;
   decisionBadge.textContent = "見送り対象";
-  const betPlan = buildBetPlan(match?.contenders, finalReady ? finalData.final_pick : match?.pick);
-  document.querySelector("#mainPicks").textContent = betPlan.main.length ? betPlan.main.join("　") : "--";
-  document.querySelector("#coverPicks").textContent = betPlan.cover.length ? betPlan.cover.join("　") : "--";
+  const candidatePlan = buildBetPlan(match?.contenders, finalReady ? finalData.final_pick : match?.pick);
+  const betPlan = finalMode && finalData?.ticket_plan ? finalData.ticket_plan : candidatePlan;
+  document.querySelector("#mainLabel").textContent = betPlan.ranked_by_edge ? "期待値上位6点" : "本線候補6点";
+  document.querySelector("#mainPicks").textContent = betPlan.main.length ? betPlan.main.map(formatTicket).join("　") : "--";
+  document.querySelector("#coverPicks").textContent = betPlan.cover.length ? betPlan.cover.map(formatTicket).join("　") : "--";
   document.querySelector("#selectionText").textContent = finalReady
     ? `${venue} ${raceSelect.value}R・展示後指数 ${Math.round(finalData.final_score)}（FINAL）`
     : match
       ? `${venue} ${raceSelect.value}R・期待度指数 ${Math.round(match.score)}（${finalMode ? finalData?.status || "WAIT" : match.label}）`
     : `${dateInput.value}・${venue} ${raceSelect.value}R・DATA BLOCKED`;
   document.querySelector("#predictionDetail").textContent = finalReady
-    ? `展示後本線 ${finalData.final_pick}｜3連単オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜残り ${liveRemaining == null ? "--" : `${Math.max(0, liveRemaining).toFixed(0)}分`}｜判定 ${valueStatus}`
+    ? `期待値最上位 ${finalData.best_value_pick || finalData.final_pick}｜3連単オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜残り ${liveRemaining == null ? "--" : `${Math.max(0, liveRemaining).toFixed(0)}分`}｜判定 ${valueStatus}`
     : match
       ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
     : dateMatches

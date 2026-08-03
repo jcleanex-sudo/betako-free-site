@@ -80,6 +80,39 @@ def value_judgement(contenders, pick, realtime):
     }
 
 
+def ticket_plan(contenders, leading_pick, realtime):
+    contender_boats = [str(item["boat"]) for item in contenders]
+    leading_boats = [boat for boat in str(leading_pick).split("-") if boat in contender_boats]
+    boats = list(dict.fromkeys(leading_boats + contender_boats))
+    if len(boats) < 5:
+        return {"main": [], "cover": [], "ranked_by_edge": False}
+
+    patterns = [
+        (0, 1, 2), (0, 2, 1), (0, 1, 3), (0, 2, 3), (0, 3, 1),
+        (0, 3, 2), (1, 0, 2), (2, 0, 1), (0, 1, 4), (0, 2, 4),
+    ]
+    odds_map = ((realtime.get("odds") or {}).get("odds") or {})
+    rows = []
+    for first, second, third in patterns:
+        pick = f"{boats[first]}-{boats[second]}-{boats[third]}"
+        odds = odds_map.get(pick)
+        model_probability = ordered_trifecta_probability(contenders, pick)
+        market_probability = 100 / float(odds) if odds else None
+        net_edge = model_probability - market_probability - 2.0 if market_probability is not None and model_probability is not None else None
+        rows.append({
+            "pick": pick,
+            "odds": round(float(odds), 1) if odds else None,
+            "model_probability": model_probability,
+            "market_probability": round(market_probability, 2) if market_probability is not None else None,
+            "net_edge": round(net_edge, 2) if net_edge is not None else None,
+        })
+
+    ranked_by_edge = all(item["net_edge"] is not None for item in rows)
+    if ranked_by_edge:
+        rows.sort(key=lambda item: item["net_edge"], reverse=True)
+    return {"main": rows[:6], "cover": rows[6:10], "ranked_by_edge": ranked_by_edge}
+
+
 def longshot_judgement(prediction, realtime):
     candidate = prediction.get("longshot")
     if not candidate:
@@ -138,14 +171,16 @@ def longshot_judgement(prediction, realtime):
 def final_prediction(prediction, realtime):
     valid_times = [item for item in realtime.get("exhibition", []) if item.get("time") is not None]
     if len(valid_times) < 4:
-        value = value_judgement(prediction.get("contenders", []), prediction["pick"], realtime)
+        plan = ticket_plan(prediction.get("contenders", []), prediction["pick"], realtime)
+        value_pick = plan["main"][0]["pick"] if plan["main"] else prediction["pick"]
+        value = value_judgement(prediction.get("contenders", []), value_pick, realtime)
         if value.get("status") == "UP":
             value["status"] = "WATCH"
             value["message"] = "期待値条件は通過したが展示不足のためUPを保留"
         return {
             "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
             "status": "WAIT", "message": "展示データ不足のため朝予想を維持", "morning_pick": prediction["pick"],
-            "value": value,
+            "ticket_plan": plan, "best_value_pick": value_pick, "value": value,
             "source_url": realtime.get("source_url"),
         }
 
@@ -159,14 +194,16 @@ def final_prediction(prediction, realtime):
         adjusted.append((contender, adjusted_score, exhibition))
     adjusted.sort(key=lambda item: item[1], reverse=True)
     if len(adjusted) < 3:
-        value = value_judgement(prediction.get("contenders", []), prediction["pick"], realtime)
+        plan = ticket_plan(prediction.get("contenders", []), prediction["pick"], realtime)
+        value_pick = plan["main"][0]["pick"] if plan["main"] else prediction["pick"]
+        value = value_judgement(prediction.get("contenders", []), value_pick, realtime)
         if value.get("status") == "UP":
             value["status"] = "WATCH"
             value["message"] = "期待値条件は通過したが候補艇の展示不足のためUPを保留"
         return {
             "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
             "status": "WAIT", "message": "候補艇の展示データ不足", "morning_pick": prediction["pick"],
-            "value": value,
+            "ticket_plan": plan, "best_value_pick": value_pick, "value": value,
             "source_url": realtime.get("source_url"),
         }
 
@@ -182,11 +219,15 @@ def final_prediction(prediction, realtime):
         f"風速{wind:g}m・波高{wave:g}cm・天候{realtime.get('weather') or '不明'}",
         "朝の能力評価に展示順位とST展示順位を加えて再計算",
     ]
-    value = value_judgement([item[0] for item in adjusted], final_pick, realtime)
+    adjusted_contenders = [item[0] for item in adjusted]
+    plan = ticket_plan(adjusted_contenders, final_pick, realtime)
+    value_pick = plan["main"][0]["pick"] if plan["main"] else final_pick
+    value = value_judgement(adjusted_contenders, value_pick, realtime)
     return {
         "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
         "status": "FINAL", "message": "展示後再計算済み", "morning_pick": prediction["pick"],
         "final_pick": final_pick, "final_score": round(final_score, 1), "reasons": reasons,
+        "ticket_plan": plan, "best_value_pick": value_pick,
         "weather": realtime.get("weather"), "wind_speed": wind, "wave_height": wave,
         "value": value,
         "fetched_at": realtime.get("fetched_at"), "source_url": realtime.get("source_url"),
