@@ -8,6 +8,18 @@ for (let race = 1; race <= 12; race += 1) raceSelect.add(new Option(`${race}R`, 
 venueSelect.value = "大村";
 dateInput.value = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
 
+function buildBetPlan(contenders = [], leadingPick = "") {
+  const contenderBoats = contenders.map((item) => String(item.boat));
+  const leadingBoats = String(leadingPick).split("-").filter((boat) => contenderBoats.includes(boat));
+  const boats = [...new Set([...leadingBoats, ...contenderBoats])];
+  if (boats.length < 5) return { main: [], cover: [] };
+  const ticket = (first, second, third) => `${boats[first]}-${boats[second]}-${boats[third]}`;
+  return {
+    main: [ticket(0, 1, 2), ticket(0, 2, 1), ticket(0, 1, 3), ticket(0, 2, 3), ticket(0, 3, 1), ticket(0, 3, 2)],
+    cover: [ticket(1, 0, 2), ticket(2, 0, 1), ticket(0, 1, 4), ticket(0, 2, 4)],
+  };
+}
+
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const venue = venueSelect.value;
@@ -34,6 +46,9 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const decisionBadge = document.querySelector("#decisionBadge");
   decisionBadge.hidden = !skipTarget;
   decisionBadge.textContent = "見送り対象";
+  const betPlan = buildBetPlan(match?.contenders, finalReady ? finalData.final_pick : match?.pick);
+  document.querySelector("#mainPicks").textContent = betPlan.main.length ? betPlan.main.join("　") : "--";
+  document.querySelector("#coverPicks").textContent = betPlan.cover.length ? betPlan.cover.join("　") : "--";
   document.querySelector("#selectionText").textContent = finalReady
     ? `${venue} ${raceSelect.value}R・展示後指数 ${Math.round(finalData.final_score)}（FINAL）`
     : match
