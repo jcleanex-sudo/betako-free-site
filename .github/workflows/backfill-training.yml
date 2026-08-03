@@ -1,0 +1,48 @@
+name: Backfill and calibrate BETAKO
+
+on:
+  schedule:
+    - cron: "30 18 * * *"
+  workflow_dispatch:
+    inputs:
+      days:
+        description: Number of historical days to collect
+        required: true
+        default: "7"
+      mode:
+        description: Collect recent dates or extend farther into the past
+        required: true
+        type: choice
+        options:
+          - older
+          - recent
+
+permissions:
+  contents: write
+
+concurrency:
+  group: betako-data-updates
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      BACKFILL_DAYS: ${{ github.event_name == 'schedule' && '1' || inputs.days }}
+      BACKFILL_MODE: ${{ github.event_name == 'schedule' && 'recent' || inputs.mode }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python scripts/backfill_training.py --days "$BACKFILL_DAYS" --mode "$BACKFILL_MODE"
+      - name: Save training data and calibration
+        run: |
+          git config user.name "betako-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/training/ data/model_calibration.json
+          git diff --cached --quiet || git commit -m "Backfill historical training data"
+          git push

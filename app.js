@@ -242,6 +242,14 @@ fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
   })
   .catch(() => {});
 
+fetch(`data/model_calibration.json?ts=${Date.now()}`, { cache: "no-store" })
+  .then((response) => response.ok ? response.json() : Promise.reject())
+  .then((payload) => {
+    document.querySelector("#historicalSamples").textContent = `${Number(payload.samples || 0).toLocaleString("ja-JP")}件`;
+    document.querySelector("#calibrationStatus").textContent = `${payload.status || "COLLECTING"}｜${payload.reason || "検証中"}`;
+  })
+  .catch(() => {});
+
 fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((response) => response.ok ? response.json() : Promise.reject())
   .then((payload) => {

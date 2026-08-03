@@ -1,0 +1,25 @@
+{
+  "updated_at": null,
+  "status": "COLLECTING",
+  "reason": "過去レース収集開始待ち",
+  "samples": 0,
+  "date_range": null,
+  "minimum_activation_samples": 800,
+  "train_samples": 0,
+  "validation_samples": 0,
+  "baseline_validation": null,
+  "candidate_validation": null,
+  "active_weights": {
+    "national": 7.5,
+    "local": 4.0,
+    "motor": 0.28,
+    "boat_rate": 0.1,
+    "course": 24.0,
+    "class": 1.0,
+    "st": 80.0,
+    "temperature": 12.0
+  },
+  "candidate_weights": null,
+  "logic_transition": "変更なし",
+  "source": "BOAT RACE公式 出走表・結果一覧"
+}

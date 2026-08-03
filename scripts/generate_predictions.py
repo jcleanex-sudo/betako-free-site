@@ -27,6 +27,26 @@ HEADERS = {"User-Agent": "Mozilla/5.0 BETAKO-Free/1.0", "Accept-Language": "ja-J
 REQUEST_TIMEOUT = int(os.environ.get("BOATRACE_REQUEST_TIMEOUT", "15"))
 MAX_WORKERS = max(1, min(4, int(os.environ.get("BOATRACE_MAX_WORKERS", "3"))))
 _THREAD_LOCAL = threading.local()
+ROOT = Path(__file__).resolve().parents[1]
+MODEL_CONFIG = ROOT / "data" / "model_calibration.json"
+DEFAULT_MODEL_WEIGHTS = {
+    "national": 7.5, "local": 4.0, "motor": 0.28, "boat_rate": 0.10,
+    "course": 24.0, "class": 1.0, "st": 80.0, "temperature": 12.0,
+}
+
+
+def load_model_weights():
+    if not MODEL_CONFIG.exists():
+        return DEFAULT_MODEL_WEIGHTS.copy()
+    try:
+        payload = json.loads(MODEL_CONFIG.read_text(encoding="utf-8"))
+        active = payload.get("active_weights") or {}
+        return {key: float(active.get(key, value)) for key, value in DEFAULT_MODEL_WEIGHTS.items()}
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return DEFAULT_MODEL_WEIGHTS.copy()
+
+
+MODEL_WEIGHTS = load_model_weights()
 
 
 def session():
@@ -126,17 +146,18 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         available = sum(entry[key] is not None for key in ("national", "local", "motor", "boat_rate", "st"))
         completeness.append(available / 5)
         strength = (
-            number(entry["national"], 4.5) * 7.5
-            + number(entry["local"], 4.2) * 4.0
-            + number(entry["motor"], 32.0) * 0.28
-            + number(entry["boat_rate"], 32.0) * 0.10
-            + COURSE_PRIOR[entry["boat"]] * 24.0
-            + CLASS_BONUS[entry["class"]]
-            + max(-4.0, min(5.0, (0.20 - number(entry["st"], 0.20)) * 80.0))
+            number(entry["national"], 4.5) * MODEL_WEIGHTS["national"]
+            + number(entry["local"], 4.2) * MODEL_WEIGHTS["local"]
+            + number(entry["motor"], 32.0) * MODEL_WEIGHTS["motor"]
+            + number(entry["boat_rate"], 32.0) * MODEL_WEIGHTS["boat_rate"]
+            + COURSE_PRIOR[entry["boat"]] * MODEL_WEIGHTS["course"]
+            + CLASS_BONUS[entry["class"]] * MODEL_WEIGHTS["class"]
+            + max(-4.0, min(5.0, (0.20 - number(entry["st"], 0.20)) * MODEL_WEIGHTS["st"]))
         )
         scored.append((entry, strength))
     maximum = max(score for _, score in scored)
-    weights = [(entry, math.exp((score - maximum) / 12.0)) for entry, score in scored]
+    temperature = max(4.0, MODEL_WEIGHTS["temperature"])
+    weights = [(entry, math.exp((score - maximum) / temperature)) for entry, score in scored]
     total = sum(weight for _, weight in weights)
     ranked = sorted(((entry, weight / total) for entry, weight in weights), key=lambda item: item[1], reverse=True)
     top_boat = ranked[0][0]["boat"]
@@ -219,7 +240,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         "agreement": round(agreement, 1),
         "data_rate": round(data_rate, 1),
         "estimated_probability": round(top_probability * 100, 1),
-        "generation_mode": "公開用複合因子ロジック v3",
+        "generation_mode": "公開用複合因子ロジック v4（過去検証対応）",
         "logic": "基礎能力・当地適性・モーター・ST・コース補正",
         "contenders": contenders,
         "reasons": reasons,
@@ -298,7 +319,7 @@ def main():
     except Exception as exc:
         output["message"] = f"データ更新失敗: {type(exc).__name__}"
         print(exc)
-    target = Path(__file__).resolve().parents[1] / "data" / "predictions.json"
+    target = ROOT / "data" / "predictions.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     history = target.parent / "history" / f"{date}.json"
