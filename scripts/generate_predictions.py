@@ -238,7 +238,11 @@ def fetch_prediction(date, stadium_id, race):
 def main():
     now = datetime.now(JST)
     date = now.strftime("%Y%m%d")
-    output = {"status": "DATA BLOCKED", "updated_at": now.strftime("%Y-%m-%d %H:%M JST"), "message": "公式データ不足", "rankings": [], "longshots": []}
+    output = {
+        "status": "DATA BLOCKED", "race_date": now.strftime("%Y-%m-%d"),
+        "updated_at": now.strftime("%Y-%m-%d %H:%M JST"), "message": "公式データ不足",
+        "rankings": [], "all_races": [], "longshots": [],
+    }
     try:
         venues = discover_venues(date)
         predictions = []
@@ -262,6 +266,8 @@ def main():
             -item["score"], -item["agreement"], -item["data_rate"],
             int(item["venue_id"]), item["race"],
         ))
+        all_races = sorted(predictions, key=lambda item: (int(item["venue_id"]), item["race"]))
+        output["all_races"] = all_races
         if eligible:
             selected = eligible[:8]
             longshots = [
@@ -279,9 +285,16 @@ def main():
                 rankings=selected,
                 longshots=longshots[:3],
                 selection_policy=f"score>=60, data_rate>=95, compare=1R-12R, workers={MAX_WORKERS}",
+                manual_count=len(all_races),
             )
         else:
-            output["message"] = "品質基準を満たす候補がないため全レース見送り"
+            if all_races:
+                output.update(
+                    status="OK", message="ランキング基準通過なし。手動予想は取得成功レースを表示",
+                    manual_count=len(all_races),
+                )
+            else:
+                output["message"] = "取得できるレースがないためDATA BLOCKED"
     except Exception as exc:
         output["message"] = f"データ更新失敗: {type(exc).__name__}"
         print(exc)

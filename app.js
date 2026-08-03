@@ -13,7 +13,11 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const venue = venueSelect.value;
   const venueIndex = venues.indexOf(venue) + 1;
   document.querySelector("#venueCode").textContent = String(venueIndex).padStart(2, "0");
-  const match = window.betakoPredictions?.rankings?.find((item) => item.venue === venue && String(item.race) === raceSelect.value);
+  const predictionDate = window.betakoPredictions?.race_date;
+  const dateMatches = !predictionDate || predictionDate === dateInput.value;
+  const match = dateMatches
+    ? (window.betakoPredictions?.all_races || window.betakoPredictions?.rankings || []).find((item) => item.venue === venue && String(item.race) === raceSelect.value)
+    : null;
   const finalMode = document.querySelector("#predictionType").value === "展示後AI最終予想";
   const finalData = window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value);
   const finalReady = finalMode && finalData?.status === "FINAL";
@@ -34,7 +38,9 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? `展示後本線 ${finalData.final_pick}｜3連単オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜残り ${liveRemaining == null ? "--" : `${Math.max(0, liveRemaining).toFixed(0)}分`}｜判定 ${valueStatus}`
     : match
       ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
-    : "現在の公開ランキングにこのレースはありません。根拠不足のため見送ります。";
+    : dateMatches
+      ? "公式データを取得できなかったレースです。DATA BLOCKEDとして見送ります。"
+      : "選択日の予想データはありません。本日の日付を選択してください。";
   const reasons = document.querySelector("#predictionReasons");
   const displayedReasons = finalReady ? finalData.reasons : (match?.reasons || []);
   reasons.replaceChildren(...displayedReasons.map((reason) => {
@@ -48,7 +54,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}｜締切 ${value?.deadline || "未取得"}｜期待値判定 ${valueStatus}：${valueMessage || "3連単オッズ未公開"}`
     : match
       ? `無効条件：${(match.invalid_conditions || []).join("／")}`
-    : "見送り条件：ランキング対象外、データ不足、公式情報の取得失敗";
+    : `見送り条件：${dateMatches ? "公式データの取得失敗" : "選択日が本日ではない"}`;
   document.querySelector("#selectionResult").hidden = false;
 });
 
