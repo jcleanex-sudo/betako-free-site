@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03 18:12 JST",
+  "updated_at": "2026-08-03 18:18 JST",
   "races": [
     {
       "venue": "福岡",
@@ -25,31 +25,42 @@
         "market_probability": 2.08,
         "net_edge": -3.36,
         "deadline": "14:45",
-        "remaining_minutes": -208.1,
+        "remaining_minutes": -214.0,
         "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=22&hd=20260803&rno=6"
       },
-      "fetched_at": "2026-08-03T18:13:05+09:00",
+      "fetched_at": "2026-08-03T18:18:57+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=22&hd=20260803&rno=6"
     },
     {
       "venue": "若松",
       "venue_id": "20",
       "race": 8,
-      "status": "WAIT",
-      "message": "展示データ不足のため朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-2-6",
+      "final_pick": "1-6-2",
+      "final_score": 76.9,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速4m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "weather": "晴",
+      "wind_speed": 4.0,
+      "wave_height": 0,
       "value": {
         "status": "UP",
-        "odds": 29.2,
-        "model_probability": 12.78,
-        "market_probability": 3.42,
-        "net_edge": 7.36,
+        "odds": 72.2,
+        "model_probability": 9.19,
+        "market_probability": 1.39,
+        "net_edge": 5.8,
         "deadline": "18:33",
-        "remaining_minutes": 19.6,
+        "remaining_minutes": 13.7,
         "message": "検証用候補（実購入を推奨するものではありません）",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=20&hd=20260803&rno=8"
       },
+      "fetched_at": "2026-08-03T18:19:15+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=20&hd=20260803&rno=8"
     },
     {
@@ -76,11 +87,11 @@
         "market_probability": 6.67,
         "net_edge": 9.83,
         "deadline": "17:46",
-        "remaining_minutes": -27.7,
+        "remaining_minutes": -33.6,
         "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=19&hd=20260803&rno=6"
       },
-      "fetched_at": "2026-08-03T18:13:40+09:00",
+      "fetched_at": "2026-08-03T18:19:33+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=19&hd=20260803&rno=6"
     },
     {
@@ -107,11 +118,11 @@
         "market_probability": 3.88,
         "net_edge": 1.93,
         "deadline": "15:31",
-        "remaining_minutes": -163.0,
+        "remaining_minutes": -168.9,
         "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=04&hd=20260803&rno=8"
       },
-      "fetched_at": "2026-08-03T18:14:01+09:00",
+      "fetched_at": "2026-08-03T18:19:52+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=04&hd=20260803&rno=8"
     },
     {
@@ -138,11 +149,11 @@
         "market_probability": 8.33,
         "net_edge": 0.84,
         "deadline": "10:59",
-        "remaining_minutes": -435.3,
+        "remaining_minutes": -441.2,
         "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=23&hd=20260803&rno=6"
       },
-      "fetched_at": "2026-08-03T18:14:20+09:00",
+      "fetched_at": "2026-08-03T18:20:11+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=23&hd=20260803&rno=6"
     },
     {
@@ -169,11 +180,11 @@
         "market_probability": 1.33,
         "net_edge": -0.64,
         "deadline": "14:07",
-        "remaining_minutes": -247.6,
+        "remaining_minutes": -253.5,
         "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=13&hd=20260803&rno=8"
       },
-      "fetched_at": "2026-08-03T18:14:36+09:00",
+      "fetched_at": "2026-08-03T18:20:30+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=13&hd=20260803&rno=8"
     },
     {
@@ -200,11 +211,11 @@
         "market_probability": 21.28,
         "net_edge": 4.11,
         "deadline": "14:02",
-        "remaining_minutes": -252.9,
+        "remaining_minutes": -258.8,
         "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=05&hd=20260803&rno=6"
       },
-      "fetched_at": "2026-08-03T18:14:53+09:00",
+      "fetched_at": "2026-08-03T18:20:48+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=05&hd=20260803&rno=6"
     },
     {
@@ -231,11 +242,11 @@
         "market_probability": 8.13,
         "net_edge": 13.09,
         "deadline": "12:49",
-        "remaining_minutes": -326.2,
+        "remaining_minutes": -332.1,
         "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=21&hd=20260803&rno=10"
       },
-      "fetched_at": "2026-08-03T18:15:11+09:00",
+      "fetched_at": "2026-08-03T18:21:08+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=21&hd=20260803&rno=10"
     }
   ],
@@ -249,7 +260,7 @@
       "formation": "1-6-流し",
       "time_rank": 1,
       "deadline": "14:45",
-      "remaining_minutes": -208.1,
+      "remaining_minutes": -214.0,
       "status": "WATCH",
       "min_odds": 7.4,
       "model_probability": 20.82,
@@ -264,15 +275,15 @@
       "boat": 2,
       "name": "松尾 祭",
       "formation": "1-2-流し",
-      "time_rank": null,
+      "time_rank": 4,
       "deadline": "18:33",
-      "remaining_minutes": 19.6,
-      "status": "WAIT",
-      "min_odds": null,
-      "model_probability": null,
-      "market_probability": null,
-      "net_edge": null,
-      "message": "候補艇の展示データ待ち"
+      "remaining_minutes": 13.7,
+      "status": "WATCH",
+      "min_odds": 3.4,
+      "model_probability": 34.27,
+      "market_probability": 117.65,
+      "net_edge": -85.38,
+      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
       "venue": "下関",
@@ -283,7 +294,7 @@
       "formation": "2-5-流し",
       "time_rank": 2,
       "deadline": "17:46",
-      "remaining_minutes": -27.7,
+      "remaining_minutes": -33.6,
       "status": "WATCH",
       "min_odds": 15.0,
       "model_probability": 38.51,
@@ -300,7 +311,7 @@
       "formation": "4-1-流し",
       "time_rank": 2,
       "deadline": "15:31",
-      "remaining_minutes": -163.0,
+      "remaining_minutes": -168.9,
       "status": "WATCH",
       "min_odds": 15.3,
       "model_probability": 45.57,
@@ -317,7 +328,7 @@
       "formation": "3-5-流し",
       "time_rank": 3,
       "deadline": "10:59",
-      "remaining_minutes": -435.3,
+      "remaining_minutes": -441.2,
       "status": "WATCH",
       "min_odds": 12.0,
       "model_probability": 25.1,
@@ -334,7 +345,7 @@
       "formation": "1-2-流し",
       "time_rank": 4,
       "deadline": "14:07",
-      "remaining_minutes": -247.6,
+      "remaining_minutes": -253.5,
       "status": "WATCH",
       "min_odds": 4.1,
       "model_probability": 67.26,
@@ -351,7 +362,7 @@
       "formation": "1-4-流し",
       "time_rank": 4,
       "deadline": "14:02",
-      "remaining_minutes": -252.9,
+      "remaining_minutes": -258.8,
       "status": "WATCH",
       "min_odds": 8.3,
       "model_probability": 27.18,
@@ -368,7 +379,7 @@
       "formation": "2-6-流し",
       "time_rank": 1,
       "deadline": "12:49",
-      "remaining_minutes": -326.2,
+      "remaining_minutes": -332.1,
       "status": "WATCH",
       "min_odds": 37.1,
       "model_probability": 8.05,
