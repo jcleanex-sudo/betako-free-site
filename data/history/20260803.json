@@ -1,8 +1,108 @@
 {
   "status": "OK",
-  "updated_at": "2026-08-03 09:02 JST",
-  "message": "公式出走表から自動生成",
+  "updated_at": "2026-08-03 18:04 JST",
+  "message": "6R・8R・10Rを全比較し、データ取得率95%以上から自動選抜",
   "rankings": [
+    {
+      "venue_id": "22",
+      "venue": "福岡",
+      "race": 6,
+      "score": 86.3,
+      "label": "厳格候補",
+      "pick": "1-2-4",
+      "agreement": 100.0,
+      "data_rate": 100.0,
+      "estimated_probability": 96.3,
+      "generation_mode": "公開用複合因子ロジック v3",
+      "logic": "基礎能力・当地適性・モーター・ST・コース補正",
+      "contenders": [
+        {
+          "boat": 1,
+          "name": "黒野 元基",
+          "class": "A1",
+          "relative_win_probability": 96.3,
+          "national_win_rate": 7.62,
+          "local_win_rate": 7.06,
+          "motor_2rate": 33.96,
+          "avg_st": 0.14
+        },
+        {
+          "boat": 2,
+          "name": "上原 健次郎",
+          "class": "A2",
+          "relative_win_probability": 2.0,
+          "national_win_rate": 5.57,
+          "local_win_rate": 5.19,
+          "motor_2rate": 25.26,
+          "avg_st": 0.18
+        },
+        {
+          "boat": 4,
+          "name": "大場 広孝",
+          "class": "B1",
+          "relative_win_probability": 0.8,
+          "national_win_rate": 5.12,
+          "local_win_rate": 5.02,
+          "motor_2rate": 33.33,
+          "avg_st": 0.17
+        },
+        {
+          "boat": 6,
+          "name": "竹田 和哉",
+          "class": "A1",
+          "relative_win_probability": 0.8,
+          "national_win_rate": 6.93,
+          "local_win_rate": 0.0,
+          "motor_2rate": 29.7,
+          "avg_st": 0.16
+        },
+        {
+          "boat": 3,
+          "name": "高山 智至",
+          "class": "B1",
+          "relative_win_probability": 0.1,
+          "national_win_rate": 4.83,
+          "local_win_rate": 0.0,
+          "motor_2rate": 29.29,
+          "avg_st": 0.19
+        },
+        {
+          "boat": 5,
+          "name": "上岡 巧汰",
+          "class": "B2",
+          "relative_win_probability": 0.0,
+          "national_win_rate": 1.94,
+          "local_win_rate": 1.67,
+          "motor_2rate": 29.67,
+          "avg_st": 0.15
+        }
+      ],
+      "reasons": [
+        "1号艇 黒野 元基（A1）を1着軸に評価",
+        "全国勝率 7.62・当地勝率 7.06・モーター2連率 34.0%",
+        "能力・当地・モーター・STの4因子中 4因子が軸艇と一致"
+      ],
+      "invalid_conditions": [
+        "展示タイム・進入・欠場に大きな変化が出た場合",
+        "強風・高波など朝データ取得後に水面条件が急変した場合",
+        "データ取得率が90%未満または公式情報を再取得できない場合"
+      ],
+      "longshot": {
+        "boat": 6,
+        "name": "竹田 和哉",
+        "class": "A1",
+        "hole_index": 43.7,
+        "status": "WATCH",
+        "relative_probability": 0.8,
+        "formation": "1-6-流し",
+        "reasons": [
+          "相対モデル確率 0.8%の人気薄候補",
+          "当地勝率 0.00・モーター2連率 29.7%・平均ST 0.16",
+          "穴評価4因子のうち 2因子が基準を通過"
+        ],
+        "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
+      }
+    },
     {
       "venue_id": "20",
       "venue": "若松",
@@ -13,7 +113,7 @@
       "agreement": 75.0,
       "data_rate": 100.0,
       "estimated_probability": 79.2,
-      "generation_mode": "公開用複合因子ロジック",
+      "generation_mode": "公開用複合因子ロジック v3",
       "logic": "基礎能力・当地適性・モーター・ST・コース補正",
       "contenders": [
         {
@@ -45,6 +145,36 @@
           "local_win_rate": 5.43,
           "motor_2rate": 29.05,
           "avg_st": 0.18
+        },
+        {
+          "boat": 5,
+          "name": "渡邊 裕貴",
+          "class": "B1",
+          "relative_win_probability": 3.8,
+          "national_win_rate": 5.52,
+          "local_win_rate": 3.0,
+          "motor_2rate": 32.26,
+          "avg_st": 0.17
+        },
+        {
+          "boat": 3,
+          "name": "吉川 晴人",
+          "class": "A2",
+          "relative_win_probability": 2.2,
+          "national_win_rate": 5.24,
+          "local_win_rate": 0.0,
+          "motor_2rate": 29.58,
+          "avg_st": 0.17
+        },
+        {
+          "boat": 4,
+          "name": "今泉 徹",
+          "class": "B1",
+          "relative_win_probability": 1.3,
+          "national_win_rate": 4.0,
+          "local_win_rate": 3.5,
+          "motor_2rate": 20.9,
+          "avg_st": 0.17
         }
       ],
       "reasons": [
@@ -74,6 +204,106 @@
       }
     },
     {
+      "venue_id": "19",
+      "venue": "下関",
+      "race": 6,
+      "score": 72.2,
+      "label": "厳格候補",
+      "pick": "2-5-1",
+      "agreement": 75.0,
+      "data_rate": 100.0,
+      "estimated_probability": 73.2,
+      "generation_mode": "公開用複合因子ロジック v3",
+      "logic": "基礎能力・当地適性・モーター・ST・コース補正",
+      "contenders": [
+        {
+          "boat": 2,
+          "name": "井本 昌也",
+          "class": "A1",
+          "relative_win_probability": 73.2,
+          "national_win_rate": 6.69,
+          "local_win_rate": 6.91,
+          "motor_2rate": 31.58,
+          "avg_st": 0.15
+        },
+        {
+          "boat": 5,
+          "name": "木下 雄介",
+          "class": "A2",
+          "relative_win_probability": 14.1,
+          "national_win_rate": 5.85,
+          "local_win_rate": 7.05,
+          "motor_2rate": 24.0,
+          "avg_st": 0.17
+        },
+        {
+          "boat": 1,
+          "name": "楠原 正剛",
+          "class": "B1",
+          "relative_win_probability": 6.1,
+          "national_win_rate": 5.01,
+          "local_win_rate": 2.57,
+          "motor_2rate": 22.81,
+          "avg_st": 0.16
+        },
+        {
+          "boat": 3,
+          "name": "山本 稔太朗",
+          "class": "B1",
+          "relative_win_probability": 5.7,
+          "national_win_rate": 4.98,
+          "local_win_rate": 5.67,
+          "motor_2rate": 27.66,
+          "avg_st": 0.16
+        },
+        {
+          "boat": 6,
+          "name": "伊藤 雄二",
+          "class": "B1",
+          "relative_win_probability": 0.6,
+          "national_win_rate": 3.16,
+          "local_win_rate": 3.72,
+          "motor_2rate": 28.85,
+          "avg_st": 0.18
+        },
+        {
+          "boat": 4,
+          "name": "小川 時光",
+          "class": "B1",
+          "relative_win_probability": 0.4,
+          "national_win_rate": 3.68,
+          "local_win_rate": 0.0,
+          "motor_2rate": 25.81,
+          "avg_st": 0.17
+        }
+      ],
+      "reasons": [
+        "2号艇 井本 昌也（A1）を1着軸に評価",
+        "全国勝率 6.69・当地勝率 6.91・モーター2連率 31.6%",
+        "能力・当地・モーター・STの4因子中 3因子が軸艇と一致"
+      ],
+      "invalid_conditions": [
+        "展示タイム・進入・欠場に大きな変化が出た場合",
+        "強風・高波など朝データ取得後に水面条件が急変した場合",
+        "データ取得率が90%未満または公式情報を再取得できない場合"
+      ],
+      "longshot": {
+        "boat": 5,
+        "name": "木下 雄介",
+        "class": "A2",
+        "hole_index": 56.1,
+        "status": "WATCH",
+        "relative_probability": 14.1,
+        "formation": "2-5-流し",
+        "reasons": [
+          "相対モデル確率 14.1%の人気薄候補",
+          "当地勝率 7.05・モーター2連率 24.0%・平均ST 0.17",
+          "穴評価4因子のうち 2因子が基準を通過"
+        ],
+        "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
+      }
+    },
+    {
       "venue_id": "04",
       "venue": "平和島",
       "race": 8,
@@ -83,7 +313,7 @@
       "agreement": 75.0,
       "data_rate": 100.0,
       "estimated_probability": 69.5,
-      "generation_mode": "公開用複合因子ロジック",
+      "generation_mode": "公開用複合因子ロジック v3",
       "logic": "基礎能力・当地適性・モーター・ST・コース補正",
       "contenders": [
         {
@@ -115,6 +345,36 @@
           "local_win_rate": 4.88,
           "motor_2rate": 34.29,
           "avg_st": 0.16
+        },
+        {
+          "boat": 2,
+          "name": "木村 浩士",
+          "class": "B1",
+          "relative_win_probability": 3.1,
+          "national_win_rate": 4.57,
+          "local_win_rate": 4.95,
+          "motor_2rate": 45.71,
+          "avg_st": 0.18
+        },
+        {
+          "boat": 5,
+          "name": "楠原 翔太",
+          "class": "B1",
+          "relative_win_probability": 1.9,
+          "national_win_rate": 5.16,
+          "local_win_rate": 4.33,
+          "motor_2rate": 28.57,
+          "avg_st": 0.17
+        },
+        {
+          "boat": 6,
+          "name": "森 竜也",
+          "class": "B1",
+          "relative_win_probability": 1.8,
+          "national_win_rate": 4.46,
+          "local_win_rate": 4.6,
+          "motor_2rate": 44.0,
+          "avg_st": 0.17
         }
       ],
       "reasons": [
@@ -144,6 +404,106 @@
       }
     },
     {
+      "venue_id": "23",
+      "venue": "唐津",
+      "race": 6,
+      "score": 69.1,
+      "label": "検証候補",
+      "pick": "3-5-6",
+      "agreement": 75.0,
+      "data_rate": 100.0,
+      "estimated_probability": 66.4,
+      "generation_mode": "公開用複合因子ロジック v3",
+      "logic": "基礎能力・当地適性・モーター・ST・コース補正",
+      "contenders": [
+        {
+          "boat": 3,
+          "name": "中辻 崇人",
+          "class": "A1",
+          "relative_win_probability": 66.4,
+          "national_win_rate": 6.57,
+          "local_win_rate": 7.88,
+          "motor_2rate": 37.56,
+          "avg_st": 0.15
+        },
+        {
+          "boat": 5,
+          "name": "末永 祐輝",
+          "class": "A1",
+          "relative_win_probability": 12.7,
+          "national_win_rate": 5.74,
+          "local_win_rate": 5.54,
+          "motor_2rate": 38.69,
+          "avg_st": 0.16
+        },
+        {
+          "boat": 6,
+          "name": "木下 大將",
+          "class": "A2",
+          "relative_win_probability": 9.3,
+          "national_win_rate": 6.17,
+          "local_win_rate": 5.33,
+          "motor_2rate": 38.25,
+          "avg_st": 0.15
+        },
+        {
+          "boat": 1,
+          "name": "山田 真聖",
+          "class": "B1",
+          "relative_win_probability": 9.1,
+          "national_win_rate": 5.43,
+          "local_win_rate": 3.25,
+          "motor_2rate": 32.83,
+          "avg_st": 0.16
+        },
+        {
+          "boat": 4,
+          "name": "泉 啓文",
+          "class": "B1",
+          "relative_win_probability": 1.5,
+          "national_win_rate": 3.62,
+          "local_win_rate": 5.45,
+          "motor_2rate": 34.5,
+          "avg_st": 0.18
+        },
+        {
+          "boat": 2,
+          "name": "佐竹 友樹",
+          "class": "B1",
+          "relative_win_probability": 1.0,
+          "national_win_rate": 4.1,
+          "local_win_rate": 2.92,
+          "motor_2rate": 38.14,
+          "avg_st": 0.18
+        }
+      ],
+      "reasons": [
+        "3号艇 中辻 崇人（A1）を1着軸に評価",
+        "全国勝率 6.57・当地勝率 7.88・モーター2連率 37.6%",
+        "能力・当地・モーター・STの4因子中 3因子が軸艇と一致"
+      ],
+      "invalid_conditions": [
+        "展示タイム・進入・欠場に大きな変化が出た場合",
+        "強風・高波など朝データ取得後に水面条件が急変した場合",
+        "データ取得率が90%未満または公式情報を再取得できない場合"
+      ],
+      "longshot": {
+        "boat": 5,
+        "name": "末永 祐輝",
+        "class": "A1",
+        "hole_index": 55.7,
+        "status": "WATCH",
+        "relative_probability": 12.7,
+        "formation": "3-5-流し",
+        "reasons": [
+          "相対モデル確率 12.7%の人気薄候補",
+          "当地勝率 5.54・モーター2連率 38.7%・平均ST 0.16",
+          "穴評価4因子のうち 4因子が基準を通過"
+        ],
+        "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
+      }
+    },
+    {
       "venue_id": "13",
       "venue": "尼崎",
       "race": 8,
@@ -153,7 +513,7 @@
       "agreement": 50.0,
       "data_rate": 96.7,
       "estimated_probability": 74.6,
-      "generation_mode": "公開用複合因子ロジック",
+      "generation_mode": "公開用複合因子ロジック v3",
       "logic": "基礎能力・当地適性・モーター・ST・コース補正",
       "contenders": [
         {
@@ -185,6 +545,36 @@
           "local_win_rate": 5.43,
           "motor_2rate": 49.33,
           "avg_st": 0.18
+        },
+        {
+          "boat": 3,
+          "name": "永井 聖美",
+          "class": "B1",
+          "relative_win_probability": 0.5,
+          "national_win_rate": 5.47,
+          "local_win_rate": 0.0,
+          "motor_2rate": 31.08,
+          "avg_st": 0.16
+        },
+        {
+          "boat": 6,
+          "name": "中村 紋夕梨",
+          "class": "B1",
+          "relative_win_probability": 0.1,
+          "national_win_rate": 2.67,
+          "local_win_rate": 1.47,
+          "motor_2rate": 34.21,
+          "avg_st": 0.22
+        },
+        {
+          "boat": 4,
+          "name": "藤本 遼磨",
+          "class": "B2",
+          "relative_win_probability": 0.0,
+          "national_win_rate": 1.78,
+          "local_win_rate": 0.0,
+          "motor_2rate": 22.22,
+          "avg_st": null
         }
       ],
       "reasons": [
@@ -214,122 +604,82 @@
       }
     },
     {
-      "venue_id": "23",
-      "venue": "唐津",
-      "race": 8,
-      "score": 66.5,
-      "label": "検証候補",
-      "pick": "6-1-3",
-      "agreement": 100.0,
-      "data_rate": 100.0,
-      "estimated_probability": 52.3,
-      "generation_mode": "公開用複合因子ロジック",
-      "logic": "基礎能力・当地適性・モーター・ST・コース補正",
-      "contenders": [
-        {
-          "boat": 6,
-          "name": "小野寺 智洋",
-          "class": "A2",
-          "relative_win_probability": 52.3,
-          "national_win_rate": 5.72,
-          "local_win_rate": 5.39,
-          "motor_2rate": 46.85,
-          "avg_st": 0.14
-        },
-        {
-          "boat": 1,
-          "name": "松田 憲幸",
-          "class": "B2",
-          "relative_win_probability": 19.2,
-          "national_win_rate": 4.62,
-          "local_win_rate": 4.5,
-          "motor_2rate": 33.99,
-          "avg_st": 0.22
-        },
-        {
-          "boat": 3,
-          "name": "牧原 崇",
-          "class": "B1",
-          "relative_win_probability": 15.9,
-          "national_win_rate": 4.88,
-          "local_win_rate": 4.72,
-          "motor_2rate": 44.27,
-          "avg_st": 0.18
-        }
-      ],
-      "reasons": [
-        "6号艇 小野寺 智洋（A2）を1着軸に評価",
-        "全国勝率 5.72・当地勝率 5.39・モーター2連率 46.9%",
-        "能力・当地・モーター・STの4因子中 4因子が軸艇と一致"
-      ],
-      "invalid_conditions": [
-        "展示タイム・進入・欠場に大きな変化が出た場合",
-        "強風・高波など朝データ取得後に水面条件が急変した場合",
-        "データ取得率が90%未満または公式情報を再取得できない場合"
-      ],
-      "longshot": {
-        "boat": 3,
-        "name": "牧原 崇",
-        "class": "B1",
-        "hole_index": 54.4,
-        "status": "WATCH",
-        "relative_probability": 15.9,
-        "formation": "6-3-流し",
-        "reasons": [
-          "相対モデル確率 15.9%の人気薄候補",
-          "当地勝率 4.72・モーター2連率 44.3%・平均ST 0.18",
-          "穴評価4因子のうち 1因子が基準を通過"
-        ],
-        "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
-      }
-    },
-    {
       "venue_id": "05",
       "venue": "多摩川",
-      "race": 8,
-      "score": 66.4,
+      "race": 6,
+      "score": 68.7,
       "label": "検証候補",
-      "pick": "1-2-3",
+      "pick": "1-2-4",
       "agreement": 50.0,
       "data_rate": 100.0,
-      "estimated_probability": 68.6,
-      "generation_mode": "公開用複合因子ロジック",
+      "estimated_probability": 73.9,
+      "generation_mode": "公開用複合因子ロジック v3",
       "logic": "基礎能力・当地適性・モーター・ST・コース補正",
       "contenders": [
         {
           "boat": 1,
-          "name": "吉田 慎二郎",
-          "class": "A2",
-          "relative_win_probability": 68.6,
-          "national_win_rate": 6.2,
-          "local_win_rate": 5.74,
-          "motor_2rate": 40.54,
-          "avg_st": 0.17
+          "name": "三角 哲男",
+          "class": "A1",
+          "relative_win_probability": 73.9,
+          "national_win_rate": 6.25,
+          "local_win_rate": 6.62,
+          "motor_2rate": 40.91,
+          "avg_st": 0.15
         },
         {
           "boat": 2,
-          "name": "長谷川 晴哉",
+          "name": "杉山 正樹",
           "class": "A1",
-          "relative_win_probability": 22.7,
-          "national_win_rate": 6.15,
-          "local_win_rate": 5.03,
+          "relative_win_probability": 13.1,
+          "national_win_rate": 6.31,
+          "local_win_rate": 7.22,
+          "motor_2rate": 13.56,
+          "avg_st": 0.16
+        },
+        {
+          "boat": 4,
+          "name": "鶴本 崇文",
+          "class": "A1",
+          "relative_win_probability": 9.6,
+          "national_win_rate": 5.9,
+          "local_win_rate": 5.77,
           "motor_2rate": 40.28,
-          "avg_st": 0.17
+          "avg_st": 0.16
         },
         {
           "boat": 3,
-          "name": "小野 桜",
-          "class": "B1",
-          "relative_win_probability": 3.1,
-          "national_win_rate": 4.89,
-          "local_win_rate": 4.44,
-          "motor_2rate": 38.1,
+          "name": "伊藤 喜智",
+          "class": "A2",
+          "relative_win_probability": 2.5,
+          "national_win_rate": 5.61,
+          "local_win_rate": 5.0,
+          "motor_2rate": 17.91,
           "avg_st": 0.18
+        },
+        {
+          "boat": 6,
+          "name": "石原 凪紗",
+          "class": "B1",
+          "relative_win_probability": 0.6,
+          "national_win_rate": 4.92,
+          "local_win_rate": 3.86,
+          "motor_2rate": 36.21,
+          "avg_st": 0.2
+        },
+        {
+          "boat": 5,
+          "name": "泉 具巳",
+          "class": "B1",
+          "relative_win_probability": 0.4,
+          "national_win_rate": 4.48,
+          "local_win_rate": 3.79,
+          "motor_2rate": 18.97,
+          "avg_st": 0.17
         }
       ],
       "reasons": [
-        "1号艇 吉田 慎二郎（A2）を1着軸に評価",
-        "全国勝率 6.20・当地勝率 5.74・モーター2連率 40.5%",
+        "1号艇 三角 哲男（A1）を1着軸に評価",
+        "全国勝率 6.25・当地勝率 6.62・モーター2連率 40.9%",
         "能力・当地・モーター・STの4因子中 2因子が軸艇と一致"
       ],
       "invalid_conditions": [
@@ -338,139 +688,99 @@
         "データ取得率が90%未満または公式情報を再取得できない場合"
       ],
       "longshot": {
-        "boat": 2,
-        "name": "長谷川 晴哉",
+        "boat": 4,
+        "name": "鶴本 崇文",
         "class": "A1",
-        "hole_index": 60.7,
+        "hole_index": 54.9,
         "status": "WATCH",
-        "relative_probability": 22.7,
-        "formation": "1-2-流し",
+        "relative_probability": 9.6,
+        "formation": "1-4-流し",
         "reasons": [
-          "相対モデル確率 22.7%の人気薄候補",
-          "当地勝率 5.03・モーター2連率 40.3%・平均ST 0.17",
-          "穴評価4因子のうち 2因子が基準を通過"
+          "相対モデル確率 9.6%の人気薄候補",
+          "当地勝率 5.77・モーター2連率 40.3%・平均ST 0.16",
+          "穴評価4因子のうち 4因子が基準を通過"
         ],
         "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
       }
     },
     {
-      "venue_id": "19",
-      "venue": "下関",
-      "race": 8,
-      "score": 66.2,
+      "venue_id": "21",
+      "venue": "芦屋",
+      "race": 10,
+      "score": 68.4,
       "label": "検証候補",
-      "pick": "4-1-3",
-      "agreement": 75.0,
+      "pick": "2-1-6",
+      "agreement": 100.0,
       "data_rate": 100.0,
-      "estimated_probability": 59.8,
-      "generation_mode": "公開用複合因子ロジック",
+      "estimated_probability": 56.5,
+      "generation_mode": "公開用複合因子ロジック v3",
       "logic": "基礎能力・当地適性・モーター・ST・コース補正",
       "contenders": [
         {
-          "boat": 4,
-          "name": "三浦 敬太",
+          "boat": 2,
+          "name": "森永 淳",
           "class": "A1",
-          "relative_win_probability": 59.8,
-          "national_win_rate": 5.7,
-          "local_win_rate": 6.1,
-          "motor_2rate": 38.6,
-          "avg_st": 0.14
+          "relative_win_probability": 56.5,
+          "national_win_rate": 7.12,
+          "local_win_rate": 7.61,
+          "motor_2rate": 45.71,
+          "avg_st": 0.13
         },
         {
           "boat": 1,
-          "name": "渡 修平",
-          "class": "B1",
-          "relative_win_probability": 16.6,
-          "national_win_rate": 4.44,
-          "local_win_rate": 4.33,
-          "motor_2rate": 36.36,
-          "avg_st": 0.2
+          "name": "武富 智亮",
+          "class": "A2",
+          "relative_win_probability": 32.3,
+          "national_win_rate": 6.32,
+          "local_win_rate": 5.85,
+          "motor_2rate": 41.67,
+          "avg_st": 0.16
         },
         {
-          "boat": 3,
-          "name": "中田 友也",
-          "class": "A2",
-          "relative_win_probability": 14.3,
-          "national_win_rate": 5.41,
-          "local_win_rate": 5.17,
-          "motor_2rate": 30.19,
-          "avg_st": 0.18
-        }
-      ],
-      "reasons": [
-        "4号艇 三浦 敬太（A1）を1着軸に評価",
-        "全国勝率 5.70・当地勝率 6.10・モーター2連率 38.6%",
-        "能力・当地・モーター・STの4因子中 3因子が軸艇と一致"
-      ],
-      "invalid_conditions": [
-        "展示タイム・進入・欠場に大きな変化が出た場合",
-        "強風・高波など朝データ取得後に水面条件が急変した場合",
-        "データ取得率が90%未満または公式情報を再取得できない場合"
-      ],
-      "longshot": {
-        "boat": 1,
-        "name": "渡 修平",
-        "class": "B1",
-        "hole_index": 50.7,
-        "status": "WATCH",
-        "relative_probability": 16.6,
-        "formation": "4-1-流し",
-        "reasons": [
-          "相対モデル確率 16.6%の人気薄候補",
-          "当地勝率 4.33・モーター2連率 36.4%・平均ST 0.20",
-          "穴評価4因子のうち 1因子が基準を通過"
-        ],
-        "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
-      }
-    },
-    {
-      "venue_id": "22",
-      "venue": "福岡",
-      "race": 8,
-      "score": 61.9,
-      "label": "検証候補",
-      "pick": "1-4-3",
-      "agreement": 0.0,
-      "data_rate": 96.7,
-      "estimated_probability": 75.6,
-      "generation_mode": "公開用複合因子ロジック",
-      "logic": "基礎能力・当地適性・モーター・ST・コース補正",
-      "contenders": [
-        {
-          "boat": 1,
-          "name": "後藤 隼之",
-          "class": "A2",
-          "relative_win_probability": 75.6,
-          "national_win_rate": 5.16,
-          "local_win_rate": 5.0,
-          "motor_2rate": 37.93,
-          "avg_st": 0.17
+          "boat": 6,
+          "name": "前田 聖文",
+          "class": "A1",
+          "relative_win_probability": 6.2,
+          "national_win_rate": 5.95,
+          "local_win_rate": 6.6,
+          "motor_2rate": 26.03,
+          "avg_st": 0.16
         },
         {
           "boat": 4,
-          "name": "上野 秀和",
+          "name": "安東 幸治",
           "class": "A2",
-          "relative_win_probability": 19.3,
-          "national_win_rate": 5.35,
-          "local_win_rate": 5.05,
-          "motor_2rate": 32.53,
+          "relative_win_probability": 4.3,
+          "national_win_rate": 5.54,
+          "local_win_rate": 6.19,
+          "motor_2rate": 34.72,
           "avg_st": 0.17
         },
         {
-          "boat": 3,
-          "name": "杉江 浩明",
+          "boat": 5,
+          "name": "丹下 健",
           "class": "B1",
-          "relative_win_probability": 2.8,
-          "national_win_rate": 4.12,
-          "local_win_rate": 3.61,
-          "motor_2rate": 32.04,
-          "avg_st": 0.21
+          "relative_win_probability": 0.6,
+          "national_win_rate": 4.22,
+          "local_win_rate": 4.53,
+          "motor_2rate": 41.89,
+          "avg_st": 0.19
+        },
+        {
+          "boat": 3,
+          "name": "萩原 丈太朗",
+          "class": "B1",
+          "relative_win_probability": 0.0,
+          "national_win_rate": 2.1,
+          "local_win_rate": 0.0,
+          "motor_2rate": 14.29,
+          "avg_st": 0.17
         }
       ],
       "reasons": [
-        "1号艇 後藤 隼之（A2）を1着軸に評価",
-        "全国勝率 5.16・当地勝率 5.00・モーター2連率 37.9%",
-        "能力・当地・モーター・STの4因子中 0因子が軸艇と一致"
+        "2号艇 森永 淳（A1）を1着軸に評価",
+        "全国勝率 7.12・当地勝率 7.61・モーター2連率 45.7%",
+        "能力・当地・モーター・STの4因子中 4因子が軸艇と一致"
       ],
       "invalid_conditions": [
         "展示タイム・進入・欠場に大きな変化が出た場合",
@@ -479,86 +789,16 @@
       ],
       "longshot": {
         "boat": 6,
-        "name": "甲斐 貴大",
-        "class": "B2",
-        "hole_index": 41.9,
+        "name": "前田 聖文",
+        "class": "A1",
+        "hole_index": 49.6,
         "status": "WATCH",
-        "relative_probability": 0.3,
-        "formation": "1-6-流し",
+        "relative_probability": 6.2,
+        "formation": "2-6-流し",
         "reasons": [
-          "相対モデル確率 0.3%の人気薄候補",
-          "当地勝率 2.32・モーター2連率 38.6%・平均ST 0.20",
-          "穴評価4因子のうち 1因子が基準を通過"
-        ],
-        "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
-      }
-    },
-    {
-      "venue_id": "06",
-      "venue": "浜名湖",
-      "race": 8,
-      "score": 60.9,
-      "label": "検証候補",
-      "pick": "1-4-2",
-      "agreement": 25.0,
-      "data_rate": 100.0,
-      "estimated_probability": 64.8,
-      "generation_mode": "公開用複合因子ロジック",
-      "logic": "基礎能力・当地適性・モーター・ST・コース補正",
-      "contenders": [
-        {
-          "boat": 1,
-          "name": "山下 和彦",
-          "class": "A2",
-          "relative_win_probability": 64.8,
-          "national_win_rate": 6.01,
-          "local_win_rate": 7.45,
-          "motor_2rate": 37.66,
-          "avg_st": 0.18
-        },
-        {
-          "boat": 4,
-          "name": "坂口 周",
-          "class": "A1",
-          "relative_win_probability": 29.0,
-          "national_win_rate": 6.28,
-          "local_win_rate": 7.36,
-          "motor_2rate": 33.82,
-          "avg_st": 0.17
-        },
-        {
-          "boat": 2,
-          "name": "芹澤 克彦",
-          "class": "B1",
-          "relative_win_probability": 3.1,
-          "national_win_rate": 4.85,
-          "local_win_rate": 5.28,
-          "motor_2rate": 25.4,
-          "avg_st": 0.14
-        }
-      ],
-      "reasons": [
-        "1号艇 山下 和彦（A2）を1着軸に評価",
-        "全国勝率 6.01・当地勝率 7.45・モーター2連率 37.7%",
-        "能力・当地・モーター・STの4因子中 1因子が軸艇と一致"
-      ],
-      "invalid_conditions": [
-        "展示タイム・進入・欠場に大きな変化が出た場合",
-        "強風・高波など朝データ取得後に水面条件が急変した場合",
-        "データ取得率が90%未満または公式情報を再取得できない場合"
-      ],
-      "longshot": {
-        "boat": 3,
-        "name": "北川 幸典",
-        "class": "B1",
-        "hole_index": 44.7,
-        "status": "WATCH",
-        "relative_probability": 0.9,
-        "formation": "1-3-流し",
-        "reasons": [
-          "相対モデル確率 0.9%の人気薄候補",
-          "当地勝率 0.00・モーター2連率 46.0%・平均ST 0.19",
-          "穴評価4因子のうち 2因子が基準を通過"
+          "相対モデル確率 6.2%の人気薄候補",
+          "当地勝率 6.60・モーター2連率 26.0%・平均ST 0.16",
+          "穴評価4因子のうち 3因子が基準を通過"
         ],
         "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
       }
@@ -585,25 +825,6 @@
       "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
     },
     {
-      "venue_id": "05",
-      "venue": "多摩川",
-      "race": 8,
-      "main_pick": "1-2-3",
-      "boat": 2,
-      "name": "長谷川 晴哉",
-      "class": "A1",
-      "hole_index": 60.7,
-      "status": "WATCH",
-      "relative_probability": 22.7,
-      "formation": "1-2-流し",
-      "reasons": [
-        "相対モデル確率 22.7%の人気薄候補",
-        "当地勝率 5.03・モーター2連率 40.3%・平均ST 0.17",
-        "穴評価4因子のうち 2因子が基準を通過"
-      ],
-      "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
-    },
-    {
       "venue_id": "04",
       "venue": "平和島",
       "race": 8,
@@ -621,6 +842,26 @@
         "穴評価4因子のうち 2因子が基準を通過"
       ],
       "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
+    },
+    {
+      "venue_id": "19",
+      "venue": "下関",
+      "race": 6,
+      "main_pick": "2-5-1",
+      "boat": 5,
+      "name": "木下 雄介",
+      "class": "A2",
+      "hole_index": 56.1,
+      "status": "WATCH",
+      "relative_probability": 14.1,
+      "formation": "2-5-流し",
+      "reasons": [
+        "相対モデル確率 14.1%の人気薄候補",
+        "当地勝率 7.05・モーター2連率 24.0%・平均ST 0.17",
+        "穴評価4因子のうち 2因子が基準を通過"
+      ],
+      "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認"
     }
-  ]
+  ],
+  "selection_policy": "score>=60, data_rate>=95, compare=6R/8R/10R"
 }
