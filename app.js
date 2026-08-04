@@ -52,7 +52,7 @@ function renderFormation(target, tickets) {
 
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
-async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt }) {
+async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt, previousUpdatedAt }) {
   const api = window.betakoRuntime?.on_demand_api;
   const badge = document.querySelector("#exhibitionBadge");
   const detail = document.querySelector("#predictionDetail");
@@ -78,7 +78,7 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt 
       if (!exhibitionResponse.ok) continue;
       const payload = await exhibitionResponse.json();
       const refreshed = payload.races?.find((item) => item.venue_id === venueId && String(item.race) === String(race));
-      if (refreshed && refreshed.fetched_at !== previousFetchedAt) {
+      if (refreshed && (refreshed.fetched_at !== previousFetchedAt || payload.updated_at !== previousUpdatedAt)) {
         window.betakoExhibition = payload;
         renderLongshots(window.betakoPredictions?.longshots || []);
         document.querySelector("#predictionForm").requestSubmit();
@@ -162,6 +162,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
       race: Number(raceSelect.value),
       raceDate: dateInput.value,
       previousFetchedAt: finalData?.fetched_at,
+      previousUpdatedAt: window.betakoExhibition?.updated_at,
     });
   }
 });
