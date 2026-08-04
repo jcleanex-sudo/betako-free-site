@@ -5650,112 +5650,123 @@
       "venue": "常滑",
       "venue_id": "08",
       "race": 3,
-      "status": "WAIT",
-      "message": "展示データ不足のため朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-3-2",
+      "final_pick": "1-3-2",
+      "final_score": 61.2,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速2m・波高0cm・天候曇り",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
-            "pick": "3-1-2",
-            "odds": 35.8,
-            "model_probability": 6.03,
-            "market_probability": 2.79,
-            "net_edge": 1.24
-          },
-          {
-            "pick": "1-2-3",
-            "odds": 14.2,
-            "model_probability": 9.85,
-            "market_probability": 7.04,
-            "net_edge": 0.81
-          },
-          {
             "pick": "2-1-3",
-            "odds": 66.1,
+            "odds": 69.3,
             "model_probability": 4.29,
-            "market_probability": 1.51,
-            "net_edge": 0.78
+            "market_probability": 1.44,
+            "net_edge": 0.85
           },
           {
-            "pick": "1-3-2",
-            "odds": 9.2,
-            "model_probability": 12.82,
-            "market_probability": 10.87,
-            "net_edge": -0.05
+            "pick": "3-1-2",
+            "odds": 23.9,
+            "model_probability": 6.03,
+            "market_probability": 4.18,
+            "net_edge": -0.15
+          },
+          {
+            "pick": "2-1-5",
+            "odds": 99.0,
+            "model_probability": 2.18,
+            "market_probability": 1.01,
+            "net_edge": -0.83
+          },
+          {
+            "pick": "1-5-3",
+            "odds": 14.0,
+            "model_probability": 7.68,
+            "market_probability": 7.14,
+            "net_edge": -1.46
           },
           {
             "pick": "1-5-2",
-            "odds": 32.4,
+            "odds": 19.1,
             "model_probability": 4.72,
-            "market_probability": 3.09,
-            "net_edge": -0.37
+            "market_probability": 5.24,
+            "net_edge": -2.52
           },
           {
-            "pick": "1-2-5",
-            "odds": 29.1,
-            "model_probability": 5.01,
-            "market_probability": 3.44,
-            "net_edge": -0.43
+            "pick": "1-2-6",
+            "odds": 64.5,
+            "model_probability": 0.52,
+            "market_probability": 1.55,
+            "net_edge": -3.03
           }
         ],
         "cover": [
           {
-            "pick": "1-5-3",
-            "odds": 16.0,
-            "model_probability": 7.68,
-            "market_probability": 6.25,
-            "net_edge": -0.57
-          },
-          {
-            "pick": "2-1-5",
-            "odds": 78.1,
-            "model_probability": 2.18,
-            "market_probability": 1.28,
-            "net_edge": -1.1
-          },
-          {
-            "pick": "1-3-4",
-            "odds": 38.2,
-            "model_probability": 2.08,
-            "market_probability": 2.62,
-            "net_edge": -2.54
-          },
-          {
-            "pick": "1-2-4",
-            "odds": 59.2,
-            "model_probability": 0.98,
-            "market_probability": 1.69,
-            "net_edge": -2.71
-          },
-          {
-            "pick": "1-3-5",
-            "odds": 7.9,
-            "model_probability": 10.63,
-            "market_probability": 12.66,
-            "net_edge": -4.03
+            "pick": "1-2-3",
+            "odds": 9.0,
+            "model_probability": 9.85,
+            "market_probability": 11.11,
+            "net_edge": -3.26
           },
           {
             "pick": "3-1-5",
-            "odds": 12.1,
+            "odds": 14.9,
             "model_probability": 5.0,
-            "market_probability": 8.26,
-            "net_edge": -5.26
+            "market_probability": 6.71,
+            "net_edge": -3.71
+          },
+          {
+            "pick": "1-3-6",
+            "odds": 31.8,
+            "model_probability": 1.1,
+            "market_probability": 3.14,
+            "net_edge": -4.04
+          },
+          {
+            "pick": "1-2-5",
+            "odds": 13.7,
+            "model_probability": 5.01,
+            "market_probability": 7.3,
+            "net_edge": -4.29
+          },
+          {
+            "pick": "1-3-2",
+            "odds": 5.9,
+            "model_probability": 12.82,
+            "market_probability": 16.95,
+            "net_edge": -6.13
+          },
+          {
+            "pick": "1-3-5",
+            "odds": 5.1,
+            "model_probability": 10.63,
+            "market_probability": 19.61,
+            "net_edge": -10.98
           }
         ],
         "ranked_by_edge": true
       },
-      "best_value_pick": "3-1-2",
+      "best_value_pick": "2-1-3",
+      "weather": "曇り",
+      "wind_speed": 2.0,
+      "wave_height": 0,
       "value": {
         "status": "WATCH",
-        "odds": 35.8,
-        "model_probability": 6.03,
-        "market_probability": 2.79,
-        "net_edge": 1.24,
+        "odds": 69.3,
+        "model_probability": 4.29,
+        "market_probability": 1.44,
+        "net_edge": 0.85,
         "deadline": "11:38",
-        "remaining_minutes": 110.5,
-        "message": "安全余白控除後の優位性が基準未満のため見送り",
+        "remaining_minutes": -53.2,
+        "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=08&hd=20260804&rno=3"
       },
+      "fetched_at": "2026-08-04T12:31:10+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=08&hd=20260804&rno=3"
     },
     {
@@ -15887,15 +15898,15 @@
       "boat": 3,
       "name": "坂本 雄紀",
       "formation": "1-3-流し",
-      "time_rank": null,
+      "time_rank": 3,
       "deadline": "11:38",
-      "remaining_minutes": 110.5,
-      "status": "WAIT",
-      "min_odds": null,
-      "model_probability": null,
-      "market_probability": null,
-      "net_edge": null,
-      "message": "候補艇の展示データ待ち"
+      "remaining_minutes": -53.2,
+      "status": "WATCH",
+      "min_odds": 5.1,
+      "model_probability": 26.75,
+      "market_probability": 78.43,
+      "net_edge": -53.69,
+      "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
       "venue": "常滑",
