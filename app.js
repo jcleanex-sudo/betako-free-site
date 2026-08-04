@@ -217,11 +217,13 @@ function renderRankings(payload) {
   grid.innerHTML = rankings.slice(0, 3).map((item, index) => {
     const tone = index === 0 ? "cyan" : index === 1 ? "blue" : "gold";
     const lead = item.contenders?.[0];
+    const rankingPicks = buildBetPlan(item.contenders, item.pick).main;
     return `<article class="rankCard ${tone}">
       <div class="rankTop"><span class="rankNumber">${String(index + 1).padStart(2, "0")}</span><span class="candidate">${escapeHtml(item.label)}</span></div>
       <h3>${escapeHtml(item.venue)} <small>${escapeHtml(item.race)}R</small></h3>
       <div class="index"><span>期待度指数</span><strong>${Number(item.score).toFixed(0)}</strong></div>
-      <div class="pick"><span>本線候補</span><b>${escapeHtml(item.pick)}</b></div>
+      <div class="pick"><span>軸目</span><b>${escapeHtml(item.pick)}</b></div>
+      <div class="rankSix"><span>予想6点</span><div>${rankingPicks.map((pick) => `<b>${escapeHtml(pick)}</b>`).join("")}</div></div>
       <p class="rankLead">軸：${escapeHtml(lead ? `${lead.boat}号艇 ${lead.name}（${lead.class}）` : "データ確認中")}</p>
       <div class="meter"><i style="width:${Math.max(0, Math.min(100, Number(item.score)))}%"></i></div>
       <p class="disclaimer">一致度 ${Number(item.agreement).toFixed(0)}%・データ取得率 ${Number(item.data_rate).toFixed(0)}%</p>
