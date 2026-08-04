@@ -245,6 +245,17 @@ def main():
     payload = json.loads(PREDICTIONS.read_text(encoding="utf-8"))
     date = now.strftime("%Y%m%d")
     predictions = payload.get("all_races") or payload.get("rankings", [])
+    target_venue = os.environ.get("TARGET_VENUE_ID", "").zfill(2)
+    target_race_text = os.environ.get("TARGET_RACE", "")
+    target_race = int(target_race_text) if target_race_text.isdigit() else None
+    targeted = bool(target_venue and target_race)
+    if targeted:
+        predictions = [
+            item for item in predictions
+            if str(item["venue_id"]).zfill(2) == target_venue and int(item["race"]) == target_race
+        ]
+        if not predictions:
+            raise SystemExit(f"target race not found: {target_venue}-{target_race}")
 
     def update_one(prediction):
         try:
@@ -277,10 +288,28 @@ def main():
                 longshots.append(longshot)
     races.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
     longshots.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
-    output = {"updated_at": now.strftime("%Y-%m-%d %H:%M JST"), "races": races, "longshots": longshots}
+    if targeted and OUTPUT.exists():
+        previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
+        race_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in races}
+        longshot_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in longshots}
+        races.extend(
+            item for item in previous.get("races", [])
+            if (str(item["venue_id"]).zfill(2), int(item["race"])) not in race_keys
+        )
+        longshots.extend(
+            item for item in previous.get("longshots", [])
+            if (str(item["venue_id"]).zfill(2), int(item["race"])) not in longshot_keys
+        )
+        races.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
+        longshots.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
+    output = {
+        "updated_at": now.strftime("%Y-%m-%d %H:%M JST"),
+        "update_mode": "selected_race" if targeted else "all_races",
+        "races": races, "longshots": longshots,
+    }
     OUTPUT.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({
-        "targets": len(predictions), "races": len(races),
+        "targets": len(predictions), "stored_races": len(races), "targeted": targeted,
         "final": sum(item["status"] == "FINAL" for item in races), "workers": MAX_WORKERS,
     }, ensure_ascii=False))
 

@@ -1,10 +1,16 @@
 name: Update exhibition predictions
 
 on:
-  schedule:
-    # 09:00-21:30 JST. 当日全レースの展示・オッズを30分間隔で確認する。
-    - cron: "*/30 0-12 * * *"
   workflow_dispatch:
+    inputs:
+      venue_id:
+        description: Optional two-digit venue id for one-race refresh
+        required: false
+        default: ""
+      race:
+        description: Optional race number for one-race refresh
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -22,6 +28,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      TARGET_VENUE_ID: ${{ inputs.venue_id }}
+      TARGET_RACE: ${{ inputs.race }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6

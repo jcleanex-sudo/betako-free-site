@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "betako-on-demand",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-04",
+  "vars": {
+    "ALLOWED_ORIGIN": "https://jcleanex-sudo.github.io",
+    "GITHUB_REPOSITORY": "jcleanex-sudo/betako-free-site",
+    "WORKFLOW_FILE": "update-exhibition.yml"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

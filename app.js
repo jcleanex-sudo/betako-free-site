@@ -2,6 +2,7 @@ const venues = ["桐生","戸田","江戸川","平和島","多摩川","浜名湖
 const venueSelect = document.querySelector("#venue");
 const raceSelect = document.querySelector("#race");
 const dateInput = document.querySelector("#raceDate");
+const pendingRefreshes = new Set();
 
 venues.forEach((venue, index) => venueSelect.add(new Option(`${String(index + 1).padStart(2, "0")} ${venue}`, venue)));
 for (let race = 1; race <= 12; race += 1) raceSelect.add(new Option(`${race}R`, String(race)));
@@ -49,6 +50,51 @@ function renderFormation(target, tickets) {
   }));
 }
 
+const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+
+async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt }) {
+  const api = window.betakoRuntime?.on_demand_api;
+  const badge = document.querySelector("#exhibitionBadge");
+  const detail = document.querySelector("#predictionDetail");
+  const key = `${raceDate}-${venueId}-${race}`;
+  if (!api || pendingRefreshes.has(key)) return;
+
+  pendingRefreshes.add(key);
+  badge.hidden = false;
+  badge.textContent = "展示前・更新中";
+  detail.textContent = "選択したレースの展示データだけを取得しています（通常1〜3分）。";
+
+  try {
+    const response = await fetch(`${api.replace(/\/$/, "")}/refresh`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ venue_id: venueId, race, race_date: raceDate }),
+    });
+    if (!response.ok) throw new Error(`refresh ${response.status}`);
+
+    for (let attempt = 0; attempt < 24; attempt += 1) {
+      await delay(10000);
+      const exhibitionResponse = await fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" });
+      if (!exhibitionResponse.ok) continue;
+      const payload = await exhibitionResponse.json();
+      const refreshed = payload.races?.find((item) => item.venue_id === venueId && String(item.race) === String(race));
+      if (refreshed && refreshed.fetched_at !== previousFetchedAt) {
+        window.betakoExhibition = payload;
+        renderLongshots(window.betakoPredictions?.longshots || []);
+        document.querySelector("#predictionForm").requestSubmit();
+        return;
+      }
+    }
+    badge.textContent = "展示前・更新待ち";
+    detail.textContent = "更新処理は受付済みです。少し待ってから、もう一度このレースを選んでください。";
+  } catch {
+    badge.textContent = "展示前";
+    detail.textContent = "更新を開始できませんでした。朝の予想を表示し、購入は見送り対象にします。";
+  } finally {
+    pendingRefreshes.delete(key);
+  }
+}
+
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const venue = venueSelect.value;
@@ -62,6 +108,9 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const finalMode = document.querySelector("#predictionType").value === "展示後AI最終予想";
   const finalData = window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value);
   const finalReady = finalMode && finalData?.status === "FINAL";
+  const exhibitionBadge = document.querySelector("#exhibitionBadge");
+  exhibitionBadge.hidden = !finalMode || finalReady;
+  exhibitionBadge.textContent = "展示前";
   const value = finalData?.value;
   const deadlineAt = value?.deadline ? new Date(`${dateInput.value}T${value.deadline}:00+09:00`) : null;
   const liveRemaining = deadlineAt && !Number.isNaN(deadlineAt.getTime())
@@ -107,6 +156,14 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
       ? `無効条件：${(match.invalid_conditions || []).join("／")}`
     : `見送り条件：${dateMatches ? "公式データの取得失敗" : "選択日が本日ではない"}`;
   document.querySelector("#selectionResult").hidden = false;
+  if (finalMode && !finalReady && match) {
+    void refreshSelectedRace({
+      venueId: String(venueIndex).padStart(2, "0"),
+      race: Number(raceSelect.value),
+      raceDate: dateInput.value,
+      previousFetchedAt: finalData?.fetched_at,
+    });
+  }
 });
 
 function escapeHtml(value) {
@@ -257,3 +314,8 @@ fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" })
     renderLongshots(window.betakoPredictions?.longshots || []);
   })
   .catch(() => { window.betakoExhibition = { races: [] }; });
+
+fetch(`data/runtime.json?ts=${Date.now()}`, { cache: "no-store" })
+  .then((response) => response.ok ? response.json() : Promise.reject())
+  .then((payload) => { window.betakoRuntime = payload; })
+  .catch(() => { window.betakoRuntime = {}; });
