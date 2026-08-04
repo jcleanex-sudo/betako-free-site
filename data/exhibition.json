@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04 20:32 JST",
+  "updated_at": "2026-08-04 20:33 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -9386,112 +9386,123 @@
       "venue": "住之江",
       "venue_id": "12",
       "race": 10,
-      "status": "WAIT",
-      "message": "展示データ不足のため朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-2-4",
+      "final_pick": "1-2-4",
+      "final_score": 69.9,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速2m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
-            "pick": "1-2-5",
-            "odds": 19.1,
-            "model_probability": 9.65,
-            "market_probability": 5.24,
-            "net_edge": 2.41
+            "pick": "2-1-4",
+            "odds": 34.9,
+            "model_probability": 3.87,
+            "market_probability": 2.87,
+            "net_edge": -1.0
           },
           {
-            "pick": "1-5-2",
-            "odds": 31.6,
-            "model_probability": 7.39,
-            "market_probability": 3.16,
-            "net_edge": 2.23
+            "pick": "2-1-6",
+            "odds": 69.8,
+            "model_probability": 1.26,
+            "market_probability": 1.43,
+            "net_edge": -2.17
           },
           {
-            "pick": "1-2-4",
-            "odds": 10.9,
-            "model_probability": 12.31,
-            "market_probability": 9.17,
-            "net_edge": 1.14
+            "pick": "1-6-2",
+            "odds": 30.6,
+            "model_probability": 2.65,
+            "market_probability": 3.27,
+            "net_edge": -2.62
           },
           {
-            "pick": "1-4-2",
-            "odds": 13.7,
-            "model_probability": 10.16,
-            "market_probability": 7.3,
-            "net_edge": 0.86
+            "pick": "1-6-4",
+            "odds": 30.5,
+            "model_probability": 1.78,
+            "market_probability": 3.28,
+            "net_edge": -3.5
           },
           {
-            "pick": "1-4-5",
-            "odds": 39.9,
-            "model_probability": 5.36,
-            "market_probability": 2.51,
-            "net_edge": 0.85
+            "pick": "4-1-2",
+            "odds": 18.7,
+            "model_probability": 3.07,
+            "market_probability": 5.35,
+            "net_edge": -4.28
           },
           {
-            "pick": "1-5-4",
-            "odds": 35.3,
-            "model_probability": 4.97,
-            "market_probability": 2.83,
-            "net_edge": 0.14
+            "pick": "1-2-6",
+            "odds": 15.6,
+            "model_probability": 3.99,
+            "market_probability": 6.41,
+            "net_edge": -4.42
           }
         ],
         "cover": [
           {
-            "pick": "1-2-6",
-            "odds": 45.9,
-            "model_probability": 3.99,
-            "market_probability": 2.18,
-            "net_edge": -0.19
+            "pick": "1-4-3",
+            "odds": 19.2,
+            "model_probability": 1.29,
+            "market_probability": 5.21,
+            "net_edge": -5.92
           },
           {
-            "pick": "2-1-5",
-            "odds": 57.4,
-            "model_probability": 3.04,
-            "market_probability": 1.74,
-            "net_edge": -0.7
+            "pick": "4-1-6",
+            "odds": 19.3,
+            "model_probability": 0.67,
+            "market_probability": 5.18,
+            "net_edge": -6.51
+          },
+          {
+            "pick": "1-4-2",
+            "odds": 6.8,
+            "model_probability": 10.16,
+            "market_probability": 14.71,
+            "net_edge": -6.55
           },
           {
             "pick": "1-4-6",
-            "odds": 70.6,
+            "odds": 12.2,
             "model_probability": 2.22,
-            "market_probability": 1.42,
-            "net_edge": -1.2
+            "market_probability": 8.2,
+            "net_edge": -7.98
           },
           {
-            "pick": "2-1-4",
-            "odds": 30.6,
-            "model_probability": 3.87,
-            "market_probability": 3.27,
-            "net_edge": -1.4
+            "pick": "1-2-4",
+            "odds": 5.3,
+            "model_probability": 12.31,
+            "market_probability": 18.87,
+            "net_edge": -8.56
           },
           {
-            "pick": "4-1-5",
-            "odds": 41.7,
-            "model_probability": 1.62,
-            "market_probability": 2.4,
-            "net_edge": -2.78
-          },
-          {
-            "pick": "4-1-2",
-            "odds": 23.5,
-            "model_probability": 3.07,
-            "market_probability": 4.26,
-            "net_edge": -3.19
+            "pick": "1-2-3",
+            "odds": 10.8,
+            "model_probability": 2.33,
+            "market_probability": 9.26,
+            "net_edge": -8.93
           }
         ],
         "ranked_by_edge": true
       },
-      "best_value_pick": "1-2-5",
+      "best_value_pick": "2-1-4",
+      "weather": "晴",
+      "wind_speed": 2.0,
+      "wave_height": 0,
       "value": {
         "status": "WATCH",
-        "odds": 19.1,
-        "model_probability": 9.65,
-        "market_probability": 5.24,
-        "net_edge": 2.41,
+        "odds": 34.9,
+        "model_probability": 3.87,
+        "market_probability": 2.87,
+        "net_edge": -1.0,
         "deadline": "19:36",
-        "remaining_minutes": 586.0,
-        "message": "安全余白控除後の優位性が基準未満のため見送り",
+        "remaining_minutes": -58.1,
+        "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=12&hd=20260804&rno=10"
       },
+      "fetched_at": "2026-08-04T20:34:05+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=12&hd=20260804&rno=10"
     },
     {
@@ -16663,7 +16674,7 @@
       "formation": "1-5-流し",
       "time_rank": null,
       "deadline": "19:36",
-      "remaining_minutes": 586.0,
+      "remaining_minutes": -58.1,
       "status": "WAIT",
       "min_odds": null,
       "model_probability": null,
