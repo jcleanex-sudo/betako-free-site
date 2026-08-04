@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -10,6 +12,7 @@ JST = timezone(timedelta(hours=9))
 ROOT = Path(__file__).resolve().parents[1]
 PREDICTIONS = ROOT / "data" / "predictions.json"
 OUTPUT = ROOT / "data" / "exhibition.json"
+MAX_WORKERS = max(1, min(4, int(os.environ.get("BOATRACE_EXHIBITION_WORKERS", "4"))))
 
 
 def ordered_trifecta_probability(contenders, pick):
@@ -241,31 +244,45 @@ def main():
         raise SystemExit("predictions.json is missing")
     payload = json.loads(PREDICTIONS.read_text(encoding="utf-8"))
     date = now.strftime("%Y%m%d")
-    races = []
-    longshots = []
-    for prediction in payload.get("rankings", []):
+    predictions = payload.get("all_races") or payload.get("rankings", [])
+
+    def update_one(prediction):
         try:
             realtime = fetch_exhibition(prediction["venue_id"], prediction["race"], date)
-            races.append(final_prediction(prediction, realtime))
-            longshot = longshot_judgement(prediction, realtime)
-            if longshot:
-                longshots.append(longshot)
+            return final_prediction(prediction, realtime), longshot_judgement(prediction, realtime)
         except Exception as exc:
-            races.append({
+            race = {
                 "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
                 "status": "DATA BLOCKED", "message": f"展示取得失敗: {type(exc).__name__}",
                 "morning_pick": prediction["pick"],
-            })
+            }
+            longshot = None
             if prediction.get("longshot"):
-                longshots.append({
+                longshot = {
                     "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
                     "boat": prediction["longshot"]["boat"], "name": prediction["longshot"]["name"],
                     "formation": prediction["longshot"]["formation"], "status": "DATA BLOCKED",
                     "message": f"穴候補の直前情報取得失敗: {type(exc).__name__}",
-                })
+                }
+            return race, longshot
+
+    races = []
+    longshots = []
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = [executor.submit(update_one, prediction) for prediction in predictions]
+        for future in as_completed(futures):
+            race, longshot = future.result()
+            races.append(race)
+            if longshot:
+                longshots.append(longshot)
+    races.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
+    longshots.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
     output = {"updated_at": now.strftime("%Y-%m-%d %H:%M JST"), "races": races, "longshots": longshots}
     OUTPUT.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"races": len(races), "final": sum(item["status"] == "FINAL" for item in races)}, ensure_ascii=False))
+    print(json.dumps({
+        "targets": len(predictions), "races": len(races),
+        "final": sum(item["status"] == "FINAL" for item in races), "workers": MAX_WORKERS,
+    }, ensure_ascii=False))
 
 
 if __name__ == "__main__":

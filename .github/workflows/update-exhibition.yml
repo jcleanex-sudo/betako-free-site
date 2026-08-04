@@ -2,8 +2,8 @@ name: Update exhibition predictions
 
 on:
   schedule:
-    # 09:00-21:45 JST. 展示・オッズの直前変化を15分間隔で確認する。
-    - cron: "*/15 0-12 * * *"
+    # 09:00-21:30 JST. 当日全レースの展示・オッズを30分間隔で確認する。
+    - cron: "*/30 0-12 * * *"
   workflow_dispatch:
 
 permissions:
@@ -21,7 +21,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6

@@ -387,6 +387,9 @@ def fetch_exhibition(stadium_id: str, race_number: int, race_date: str) -> dict:
         soup = BeautifulSoup(html, "lxml")
         weather = _weather_from_soup(soup)
         exhibition = add_exhibition_ranks(_parse_exhibition_table(soup))
+        # 展示がまだ公開されていないレースの120通りオッズ取得は省略する。
+        # 全レース巡回時の公式サイト負荷を抑え、展示公開後だけ期待値を計算する。
+        odds = fetch_trifecta_odds(stadium_id, race_number, race_date_compact) if len(exhibition) >= 4 else None
         realtime = {
             "stadium_id": stadium_id,
             "stadium_name": STADIUM_NAMES.get(stadium_id, f"場{stadium_id}"),
@@ -398,7 +401,7 @@ def fetch_exhibition(stadium_id: str, race_number: int, race_date: str) -> dict:
             "wave_height": weather.get("wave_height"),
             "temperature": weather.get("temperature"),
             "water_temperature": weather.get("water_temperature"),
-            "odds": fetch_trifecta_odds(stadium_id, race_number, race_date_compact),
+            "odds": odds,
             "exhibition": exhibition,
             "fetched_at": datetime.now(JST).isoformat(timespec="seconds"),
             "source": "boatrace_beforeinfo",
