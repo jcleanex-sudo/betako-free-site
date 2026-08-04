@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04 12:16 JST",
+  "updated_at": "2026-08-04 12:17 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -2918,112 +2918,123 @@
       "venue": "多摩川",
       "venue_id": "05",
       "race": 3,
-      "status": "WAIT",
-      "message": "展示データ不足のため朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-3-6",
+      "final_pick": "1-6-4",
+      "final_score": 55.1,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速1m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
             "pick": "1-4-3",
-            "odds": 92.7,
+            "odds": 44.3,
             "model_probability": 4.88,
-            "market_probability": 1.08,
-            "net_edge": 1.8
-          },
-          {
-            "pick": "1-3-4",
-            "odds": 34.1,
-            "model_probability": 5.01,
-            "market_probability": 2.93,
-            "net_edge": 0.08
-          },
-          {
-            "pick": "1-6-3",
-            "odds": 25.9,
-            "model_probability": 5.36,
-            "market_probability": 3.86,
-            "net_edge": -0.5
-          },
-          {
-            "pick": "6-1-4",
-            "odds": 86.6,
-            "model_probability": 2.48,
-            "market_probability": 1.15,
-            "net_edge": -0.67
+            "market_probability": 2.26,
+            "net_edge": 0.62
           },
           {
             "pick": "1-6-4",
-            "odds": 27.0,
+            "odds": 31.2,
             "model_probability": 4.95,
-            "market_probability": 3.7,
-            "net_edge": -0.75
+            "market_probability": 3.21,
+            "net_edge": -0.26
           },
           {
             "pick": "1-4-6",
-            "odds": 24.9,
+            "odds": 27.9,
             "model_probability": 4.83,
-            "market_probability": 4.02,
-            "net_edge": -1.19
+            "market_probability": 3.58,
+            "net_edge": -0.75
+          },
+          {
+            "pick": "4-1-3",
+            "odds": 75.5,
+            "model_probability": 2.42,
+            "market_probability": 1.32,
+            "net_edge": -0.9
+          },
+          {
+            "pick": "4-1-6",
+            "odds": 67.6,
+            "model_probability": 2.4,
+            "market_probability": 1.48,
+            "net_edge": -1.08
+          },
+          {
+            "pick": "6-1-4",
+            "odds": 59.6,
+            "model_probability": 2.48,
+            "market_probability": 1.68,
+            "net_edge": -1.2
           }
         ],
         "cover": [
           {
+            "pick": "1-4-2",
+            "odds": 74.7,
+            "model_probability": 1.9,
+            "market_probability": 1.34,
+            "net_edge": -1.44
+          },
+          {
+            "pick": "1-3-4",
+            "odds": 21.0,
+            "model_probability": 5.01,
+            "market_probability": 4.76,
+            "net_edge": -1.75
+          },
+          {
+            "pick": "1-6-3",
+            "odds": 17.1,
+            "model_probability": 5.36,
+            "market_probability": 5.85,
+            "net_edge": -2.49
+          },
+          {
+            "pick": "1-6-2",
+            "odds": 36.9,
+            "model_probability": 2.09,
+            "market_probability": 2.71,
+            "net_edge": -2.62
+          },
+          {
             "pick": "6-1-3",
-            "odds": 46.3,
+            "odds": 28.4,
             "model_probability": 2.68,
-            "market_probability": 2.16,
-            "net_edge": -1.48
-          },
-          {
-            "pick": "3-1-4",
-            "odds": 49.9,
-            "model_probability": 2.51,
-            "market_probability": 2.0,
-            "net_edge": -1.49
-          },
-          {
-            "pick": "1-6-5",
-            "odds": 49.9,
-            "model_probability": 2.36,
-            "market_probability": 2.0,
-            "net_edge": -1.64
-          },
-          {
-            "pick": "1-3-5",
-            "odds": 48.1,
-            "model_probability": 2.39,
-            "market_probability": 2.08,
-            "net_edge": -1.69
-          },
-          {
-            "pick": "3-1-6",
-            "odds": 28.8,
-            "model_probability": 2.7,
-            "market_probability": 3.47,
-            "net_edge": -2.77
+            "market_probability": 3.52,
+            "net_edge": -2.84
           },
           {
             "pick": "1-3-6",
-            "odds": 14.4,
+            "odds": 9.7,
             "model_probability": 5.38,
-            "market_probability": 6.94,
-            "net_edge": -3.56
+            "market_probability": 10.31,
+            "net_edge": -6.93
           }
         ],
         "ranked_by_edge": true
       },
       "best_value_pick": "1-4-3",
+      "weather": "晴",
+      "wind_speed": 1.0,
+      "wave_height": 0,
       "value": {
         "status": "WATCH",
-        "odds": 92.7,
+        "odds": 44.3,
         "model_probability": 4.88,
-        "market_probability": 1.08,
-        "net_edge": 1.8,
+        "market_probability": 2.26,
+        "net_edge": 0.62,
         "deadline": "12:31",
-        "remaining_minutes": 165.4,
+        "remaining_minutes": 13.5,
         "message": "安全余白控除後の優位性が基準未満のため見送り",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=05&hd=20260804&rno=3"
       },
+      "fetched_at": "2026-08-04T12:17:29+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=05&hd=20260804&rno=3"
     },
     {
@@ -15404,12 +15415,12 @@
       "formation": "1-6-流し",
       "time_rank": 1,
       "deadline": "12:31",
-      "remaining_minutes": 165.4,
+      "remaining_minutes": 13.5,
       "status": "WATCH",
-      "min_odds": 25.9,
+      "min_odds": 17.1,
       "model_probability": 14.77,
-      "market_probability": 15.44,
-      "net_edge": -2.67,
+      "market_probability": 23.39,
+      "net_edge": -10.62,
       "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
