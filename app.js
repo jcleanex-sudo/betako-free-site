@@ -289,6 +289,7 @@ fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((payload) => {
     const summary = payload.summary || {};
     document.querySelector("#learningSamples").textContent = `${summary.samples || 0}件`;
+    document.querySelector("#learningHit").textContent = `${Number(summary.hit_rate || 0).toFixed(1)}%`;
     document.querySelector("#learningNet").textContent = `${Number(summary.net_profit_yen || 0).toLocaleString("ja-JP")}円`;
     document.querySelector("#learningRisk").textContent = `${summary.profit_factor ?? "--"} / ${Number(summary.max_drawdown_yen || 0).toLocaleString("ja-JP")}円`;
     document.querySelector("#learningCi").textContent = summary.hit_rate_ci95 ? `${summary.hit_rate_ci95[0]}%—${summary.hit_rate_ci95[1]}%` : "集計開始待ち";
