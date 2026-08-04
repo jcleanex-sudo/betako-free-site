@@ -44,7 +44,7 @@
   </section>
 
   <section class="rankingSection" id="ranking">
-    <div class="sectionHead"><div><p class="eyebrow">EXPECTATION RANKING</p><h2>期待度指数ランキング</h2></div><p><span class="demoTag" id="dataStatus">データ取得中</span> <span id="dataUpdated">毎朝8時ごろ更新</span></p></div>
+    <div class="sectionHead"><div><p class="eyebrow">EXPECTATION RANKING</p><h2>期待度指数ランキング</h2></div><p><span class="demoTag" id="dataStatus">データ取得中</span> <span id="dataUpdated">毎朝8時ごろ更新</span><br><small>指数75・一致度75%以上だけを厳格公開</small></p></div>
     <div class="rankingGrid" id="rankingGrid" aria-live="polite">
       <article class="rankCard cyan"><div class="rankTop"><span class="rankNumber">--</span><span class="candidate">読み込み中</span></div><h3>公式データを確認中</h3><div class="index"><span>期待度指数</span><strong>--</strong></div><div class="pick"><span>本線候補</span><b>--</b></div><div class="meter"><i style="width:0"></i></div></article>
     </div>
@@ -68,12 +68,12 @@
   </section>
 
   <section class="operations" id="operations">
-    <article><div class="articleIcon">↗</div><p class="eyebrow">LEARNING</p><h2>結果検証・学習記録</h2><p>公式の過去出走表と結果を収集し、時系列検証で改善を確認できた重みだけを採用します。</p><dl><div><dt>過去学習データ</dt><dd id="historicalSamples">収集開始待ち</dd></div><div><dt>学習状態</dt><dd id="calibrationStatus">COLLECTING</dd></div><div><dt>照合済み公開予想</dt><dd id="learningSamples">集計開始待ち</dd></div><div><dt>純損益（各100円）</dt><dd id="learningNet">--</dd></div><div><dt>利益係数 / 最大DD</dt><dd id="learningRisk">--</dd></div><div><dt>的中率 95%CI</dt><dd id="learningCi">--</dd></div></dl><div class="tierGrid"><section><span>STRICT ≥70</span><strong id="strictSamples">0件</strong><small id="strictMetrics">純損益 0円｜PF 0｜DD 0円｜95%CI --</small></section><section><span>EXPERIMENTAL 60–69</span><strong id="experimentalSamples">0件</strong><small id="experimentalMetrics">純損益 0円｜PF 0｜DD 0円｜95%CI --</small></section></div></article>
+    <article><div class="articleIcon">↗</div><p class="eyebrow">LEARNING</p><h2>結果検証・学習記録</h2><p>モデルは現在凍結中です。公式の過去出走表と結果収集、6点予想の時系列検証だけを継続します。</p><dl><div><dt>過去学習データ</dt><dd id="historicalSamples">収集開始待ち</dd></div><div><dt>学習状態</dt><dd id="calibrationStatus">FROZEN</dd></div><div><dt>照合済み公開予想</dt><dd id="learningSamples">集計開始待ち</dd></div><div><dt>純損益（6点×各100円）</dt><dd id="learningNet">--</dd></div><div><dt>利益係数 / 最大DD</dt><dd id="learningRisk">--</dd></div><div><dt>的中率 95%CI</dt><dd id="learningCi">--</dd></div></dl><div class="tierGrid"><section><span>STRICT 指数75・一致度75%以上</span><strong id="strictSamples">0件</strong><small id="strictMetrics">純損益 0円｜PF 0｜DD 0円｜95%CI --</small></section><section><span>EXPERIMENTAL 60–74</span><strong id="experimentalSamples">0件</strong><small id="experimentalMetrics">純損益 0円｜PF 0｜DD 0円｜95%CI --</small></section></div></article>
     <article><div class="articleIcon">𝕏</div><p class="eyebrow">X POST DRAFT</p><h2>X投稿文を自動生成</h2><p>有料APIを使わず、最新の1位予想から投稿文を自動作成します。コピーしてXへ貼り付けられます。</p><dl><div><dt>予想データ更新</dt><dd>毎朝 8:00頃</dd></div><div><dt>API利用料</dt><dd>0円</dd></div><div><dt>現在の状態</dt><dd class="migrating">投稿文生成・稼働中</dd></div></dl><button class="copyButton" id="copyXPost" type="button">今日の投稿文をコピー</button><small id="copyStatus" role="status"></small></article>
   </section>
 
   <footer><a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO</span></a><p>勝つことより先に、大きく負けないこと。</p><small>AI予想は検証中の分析情報です。舟券購入は自己責任で行ってください。</small></footer>
 </main>
-<script src="app.js?v=20260804-2"></script>
+<script src="app.js?v=20260804-3"></script>
 </body>
 </html>

@@ -14,6 +14,20 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 PERFORMANCE = DATA / "performance.json"
 HEADERS = {"User-Agent": "Mozilla/5.0 BETAKO-Free/1.0", "Accept-Language": "ja-JP,ja;q=0.9"}
+EVALUATION_VERSION = "main6-v1"
+
+
+def build_main_tickets(prediction: dict) -> list[str]:
+    contender_boats = [str(item["boat"]) for item in prediction.get("contenders", [])]
+    leading_boats = [boat for boat in str(prediction.get("pick", "")).split("-") if boat in contender_boats]
+    boats = list(dict.fromkeys(leading_boats + contender_boats))
+    if len(boats) < 4:
+        return [prediction["pick"]] if prediction.get("pick") else []
+    ticket = lambda first, second, third: f"{boats[first]}-{boats[second]}-{boats[third]}"
+    return [
+        ticket(0, 1, 2), ticket(0, 2, 1), ticket(0, 1, 3),
+        ticket(0, 2, 3), ticket(0, 3, 1), ticket(0, 3, 2),
+    ]
 
 
 def fetch_result(date: str, venue_id: str, race: int):
@@ -68,12 +82,13 @@ def summarize(records):
     }
 
 
-def score_tier(score):
+def score_tier(score, agreement=0):
     try:
         value = float(score)
+        agreement_value = float(agreement or 0)
     except (TypeError, ValueError):
         return "unclassified"
-    if value >= 70:
+    if value >= 75 and agreement_value >= 75:
         return "strict"
     if value >= 60:
         return "experimental"
@@ -88,24 +103,41 @@ def main():
     longshot_records = payload.setdefault("longshot_evaluated", {})
     if history_file.exists():
         history = json.loads(history_file.read_text(encoding="utf-8"))
-        for prediction in history.get("rankings", []):
+        visible_predictions = history.get("rankings", [])[:3]
+        visible_keys = {
+            f"{yesterday}-{prediction['venue_id']}-{prediction['race']}"
+            for prediction in visible_predictions
+        }
+        for key in list(records):
+            if key.startswith(f"{yesterday}-") and key not in visible_keys:
+                records.pop(key)
+        for prediction in visible_predictions:
             key = f"{yesterday}-{prediction['venue_id']}-{prediction['race']}"
-            if key in records:
+            existing = records.get(key)
+            if existing and existing.get("evaluation_version") == EVALUATION_VERSION:
                 continue
-            try:
-                result = fetch_result(yesterday, prediction["venue_id"], prediction["race"])
-            except requests.RequestException as exc:
-                print(f"{key}: {exc}")
-                continue
-            if not result:
-                continue
-            actual, payout = result
-            hit = prediction["pick"] == actual
+            if existing and existing.get("actual"):
+                actual, payout = existing["actual"], int(existing.get("payout_yen") or 0)
+            else:
+                try:
+                    result = fetch_result(yesterday, prediction["venue_id"], prediction["race"])
+                except requests.RequestException as exc:
+                    print(f"{key}: {exc}")
+                    continue
+                if not result:
+                    continue
+                actual, payout = result
+            tickets = build_main_tickets(prediction)
+            stake = len(tickets) * 100
+            hit = actual in tickets
             records[key] = {
                 "key": key, "venue": prediction["venue"], "race": prediction["race"],
-                "predicted": prediction["pick"], "actual": actual, "hit": hit,
-                "payout_yen": payout, "profit_yen": payout - 100 if hit else -100,
-                "score": prediction.get("score"), "tier": score_tier(prediction.get("score")),
+                "predicted": prediction["pick"], "predicted_tickets": tickets,
+                "actual": actual, "hit": hit, "payout_yen": payout, "stake_yen": stake,
+                "profit_yen": payout - stake if hit else -stake,
+                "score": prediction.get("score"), "agreement": prediction.get("agreement"),
+                "tier": score_tier(prediction.get("score"), prediction.get("agreement")),
+                "evaluation_version": EVALUATION_VERSION,
             }
         for candidate in history.get("longshots", []):
             key = f"{yesterday}-{candidate['venue_id']}-{candidate['race']}-longshot"

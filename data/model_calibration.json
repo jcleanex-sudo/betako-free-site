@@ -1,7 +1,7 @@
 {
   "updated_at": "2026-08-04 05:11 JST",
-  "status": "ACTIVATED",
-  "reason": "時系列検証log lossを0.0257改善",
+  "status": "FROZEN",
+  "reason": "モデル改造停止中。データ収集と検証のみ継続",
   "samples": 1030,
   "date_range": [
     "20260726",
@@ -42,6 +42,7 @@
     "st": 77.408,
     "temperature": 14.16
   },
-  "logic_transition": "v3 → v4 historical calibration",
+  "model_frozen": true,
+  "logic_transition": "v4固定（モデル凍結）",
   "source": "BOAT RACE公式 出走表・結果一覧"
 }

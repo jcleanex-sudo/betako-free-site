@@ -26,6 +26,9 @@ CLASS_BONUS = {"A1": 12.0, "A2": 7.0, "B1": 2.0, "B2": -3.0}
 HEADERS = {"User-Agent": "Mozilla/5.0 BETAKO-Free/1.0", "Accept-Language": "ja-JP,ja;q=0.9"}
 REQUEST_TIMEOUT = int(os.environ.get("BOATRACE_REQUEST_TIMEOUT", "15"))
 MAX_WORKERS = max(1, min(4, int(os.environ.get("BOATRACE_MAX_WORKERS", "3"))))
+PUBLIC_SCORE_MIN = 75.0
+PUBLIC_AGREEMENT_MIN = 75.0
+PUBLIC_DATA_RATE_MIN = 95.0
 _THREAD_LOCAL = threading.local()
 ROOT = Path(__file__).resolve().parents[1]
 MODEL_CONFIG = ROOT / "data" / "model_calibration.json"
@@ -171,7 +174,11 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     data_rate = sum(completeness) / len(completeness) * 100
     top_probability = ranked[0][1]
     score = min(90.0, 25.0 + top_probability * 45.0 + agreement * 0.15 + data_rate * 0.03)
-    label = "厳格候補" if score >= 70 else "検証候補" if score >= 60 else "見送り"
+    label = (
+        "厳格候補"
+        if score >= PUBLIC_SCORE_MIN and agreement >= PUBLIC_AGREEMENT_MIN and data_rate >= PUBLIC_DATA_RATE_MIN
+        else "検証候補" if score >= 60 else "見送り"
+    )
     top_entry = ranked[0][0]
     top_factor_count = factor_winners.count(top_boat)
     contenders = [
@@ -281,7 +288,9 @@ def main():
                     print(error)
         eligible = [
             prediction for prediction in predictions
-            if prediction["score"] >= 60 and prediction["data_rate"] >= 95
+            if prediction["score"] >= PUBLIC_SCORE_MIN
+            and prediction["agreement"] >= PUBLIC_AGREEMENT_MIN
+            and prediction["data_rate"] >= PUBLIC_DATA_RATE_MIN
         ]
         eligible.sort(key=lambda item: (
             -item["score"], -item["agreement"], -item["data_rate"],
@@ -290,7 +299,7 @@ def main():
         all_races = sorted(predictions, key=lambda item: (int(item["venue_id"]), item["race"]))
         output["all_races"] = all_races
         if eligible:
-            selected = eligible[:8]
+            selected = eligible[:3]
             longshots = [
                 {
                     "venue_id": prediction["venue_id"], "venue": prediction["venue"],
@@ -302,10 +311,10 @@ def main():
             longshots.sort(key=lambda item: item["hole_index"], reverse=True)
             output.update(
                 status="OK",
-                message="全1R〜12Rを比較し、データ取得率95%以上から自動選抜",
+                message="全1R〜12Rを比較し、指数75・一致度75%・データ取得率95%以上だけを厳格選抜",
                 rankings=selected,
                 longshots=longshots[:3],
-                selection_policy=f"score>=60, data_rate>=95, compare=1R-12R, workers={MAX_WORKERS}",
+                selection_policy=f"score>={PUBLIC_SCORE_MIN:.0f}, agreement>={PUBLIC_AGREEMENT_MIN:.0f}, data_rate>={PUBLIC_DATA_RATE_MIN:.0f}, compare=1R-12R, workers={MAX_WORKERS}",
                 manual_count=len(all_races),
             )
         else:

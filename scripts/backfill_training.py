@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import re
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -32,6 +33,7 @@ TRAINING_DIR = ROOT / "data" / "training"
 DATASET = TRAINING_DIR / "races.json"
 MODEL_CONFIG = ROOT / "data" / "model_calibration.json"
 MIN_ACTIVATION_SAMPLES = 800
+MODEL_FROZEN = os.environ.get("BETAKO_MODEL_FROZEN", "1") != "0"
 
 
 def fetch_result_list(date: str, venue_id: str) -> dict[int, tuple[str, int]]:
@@ -192,7 +194,10 @@ def calibrate(records: dict[str, dict]):
     activated = False
     reason = f"安全な自動調整には最低{MIN_ACTIVATION_SAMPLES}レース必要"
 
-    if len(ordered) >= MIN_ACTIVATION_SAMPLES and len(validation) >= 100:
+    if MODEL_FROZEN:
+        status = "FROZEN"
+        reason = "モデル改造停止中。データ収集と検証のみ継続"
+    elif len(ordered) >= MIN_ACTIVATION_SAMPLES and len(validation) >= 100:
         candidate = tune(train, current)
         candidate_validation = metrics(validation, candidate)
         loss_gain = baseline_validation["log_loss"] - candidate_validation["log_loss"]
@@ -215,7 +220,8 @@ def calibrate(records: dict[str, dict]):
         "baseline_validation": baseline_validation,
         "candidate_validation": candidate_validation,
         "active_weights": active, "candidate_weights": candidate,
-        "logic_transition": "v3 → v4 historical calibration" if activated else "変更なし",
+        "model_frozen": MODEL_FROZEN,
+        "logic_transition": "v4固定（モデル凍結）" if MODEL_FROZEN else "v3 → v4 historical calibration" if activated else "変更なし",
         "source": "BOAT RACE公式 出走表・結果一覧",
     }
     MODEL_CONFIG.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
