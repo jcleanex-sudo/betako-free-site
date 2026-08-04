@@ -2817,112 +2817,123 @@
       "venue": "多摩川",
       "venue_id": "05",
       "race": 2,
-      "status": "WAIT",
-      "message": "展示データ不足のため朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-3-2",
+      "final_pick": "1-3-6",
+      "final_score": 48.3,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速1m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
-            "pick": "3-1-6",
-            "odds": 51.6,
-            "model_probability": 5.7,
-            "market_probability": 1.94,
-            "net_edge": 1.76
-          },
-          {
             "pick": "3-1-2",
-            "odds": 43.6,
+            "odds": 36.9,
             "model_probability": 5.94,
-            "market_probability": 2.29,
-            "net_edge": 1.65
+            "market_probability": 2.71,
+            "net_edge": 1.23
           },
           {
-            "pick": "1-3-6",
-            "odds": 27.6,
-            "model_probability": 7.2,
-            "market_probability": 3.62,
-            "net_edge": 1.58
+            "pick": "6-1-3",
+            "odds": 124.4,
+            "model_probability": 3.79,
+            "market_probability": 0.8,
+            "net_edge": 0.99
+          },
+          {
+            "pick": "3-1-6",
+            "odds": 29.2,
+            "model_probability": 5.7,
+            "market_probability": 3.42,
+            "net_edge": 0.28
           },
           {
             "pick": "1-6-3",
-            "odds": 53.0,
+            "odds": 29.8,
             "model_probability": 5.47,
-            "market_probability": 1.89,
-            "net_edge": 1.58
+            "market_probability": 3.36,
+            "net_edge": 0.11
           },
           {
-            "pick": "2-1-6",
-            "odds": 122.7,
-            "model_probability": 2.3,
-            "market_probability": 0.81,
-            "net_edge": -0.51
+            "pick": "6-1-2",
+            "odds": 139.6,
+            "model_probability": 2.25,
+            "market_probability": 0.72,
+            "net_edge": -0.47
           },
           {
-            "pick": "2-1-3",
-            "odds": 38.5,
-            "model_probability": 4.03,
-            "market_probability": 2.6,
-            "net_edge": -0.57
+            "pick": "1-3-5",
+            "odds": 49.0,
+            "model_probability": 1.56,
+            "market_probability": 2.04,
+            "net_edge": -2.48
           }
         ],
         "cover": [
           {
-            "pick": "1-2-6",
-            "odds": 45.6,
-            "model_probability": 3.29,
-            "market_probability": 2.19,
-            "net_edge": -0.9
+            "pick": "1-6-5",
+            "odds": 79.4,
+            "model_probability": 0.68,
+            "market_probability": 1.26,
+            "net_edge": -2.58
           },
           {
             "pick": "1-6-2",
-            "odds": 38.5,
+            "odds": 25.1,
             "model_probability": 3.25,
-            "market_probability": 2.6,
-            "net_edge": -1.35
+            "market_probability": 3.98,
+            "net_edge": -2.73
           },
           {
             "pick": "1-3-2",
-            "odds": 14.3,
+            "odds": 10.8,
             "model_probability": 7.51,
-            "market_probability": 6.99,
-            "net_edge": -1.48
+            "market_probability": 9.26,
+            "net_edge": -3.75
           },
           {
-            "pick": "1-3-5",
-            "odds": 75.5,
-            "model_probability": 1.56,
-            "market_probability": 1.32,
-            "net_edge": -1.76
+            "pick": "1-3-6",
+            "odds": 10.9,
+            "model_probability": 7.2,
+            "market_probability": 9.17,
+            "net_edge": -3.97
           },
           {
             "pick": "1-2-3",
-            "odds": 16.0,
+            "odds": 9.4,
             "model_probability": 5.78,
-            "market_probability": 6.25,
-            "net_edge": -2.47
+            "market_probability": 10.64,
+            "net_edge": -6.86
           },
           {
-            "pick": "1-2-5",
-            "odds": 78.5,
-            "model_probability": 0.71,
-            "market_probability": 1.27,
-            "net_edge": -2.56
+            "pick": "1-2-6",
+            "odds": 10.8,
+            "model_probability": 3.29,
+            "market_probability": 9.26,
+            "net_edge": -7.97
           }
         ],
         "ranked_by_edge": true
       },
-      "best_value_pick": "3-1-6",
+      "best_value_pick": "3-1-2",
+      "weather": "晴",
+      "wind_speed": 1.0,
+      "wave_height": 0,
       "value": {
         "status": "WATCH",
-        "odds": 51.6,
-        "model_probability": 5.7,
-        "market_probability": 1.94,
-        "net_edge": 1.76,
+        "odds": 36.9,
+        "model_probability": 5.94,
+        "market_probability": 2.71,
+        "net_edge": 1.23,
         "deadline": "12:03",
-        "remaining_minutes": 137.3,
-        "message": "安全余白控除後の優位性が基準未満のため見送り",
+        "remaining_minutes": -32.1,
+        "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=05&hd=20260804&rno=2"
       },
+      "fetched_at": "2026-08-04T12:35:06+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=05&hd=20260804&rno=2"
     },
     {
@@ -15497,13 +15508,13 @@
       "formation": "1-6-流し",
       "time_rank": 1,
       "deadline": "12:03",
-      "remaining_minutes": 137.3,
+      "remaining_minutes": -32.1,
       "status": "WATCH",
-      "min_odds": 38.5,
+      "min_odds": 25.1,
       "model_probability": 9.81,
-      "market_probability": 10.39,
-      "net_edge": -2.57,
-      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
+      "market_probability": 15.94,
+      "net_edge": -8.12,
+      "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
       "venue": "多摩川",
