@@ -116,6 +116,22 @@ form button span { float: right; }
 .ticketGroup { margin: 0; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: rgba(7,19,31,.58); }
 .ticketGroup > b { display: block; margin-bottom: 7px; color: var(--cyan); font-size: 10px; }
 .formationRows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+.formationRows.singleFormation { grid-template-columns: 1fr; }
+.formationCard { overflow: hidden; border: 1px solid rgba(64,226,231,.2); border-radius: 8px; background: #0a1420; }
+.formationHeader { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; color: var(--muted); background: rgba(64,226,231,.06); font: 800 8px monospace; }
+.formationHeader em { color: var(--cyan); font-style: normal; font-size: 10px; }
+.formationColumns { display: grid; grid-template-columns: repeat(3, 1fr); }
+.formationColumns section { min-width: 0; padding: 7px; border-right: 1px solid var(--line); }
+.formationColumns section:last-child { border-right: 0; }
+.formationColumns small { display: block; margin: 0 0 6px; color: var(--muted); font-size: 8px; text-align: center; }
+.boatChoices { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.boatChoice { display: grid; place-items: center; width: 29px; height: 29px; border: 1px solid rgba(255,255,255,.24); border-radius: 5px; font: 900 13px monospace; box-shadow: inset 0 -2px 0 rgba(0,0,0,.16); }
+.boatChoice.boat1 { color: #111; background: #f7f7f4; }
+.boatChoice.boat2 { color: white; background: #24272c; }
+.boatChoice.boat3 { color: white; background: #dc5b5b; }
+.boatChoice.boat4 { color: white; background: #397ee8; }
+.boatChoice.boat5 { color: #171717; background: #f3d952; }
+.boatChoice.boat6 { color: white; background: #49a968; }
 .formationRow { display: flex; align-items: center; gap: 4px; min-width: 0; padding: 5px; border: 1px solid rgba(143,174,202,.12); border-radius: 6px; }
 .formationRow > span { display: grid; place-items: center; min-width: 30px; }
 .formationRow small { margin: 0; color: var(--muted); font-size: 7px; }

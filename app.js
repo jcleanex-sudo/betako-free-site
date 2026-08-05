@@ -24,35 +24,101 @@ function buildBetPlan(contenders = [], leadingPick = "") {
 
 function renderFormation(target, tickets) {
   if (!tickets.length) {
+    target.classList.remove("singleFormation");
     target.textContent = "--";
     return;
   }
-  const labels = ["1着", "2着", "3着"];
-  target.replaceChildren(...tickets.map((ticket) => {
-    const pick = typeof ticket === "string" ? ticket : ticket?.pick || "--";
-    const boats = pick.split("-");
-    const row = document.createElement("div");
-    row.className = "formationRow";
-    labels.forEach((label, index) => {
-      const position = document.createElement("span");
+  const formations = compressTicketsToFormations(tickets);
+  target.classList.toggle("singleFormation", formations.length === 1);
+  target.replaceChildren(...formations.map((formation, formationIndex) => {
+    const card = document.createElement("div");
+    card.className = "formationCard";
+    const header = document.createElement("div");
+    header.className = "formationHeader";
+    header.innerHTML = `<b>FORMATION ${formationIndex + 1}</b><em>${formation.points}点</em>`;
+    const columns = document.createElement("div");
+    columns.className = "formationColumns";
+    [["1着", formation.first], ["2着", formation.second], ["3着", formation.third]].forEach(([label, boats]) => {
+      const column = document.createElement("section");
       const caption = document.createElement("small");
-      const boat = document.createElement("b");
       caption.textContent = label;
-      boat.textContent = boats[index] || "--";
-      position.append(caption, boat);
-      row.append(position);
+      const choices = document.createElement("div");
+      choices.className = "boatChoices";
+      boats.forEach((boat) => {
+        const choice = document.createElement("span");
+        choice.className = `boatChoice boat${boat}`;
+        choice.textContent = boat;
+        choice.setAttribute("aria-label", `${label} ${boat}号艇`);
+        choices.append(choice);
+      });
+      column.append(caption, choices);
+      columns.append(column);
     });
-    if (typeof ticket !== "string" && ticket?.net_edge != null) {
-      const edge = document.createElement("em");
-      edge.textContent = `edge ${ticket.net_edge >= 0 ? "+" : ""}${Number(ticket.net_edge).toFixed(1)}%`;
-      row.append(edge);
-    }
-    return row;
+    card.append(header, columns);
+    return card;
   }));
 }
 
 function ticketText(ticket) {
   return typeof ticket === "string" ? ticket : ticket?.pick || "--";
+}
+
+function formationPointCount(first, second, third) {
+  let points = 0;
+  first.forEach((a) => second.forEach((b) => third.forEach((c) => {
+    if (a !== b && a !== c && b !== c) points += 1;
+  })));
+  return points;
+}
+
+function compressTicketsToFormations(tickets = []) {
+  const parsed = [...new Set(tickets.map(ticketText))]
+    .map((pick) => pick.split("-"))
+    .filter((boats) => boats.length === 3 && new Set(boats).size === 3);
+  const count = parsed.length;
+  if (!count) return [];
+  const candidates = [];
+  for (let mask = 1; mask < (1 << count); mask += 1) {
+    const selected = parsed.filter((_, index) => mask & (1 << index));
+    const first = [...new Set(selected.map((boats) => boats[0]))];
+    const second = [...new Set(selected.map((boats) => boats[1]))];
+    const third = [...new Set(selected.map((boats) => boats[2]))];
+    const selectedSet = new Set(selected.map((boats) => boats.join("-")));
+    const generated = [];
+    first.forEach((a) => second.forEach((b) => third.forEach((c) => {
+      if (a !== b && a !== c && b !== c) generated.push(`${a}-${b}-${c}`);
+    })));
+    if (generated.length === selected.length && generated.every((pick) => selectedSet.has(pick))) {
+      candidates.push({ mask, first, second, third, points: generated.length });
+    }
+  }
+  const memo = new Map();
+  const solve = (mask) => {
+    if (!mask) return [];
+    if (memo.has(mask)) return memo.get(mask);
+    const anchor = mask & -mask;
+    let best = null;
+    candidates.forEach((candidate) => {
+      if (!(candidate.mask & anchor) || (candidate.mask & mask) !== candidate.mask) return;
+      const tail = solve(mask ^ candidate.mask);
+      if (!tail) return;
+      const option = [candidate, ...tail];
+      const optionChoices = option.reduce((sum, item) => sum + item.first.length + item.second.length + item.third.length, 0);
+      const bestChoices = best?.reduce((sum, item) => sum + item.first.length + item.second.length + item.third.length, 0) ?? Infinity;
+      if (!best || option.length < best.length || (option.length === best.length && optionChoices < bestChoices)) best = option;
+    });
+    memo.set(mask, best);
+    return best;
+  };
+  return solve((1 << count) - 1) || [];
+}
+
+function formationCopyLines(label, tickets) {
+  const formations = compressTicketsToFormations(tickets);
+  return formations.map((formation, index) => {
+    const suffix = formations.length > 1 ? String(index + 1) : "";
+    return `${label}${suffix}:${formation.first.join("")}-${formation.second.join("")}-${formation.third.join("")}(${formation.points}点)`;
+  });
 }
 
 function buildDevelopmentPrediction(leadingPick, reasons = [], finalReady = false) {
@@ -68,8 +134,8 @@ function buildManualCopyText(payload) {
   const date = String(payload.date || "").replaceAll("-", "/");
   const fixedLines = [
     `${date} ${payload.venue}${payload.race}R`,
-    `本線:${payload.main.map(ticketText).join("・") || "--"}`,
-    `押さえ:${payload.cover.map(ticketText).join("・") || "--"}`,
+    ...formationCopyLines("本線", payload.main),
+    ...formationCopyLines("押さえ", payload.cover),
     "※検証中・的中利益保証なし",
   ];
   const maxJapaneseCharacters = 140;
