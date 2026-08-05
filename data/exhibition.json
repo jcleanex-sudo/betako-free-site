@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05 12:22 JST",
+  "updated_at": "2026-08-05 13:02 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -12390,6 +12390,129 @@
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260805&rno=9"
     },
     {
+      "venue": "鳴門",
+      "venue_id": "14",
+      "race": 10,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-3-5",
+      "final_pick": "1-3-5",
+      "final_score": 44.7,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速1m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "5-1-2",
+            "odds": 98.8,
+            "model_probability": 2.33,
+            "market_probability": 1.01,
+            "net_edge": -0.68
+          },
+          {
+            "pick": "5-1-3",
+            "odds": 50.6,
+            "model_probability": 3.09,
+            "market_probability": 1.98,
+            "net_edge": -0.89
+          },
+          {
+            "pick": "1-5-2",
+            "odds": 56.8,
+            "model_probability": 2.85,
+            "market_probability": 1.76,
+            "net_edge": -0.91
+          },
+          {
+            "pick": "1-2-5",
+            "odds": 54.7,
+            "model_probability": 2.77,
+            "market_probability": 1.83,
+            "net_edge": -1.06
+          },
+          {
+            "pick": "1-5-3",
+            "odds": 32.9,
+            "model_probability": 3.77,
+            "market_probability": 3.04,
+            "net_edge": -1.27
+          },
+          {
+            "pick": "3-1-2",
+            "odds": 39.2,
+            "model_probability": 3.24,
+            "market_probability": 2.55,
+            "net_edge": -1.31
+          }
+        ],
+        "cover": [
+          {
+            "pick": "1-3-2",
+            "odds": 28.4,
+            "model_probability": 3.77,
+            "market_probability": 3.52,
+            "net_edge": -1.75
+          },
+          {
+            "pick": "1-5-6",
+            "odds": 77.6,
+            "model_probability": 1.25,
+            "market_probability": 1.29,
+            "net_edge": -2.04
+          },
+          {
+            "pick": "1-3-6",
+            "odds": 53.8,
+            "model_probability": 1.65,
+            "market_probability": 1.86,
+            "net_edge": -2.21
+          },
+          {
+            "pick": "1-2-3",
+            "odds": 26.6,
+            "model_probability": 3.38,
+            "market_probability": 3.76,
+            "net_edge": -2.38
+          },
+          {
+            "pick": "1-3-5",
+            "odds": 20.8,
+            "model_probability": 4.09,
+            "market_probability": 4.81,
+            "net_edge": -2.72
+          },
+          {
+            "pick": "3-1-5",
+            "odds": 21.9,
+            "model_probability": 3.52,
+            "market_probability": 4.57,
+            "net_edge": -3.05
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "5-1-2",
+      "weather": "晴",
+      "wind_speed": 1.0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 98.8,
+        "model_probability": 2.33,
+        "market_probability": 1.01,
+        "net_edge": -0.68,
+        "deadline": "13:12",
+        "remaining_minutes": 8.7,
+        "message": "安全余白控除後の優位性が基準未満のため見送り",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=14&hd=20260805&rno=10"
+      },
+      "fetched_at": "2026-08-05T13:03:17+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260805&rno=10"
+    },
+    {
       "venue": "宮島",
       "venue_id": "17",
       "race": 1,
@@ -18387,6 +18510,23 @@
       "model_probability": 7.07,
       "market_probability": 6.55,
       "net_edge": -1.47,
+      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
+    },
+    {
+      "venue": "鳴門",
+      "venue_id": "14",
+      "race": 10,
+      "boat": 5,
+      "name": "堀本 和也",
+      "formation": "1-5-流し",
+      "time_rank": 3,
+      "deadline": "13:12",
+      "remaining_minutes": 8.7,
+      "status": "WATCH",
+      "min_odds": 32.9,
+      "model_probability": 8.61,
+      "market_probability": 12.16,
+      "net_edge": -5.55,
       "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
