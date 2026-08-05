@@ -68,7 +68,6 @@ function buildManualCopyText(payload) {
   const lines = [
     "🌊 水面ベタ子 手動予想",
     `${payload.date} ${payload.venue} ${payload.race}R`,
-    payload.skipTarget ? "【現在判断】見送り対象" : "【現在判断】予想候補",
     `【展開予想】${payload.development}`,
     `【${payload.mainLabel}】${payload.main.map(ticketText).join(" / ") || "--"}`,
     `【押さえ6点】${payload.cover.map(ticketText).join(" / ") || "--"}`,
@@ -195,7 +194,6 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     date: dateInput.value,
     venue,
     race: raceSelect.value,
-    skipTarget,
     development,
     mainLabel: document.querySelector("#mainLabel").textContent,
     main: betPlan.main || [],
