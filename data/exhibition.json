@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05 13:02 JST",
+  "updated_at": "2026-08-05 13:25 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -12513,6 +12513,129 @@
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260805&rno=10"
     },
     {
+      "venue": "鳴門",
+      "venue_id": "14",
+      "race": 11,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-2-3",
+      "final_pick": "1-2-6",
+      "final_score": 65.7,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速1m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "1-6-2",
+            "odds": 51.5,
+            "model_probability": 4.05,
+            "market_probability": 1.94,
+            "net_edge": 0.11
+          },
+          {
+            "pick": "2-1-6",
+            "odds": 69.5,
+            "model_probability": 2.56,
+            "market_probability": 1.44,
+            "net_edge": -0.88
+          },
+          {
+            "pick": "1-2-6",
+            "odds": 21.1,
+            "model_probability": 5.83,
+            "market_probability": 4.74,
+            "net_edge": -0.91
+          },
+          {
+            "pick": "6-1-2",
+            "odds": 153.0,
+            "model_probability": 1.6,
+            "market_probability": 0.65,
+            "net_edge": -1.05
+          },
+          {
+            "pick": "1-6-3",
+            "odds": 80.5,
+            "model_probability": 2.11,
+            "market_probability": 1.24,
+            "net_edge": -1.13
+          },
+          {
+            "pick": "6-1-3",
+            "odds": 332.7,
+            "model_probability": 0.83,
+            "market_probability": 0.3,
+            "net_edge": -1.47
+          }
+        ],
+        "cover": [
+          {
+            "pick": "1-3-2",
+            "odds": 15.6,
+            "model_probability": 6.62,
+            "market_probability": 6.41,
+            "net_edge": -1.79
+          },
+          {
+            "pick": "1-6-4",
+            "odds": 57.7,
+            "model_probability": 1.54,
+            "market_probability": 1.73,
+            "net_edge": -2.19
+          },
+          {
+            "pick": "2-1-3",
+            "odds": 23.8,
+            "model_probability": 3.85,
+            "market_probability": 4.2,
+            "net_edge": -2.35
+          },
+          {
+            "pick": "1-3-6",
+            "odds": 32.0,
+            "model_probability": 2.29,
+            "market_probability": 3.12,
+            "net_edge": -2.83
+          },
+          {
+            "pick": "1-2-4",
+            "odds": 12.9,
+            "model_probability": 6.39,
+            "market_probability": 7.75,
+            "net_edge": -3.36
+          },
+          {
+            "pick": "1-2-3",
+            "odds": 9.2,
+            "model_probability": 8.74,
+            "market_probability": 10.87,
+            "net_edge": -4.13
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "1-6-2",
+      "weather": "晴",
+      "wind_speed": 1.0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 51.5,
+        "model_probability": 4.05,
+        "market_probability": 1.94,
+        "net_edge": 0.11,
+        "deadline": "13:49",
+        "remaining_minutes": 23.2,
+        "message": "安全余白控除後の優位性が基準未満のため見送り",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=14&hd=20260805&rno=11"
+      },
+      "fetched_at": "2026-08-05T13:25:50+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260805&rno=11"
+    },
+    {
       "venue": "宮島",
       "venue_id": "17",
       "race": 1,
@@ -18527,6 +18650,23 @@
       "model_probability": 8.61,
       "market_probability": 12.16,
       "net_edge": -5.55,
+      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
+    },
+    {
+      "venue": "鳴門",
+      "venue_id": "14",
+      "race": 11,
+      "boat": 2,
+      "name": "葛原 大陽",
+      "formation": "1-2-流し",
+      "time_rank": 2,
+      "deadline": "13:49",
+      "remaining_minutes": 23.2,
+      "status": "WATCH",
+      "min_odds": 9.2,
+      "model_probability": 25.11,
+      "market_probability": 43.48,
+      "net_edge": -20.37,
       "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
