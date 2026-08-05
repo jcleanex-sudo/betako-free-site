@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05 10:08 JST",
+  "updated_at": "2026-08-05 10:27 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -11775,6 +11775,129 @@
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260805&rno=4"
     },
     {
+      "venue": "鳴門",
+      "venue_id": "14",
+      "race": 5,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-4-5",
+      "final_pick": "1-4-6",
+      "final_score": 66.0,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速1m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "1-4-2",
+            "odds": 13.7,
+            "model_probability": 8.48,
+            "market_probability": 7.3,
+            "net_edge": -0.82
+          },
+          {
+            "pick": "1-6-4",
+            "odds": 40.9,
+            "model_probability": 3.35,
+            "market_probability": 2.44,
+            "net_edge": -1.09
+          },
+          {
+            "pick": "1-6-2",
+            "odds": 123.6,
+            "model_probability": 1.38,
+            "market_probability": 0.81,
+            "net_edge": -1.43
+          },
+          {
+            "pick": "1-2-4",
+            "odds": 18.4,
+            "model_probability": 6.0,
+            "market_probability": 5.43,
+            "net_edge": -1.43
+          },
+          {
+            "pick": "1-6-5",
+            "odds": 107.6,
+            "model_probability": 1.49,
+            "market_probability": 0.93,
+            "net_edge": -1.44
+          },
+          {
+            "pick": "1-2-6",
+            "odds": 70.0,
+            "model_probability": 1.49,
+            "market_probability": 1.43,
+            "net_edge": -1.94
+          }
+        ],
+        "cover": [
+          {
+            "pick": "6-1-2",
+            "odds": 294.9,
+            "model_probability": 0.4,
+            "market_probability": 0.34,
+            "net_edge": -1.94
+          },
+          {
+            "pick": "1-4-5",
+            "odds": 10.8,
+            "model_probability": 9.18,
+            "market_probability": 9.26,
+            "net_edge": -2.08
+          },
+          {
+            "pick": "6-1-4",
+            "odds": 92.1,
+            "model_probability": 0.98,
+            "market_probability": 1.09,
+            "net_edge": -2.11
+          },
+          {
+            "pick": "4-1-2",
+            "odds": 25.1,
+            "model_probability": 2.73,
+            "market_probability": 3.98,
+            "net_edge": -3.25
+          },
+          {
+            "pick": "1-4-6",
+            "odds": 12.9,
+            "model_probability": 5.12,
+            "market_probability": 7.75,
+            "net_edge": -4.63
+          },
+          {
+            "pick": "4-1-6",
+            "odds": 19.5,
+            "model_probability": 1.65,
+            "market_probability": 5.13,
+            "net_edge": -5.48
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "1-4-2",
+      "weather": "晴",
+      "wind_speed": 1.0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 13.7,
+        "model_probability": 8.48,
+        "market_probability": 7.3,
+        "net_edge": -0.82,
+        "deadline": "10:32",
+        "remaining_minutes": 4.4,
+        "message": "締切5分前を過ぎたため新規判定を停止",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=14&hd=20260805&rno=5"
+      },
+      "fetched_at": "2026-08-05T10:27:38+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260805&rno=5"
+    },
+    {
       "venue": "宮島",
       "venue_id": "17",
       "race": 1,
@@ -17676,6 +17799,23 @@
       "model_probability": 33.33,
       "market_probability": 62.5,
       "net_edge": -31.17,
+      "message": "締切5分前を過ぎたため新規判定を停止"
+    },
+    {
+      "venue": "鳴門",
+      "venue_id": "14",
+      "race": 5,
+      "boat": 4,
+      "name": "田村 隆信",
+      "formation": "1-4-流し",
+      "time_rank": 4,
+      "deadline": "10:32",
+      "remaining_minutes": 4.4,
+      "status": "WATCH",
+      "min_odds": 10.8,
+      "model_probability": 29.5,
+      "market_probability": 37.04,
+      "net_edge": -9.54,
       "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
