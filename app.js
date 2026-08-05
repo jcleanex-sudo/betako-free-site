@@ -3,6 +3,7 @@ const venueSelect = document.querySelector("#venue");
 const raceSelect = document.querySelector("#race");
 const dateInput = document.querySelector("#raceDate");
 const pendingRefreshes = new Set();
+let latestManualPrediction = null;
 
 venues.forEach((venue, index) => venueSelect.add(new Option(`${String(index + 1).padStart(2, "0")} ${venue}`, venue)));
 for (let race = 1; race <= 12; race += 1) raceSelect.add(new Option(`${race}R`, String(race)));
@@ -48,6 +49,34 @@ function renderFormation(target, tickets) {
     }
     return row;
   }));
+}
+
+function ticketText(ticket) {
+  return typeof ticket === "string" ? ticket : ticket?.pick || "--";
+}
+
+function buildDevelopmentPrediction(leadingPick, reasons = [], finalReady = false) {
+  const boats = String(leadingPick || "").split("-").filter(Boolean);
+  if (boats.length < 3) return "データ不足のため展開を確定できません。見送り対象です。";
+  const [axis, second, third] = boats;
+  const phase = finalReady ? "展示後データでは" : "朝データでは";
+  const reason = reasons.filter(Boolean).slice(0, 2).join("。 ");
+  return `${phase}${axis}号艇の先頭争いを軸に、${second}号艇と${third}号艇の連下進出を評価。${reason ? `${reason}。` : "進入や展示気配が変われば評価を下げます。"}`;
+}
+
+function buildManualCopyText(payload) {
+  const lines = [
+    "🌊 水面ベタ子 手動予想",
+    `${payload.date} ${payload.venue} ${payload.race}R`,
+    payload.skipTarget ? "【現在判断】見送り対象" : "【現在判断】予想候補",
+    `【展開予想】${payload.development}`,
+    `【${payload.mainLabel}】${payload.main.map(ticketText).join(" / ") || "--"}`,
+    `【押さえ6点】${payload.cover.map(ticketText).join(" / ") || "--"}`,
+  ];
+  if (payload.detail) lines.push(`【数値】${payload.detail}`);
+  if (payload.invalidConditions) lines.push(`【見送り・無効条件】${payload.invalidConditions}`);
+  lines.push("※検証中の分析情報です。的中・利益を保証しません。");
+  return lines.join("\n");
 }
 
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -147,6 +176,9 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
       : "選択日の予想データはありません。本日の日付を選択してください。";
   const reasons = document.querySelector("#predictionReasons");
   const displayedReasons = finalReady ? finalData.reasons : (match?.reasons || []);
+  const leadingPick = finalReady ? finalData.final_pick : match?.pick;
+  const development = buildDevelopmentPrediction(leadingPick, displayedReasons, finalReady);
+  document.querySelector("#developmentText").textContent = development;
   reasons.replaceChildren(...displayedReasons.map((reason) => {
     const item = document.createElement("li");
     item.textContent = reason;
@@ -159,6 +191,19 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     : match
       ? `無効条件：${(match.invalid_conditions || []).join("／")}`
     : `見送り条件：${dateMatches ? "公式データの取得失敗" : "選択日が本日ではない"}`;
+  latestManualPrediction = {
+    date: dateInput.value,
+    venue,
+    race: raceSelect.value,
+    skipTarget,
+    development,
+    mainLabel: document.querySelector("#mainLabel").textContent,
+    main: betPlan.main || [],
+    cover: betPlan.cover || [],
+    detail: document.querySelector("#predictionDetail").textContent,
+    invalidConditions: document.querySelector("#invalidConditions").textContent,
+  };
+  document.querySelector("#manualCopyStatus").textContent = "";
   document.querySelector("#selectionResult").hidden = false;
   if (finalMode && !finalReady && match) {
     void refreshSelectedRace({
@@ -168,6 +213,20 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
       previousFetchedAt: finalData?.fetched_at,
       previousUpdatedAt: window.betakoExhibition?.updated_at,
     });
+  }
+});
+
+document.querySelector("#copyManualPrediction").addEventListener("click", async () => {
+  const status = document.querySelector("#manualCopyStatus");
+  if (!latestManualPrediction) {
+    status.textContent = "先に開催場とレースを選んで予想してください。";
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(buildManualCopyText(latestManualPrediction));
+    status.textContent = "展開予想・本線6点・押さえ6点をコピーしました。";
+  } catch {
+    status.textContent = "コピーできませんでした。ブラウザの許可を確認してください。";
   }
 });
 
