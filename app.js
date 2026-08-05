@@ -65,17 +65,18 @@ function buildDevelopmentPrediction(leadingPick, reasons = [], finalReady = fals
 }
 
 function buildManualCopyText(payload) {
-  const lines = [
-    "🌊 水面ベタ子 手動予想",
-    `${payload.date} ${payload.venue} ${payload.race}R`,
-    `【展開予想】${payload.development}`,
-    `【${payload.mainLabel}】${payload.main.map(ticketText).join(" / ") || "--"}`,
-    `【押さえ6点】${payload.cover.map(ticketText).join(" / ") || "--"}`,
+  const date = String(payload.date || "").replaceAll("-", "/");
+  const fixedLines = [
+    `${date} ${payload.venue}${payload.race}R`,
+    `本線:${payload.main.map(ticketText).join("・") || "--"}`,
+    `押さえ:${payload.cover.map(ticketText).join("・") || "--"}`,
+    "※検証中・的中利益保証なし",
   ];
-  if (payload.detail) lines.push(`【数値】${payload.detail}`);
-  if (payload.invalidConditions) lines.push(`【見送り・無効条件】${payload.invalidConditions}`);
-  lines.push("※検証中の分析情報です。的中・利益を保証しません。");
-  return lines.join("\n");
+  const maxJapaneseCharacters = 140;
+  const developmentPrefix = "展開:";
+  const reserved = Array.from(fixedLines.join("\n")).length + developmentPrefix.length + 1;
+  const development = Array.from(payload.development || "").slice(0, Math.max(0, maxJapaneseCharacters - reserved)).join("");
+  return [fixedLines[0], `${developmentPrefix}${development}`, ...fixedLines.slice(1)].join("\n");
 }
 
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -222,7 +223,7 @@ document.querySelector("#copyManualPrediction").addEventListener("click", async 
   }
   try {
     await navigator.clipboard.writeText(buildManualCopyText(latestManualPrediction));
-    status.textContent = "展開予想・本線6点・押さえ6点をコピーしました。";
+    status.textContent = "X投稿用（140文字以内）でコピーしました。";
   } catch {
     status.textContent = "コピーできませんでした。ブラウザの許可を確認してください。";
   }
