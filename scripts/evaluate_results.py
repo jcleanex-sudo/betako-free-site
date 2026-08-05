@@ -82,6 +82,32 @@ def summarize(records):
     }
 
 
+def build_daily_summaries(records, existing_daily=None):
+    existing_daily = existing_daily or {}
+    dates = set(existing_daily)
+    for item in records.values():
+        key = str(item.get("key", ""))
+        if re.match(r"^\d{8}-", key):
+            dates.add(key[:8])
+    daily = {}
+    for date in sorted(dates):
+        day_records = {
+            key: item for key, item in records.items()
+            if str(item.get("key", key)).startswith(f"{date}-")
+        }
+        summary = summarize(day_records)
+        previous = existing_daily.get(date, {})
+        published = max(int(previous.get("published") or 0), summary["samples"])
+        daily[date] = {
+            "date": f"{date[:4]}-{date[4:6]}-{date[6:]}",
+            "published": published,
+            "evaluated": summary["samples"],
+            "pending": max(0, published - summary["samples"]),
+            **summary,
+        }
+    return daily
+
+
 def score_tier(score, agreement=0):
     try:
         value = float(score)
@@ -101,9 +127,14 @@ def main():
     payload = json.loads(PERFORMANCE.read_text(encoding="utf-8")) if PERFORMANCE.exists() else {"evaluated": {}}
     records = payload.setdefault("evaluated", {})
     longshot_records = payload.setdefault("longshot_evaluated", {})
+    existing_daily = payload.get("daily", {})
     if history_file.exists():
         history = json.loads(history_file.read_text(encoding="utf-8"))
         visible_predictions = history.get("rankings", [])[:3]
+        existing_daily[yesterday] = {
+            **existing_daily.get(yesterday, {}),
+            "published": len(visible_predictions),
+        }
         visible_keys = {
             f"{yesterday}-{prediction['venue_id']}-{prediction['race']}"
             for prediction in visible_predictions
@@ -169,6 +200,7 @@ def main():
         "experimental": summarize({key: item for key, item in records.items() if item.get("tier") == "experimental"}),
     }
     payload["longshot_summary"] = summarize(longshot_records)
+    payload["daily"] = build_daily_summaries(records, existing_daily)
     PERFORMANCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(payload["summary"], ensure_ascii=False))
 

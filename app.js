@@ -326,6 +326,7 @@ function renderLongshots(longshots) {
 
 function renderRankings(payload) {
   window.betakoPredictions = payload;
+  renderDailyPerformance();
   const grid = document.querySelector("#rankingGrid");
   const status = document.querySelector("#dataStatus");
   const updated = document.querySelector("#dataUpdated");
@@ -359,6 +360,73 @@ function renderRankings(payload) {
   }).join("");
 
   renderLongshots(longshots);
+}
+
+function deriveDailyRecords(payload = {}) {
+  if (payload.daily && Object.keys(payload.daily).length) return payload.daily;
+  const groups = {};
+  Object.values(payload.evaluated || {}).forEach((item) => {
+    const date = String(item.key || "").slice(0, 8);
+    if (!/^\d{8}$/.test(date)) return;
+    (groups[date] ||= []).push(item);
+  });
+  return Object.fromEntries(Object.entries(groups).map(([date, records]) => {
+    const hits = records.filter((item) => item.hit).length;
+    const net = records.reduce((sum, item) => sum + Number(item.profit_yen || 0), 0);
+    return [date, {
+      date: `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6)}`,
+      published: records.length,
+      evaluated: records.length,
+      samples: records.length,
+      hits,
+      hit_rate: records.length ? hits / records.length * 100 : 0,
+      net_profit_yen: net,
+      pending: 0,
+    }];
+  }));
+}
+
+function renderDailyPerformance() {
+  const predictions = window.betakoPredictions;
+  const performance = window.betakoPerformance || {};
+  if (!predictions) return;
+  const todayKey = String(predictions.race_date || dateInput.value).replaceAll("-", "");
+  const daily = deriveDailyRecords(performance);
+  const storedToday = daily[todayKey] || {};
+  const published = Array.isArray(predictions.rankings) ? predictions.rankings.length : 0;
+  const evaluated = Number(storedToday.evaluated ?? storedToday.samples ?? 0);
+  const hits = Number(storedToday.hits || 0);
+  const pending = Math.max(0, published - evaluated);
+  const state = !published ? "公開予想なし" : pending ? "結果待ち" : "集計済み";
+  document.querySelector("#todayPublished").textContent = `${published}件`;
+  document.querySelector("#todayEvaluated").textContent = `${evaluated}/${published}件`;
+  document.querySelector("#todayHits").textContent = evaluated ? `${hits}件` : "判定前";
+  document.querySelector("#todayRecordStatus").textContent = state;
+
+  const today = {
+    date: predictions.race_date || dateInput.value,
+    published,
+    evaluated,
+    samples: evaluated,
+    hits,
+    hit_rate: evaluated ? hits / evaluated * 100 : 0,
+    net_profit_yen: storedToday.net_profit_yen || 0,
+    pending,
+  };
+  const rows = { ...daily, [todayKey]: today };
+  document.querySelector("#dailyHistory").innerHTML = Object.entries(rows)
+    .sort(([a], [b]) => b.localeCompare(a))
+    .slice(0, 14)
+    .map(([, item]) => {
+      const itemPublished = Number(item.published || item.samples || 0);
+      const itemEvaluated = Number(item.evaluated ?? item.samples ?? 0);
+      const itemPending = Math.max(0, Number(item.pending ?? itemPublished - itemEvaluated));
+      const status = itemPending ? "結果待ち" : "集計済み";
+      const hitText = itemEvaluated ? `${Number(item.hits || 0)}件` : "--";
+      const rateText = itemEvaluated ? `${Number(item.hit_rate || 0).toFixed(1)}%` : "--";
+      const netText = itemEvaluated ? `${Number(item.net_profit_yen || 0).toLocaleString("ja-JP")}円` : "--";
+      return `<div class="dailyRow" role="row"><span>${escapeHtml(item.date || "--")}</span><span>${itemPublished}件</span><span>${itemEvaluated}件</span><span>${hitText}</span><span>${rateText}</span><span>${netText}</span><span class="${itemPending ? "dailyPending" : "dailyComplete"}">${status}</span></div>`;
+    }).join("");
 }
 
 document.querySelector("#copyXPost").addEventListener("click", async () => {
@@ -411,6 +479,8 @@ fetch(`data/predictions.json?ts=${Date.now()}`, { cache: "no-store" })
 fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((response) => response.ok ? response.json() : Promise.reject())
   .then((payload) => {
+    window.betakoPerformance = payload;
+    renderDailyPerformance();
     const summary = payload.summary || {};
     document.querySelector("#learningSamples").textContent = `${summary.samples || 0}件`;
     document.querySelector("#learningHit").textContent = `${Number(summary.hit_rate || 0).toFixed(1)}%`;

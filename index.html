@@ -50,6 +50,20 @@
     </div>
   </section>
 
+  <section class="dailySection" id="daily-performance">
+    <div class="sectionHead"><div><p class="eyebrow">DAILY PERFORMANCE</p><h2>毎日の予想記録</h2></div><p>公開した本線6点を日別に保存。結果待ちを0的中として扱わず、公式結果との照合後に確定します。</p></div>
+    <div class="todayRecord">
+      <article><span>今日の公開予想</span><strong id="todayPublished">--</strong></article>
+      <article><span>結果照合済み</span><strong id="todayEvaluated">--</strong></article>
+      <article><span>的中数</span><strong id="todayHits">--</strong></article>
+      <article><span>今日の状態</span><strong id="todayRecordStatus">読み込み中</strong></article>
+    </div>
+    <div class="dailyTable" role="table" aria-label="日別予想成績">
+      <div class="dailyRow dailyHead" role="row"><span>日付</span><span>公開</span><span>照合</span><span>的中</span><span>的中率</span><span>純損益</span><span>状態</span></div>
+      <div id="dailyHistory"><div class="dailyRow" role="row"><span>読み込み中</span></div></div>
+    </div>
+  </section>
+
   <section class="longshotSection" id="longshot">
     <div class="sectionHead"><div><p class="eyebrow">LONGSHOT WATCH</p><h2>穴党コーナー</h2></div><p>人気薄の中から機力・当地適性・STに上振れ余地がある艇だけを抽出。朝段階では買い推奨にせず、展示とオッズが揃うまでWATCHします。</p></div>
     <div class="longshotGrid" id="longshotGrid" aria-live="polite"><article class="longshotCard"><span>WATCH</span><h3>穴候補を確認中</h3><p>公式データを読み込んでいます。</p></article></div>
@@ -74,6 +88,6 @@
 
   <footer><a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO</span></a><p>勝つことより先に、大きく負けないこと。</p><small>AI予想は検証中の分析情報です。舟券購入は自己責任で行ってください。</small></footer>
 </main>
-<script src="app.js?v=20260805-4"></script>
+<script src="app.js?v=20260805-5"></script>
 </body>
 </html>
