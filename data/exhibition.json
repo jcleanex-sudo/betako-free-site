@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05 10:27 JST",
+  "updated_at": "2026-08-05 10:42 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -11898,6 +11898,118 @@
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260805&rno=5"
     },
     {
+      "venue": "鳴門",
+      "venue_id": "14",
+      "race": 6,
+      "status": "WAIT",
+      "message": "展示データ不足のため朝予想を維持",
+      "morning_pick": "1-2-3",
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "1-2-4",
+            "odds": 45.1,
+            "model_probability": 4.07,
+            "market_probability": 2.22,
+            "net_edge": -0.15
+          },
+          {
+            "pick": "1-4-2",
+            "odds": 77.4,
+            "model_probability": 3.05,
+            "market_probability": 1.29,
+            "net_edge": -0.24
+          },
+          {
+            "pick": "1-2-3",
+            "odds": 28.6,
+            "model_probability": 4.84,
+            "market_probability": 3.5,
+            "net_edge": -0.66
+          },
+          {
+            "pick": "2-1-4",
+            "odds": 35.1,
+            "model_probability": 3.77,
+            "market_probability": 2.85,
+            "net_edge": -1.08
+          },
+          {
+            "pick": "1-4-3",
+            "odds": 112.0,
+            "model_probability": 1.77,
+            "market_probability": 0.89,
+            "net_edge": -1.12
+          },
+          {
+            "pick": "1-3-2",
+            "odds": 33.6,
+            "model_probability": 3.8,
+            "market_probability": 2.98,
+            "net_edge": -1.18
+          }
+        ],
+        "cover": [
+          {
+            "pick": "1-2-5",
+            "odds": 64.7,
+            "model_probability": 2.36,
+            "market_probability": 1.55,
+            "net_edge": -1.19
+          },
+          {
+            "pick": "3-1-2",
+            "odds": 39.1,
+            "model_probability": 3.06,
+            "market_probability": 2.56,
+            "net_edge": -1.5
+          },
+          {
+            "pick": "1-3-4",
+            "odds": 67.0,
+            "model_probability": 1.86,
+            "market_probability": 1.49,
+            "net_edge": -1.63
+          },
+          {
+            "pick": "2-1-3",
+            "odds": 21.4,
+            "model_probability": 4.49,
+            "market_probability": 4.67,
+            "net_edge": -2.18
+          },
+          {
+            "pick": "3-1-4",
+            "odds": 57.7,
+            "model_probability": 1.49,
+            "market_probability": 1.73,
+            "net_edge": -2.24
+          },
+          {
+            "pick": "1-3-5",
+            "odds": 68.5,
+            "model_probability": 1.08,
+            "market_probability": 1.46,
+            "net_edge": -2.38
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "1-2-4",
+      "value": {
+        "status": "WATCH",
+        "odds": 45.1,
+        "model_probability": 4.07,
+        "market_probability": 2.22,
+        "net_edge": -0.15,
+        "deadline": "11:02",
+        "remaining_minutes": 18.9,
+        "message": "安全余白控除後の優位性が基準未満のため見送り",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=14&hd=20260805&rno=6"
+      },
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260805&rno=6"
+    },
+    {
       "venue": "宮島",
       "venue_id": "17",
       "race": 1,
@@ -17817,6 +17929,23 @@
       "market_probability": 37.04,
       "net_edge": -9.54,
       "message": "締切5分前を過ぎたため新規判定を停止"
+    },
+    {
+      "venue": "鳴門",
+      "venue_id": "14",
+      "race": 6,
+      "boat": 4,
+      "name": "村上 功祐",
+      "formation": "1-4-流し",
+      "time_rank": null,
+      "deadline": "11:02",
+      "remaining_minutes": 18.9,
+      "status": "WAIT",
+      "min_odds": null,
+      "model_probability": null,
+      "market_probability": null,
+      "net_edge": null,
+      "message": "候補艇の展示データ待ち"
     },
     {
       "venue": "宮島",
