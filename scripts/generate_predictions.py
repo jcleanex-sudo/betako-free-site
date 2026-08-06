@@ -270,6 +270,8 @@ def main():
         "status": "DATA BLOCKED", "race_date": now.strftime("%Y-%m-%d"),
         "updated_at": now.strftime("%Y-%m-%d %H:%M JST"), "message": "公式データ不足",
         "rankings": [], "all_races": [], "longshots": [],
+        "official_venues": [], "venue_count": 0, "expected_races": 0,
+        "fetched_races": 0, "collection_rate": 0,
     }
     try:
         venues = discover_venues(date)
@@ -298,7 +300,34 @@ def main():
         ))
         all_races = sorted(predictions, key=lambda item: (int(item["venue_id"]), item["race"]))
         output["all_races"] = all_races
-        if eligible:
+        counts = {
+            stadium_id: sum(1 for item in all_races if item["venue_id"] == stadium_id)
+            for stadium_id in venues
+        }
+        expected_races = len(venues) * 12
+        fetched_races = len(all_races)
+        collection_rate = fetched_races / expected_races * 100 if expected_races else 0
+        complete = bool(venues) and fetched_races == expected_races and all(counts[stadium_id] == 12 for stadium_id in venues)
+        output.update(
+            official_venues=[
+                {
+                    "venue_id": stadium_id, "venue": STADIUMS[stadium_id],
+                    "expected_races": 12, "fetched_races": counts[stadium_id],
+                    "complete": counts[stadium_id] == 12,
+                }
+                for stadium_id in venues
+            ],
+            venue_count=len(venues), expected_races=expected_races,
+            fetched_races=fetched_races, collection_rate=round(collection_rate, 1),
+        )
+        if not complete:
+            missing = [f"{STADIUMS[stadium_id]} {counts[stadium_id]}/12R" for stadium_id in venues if counts[stadium_id] != 12]
+            output.update(
+                status="DATA BLOCKED",
+                message=f"公式開催データ未完了: {'、'.join(missing) or '開催場を取得できません'}",
+                rankings=[], longshots=[], manual_count=0,
+            )
+        elif eligible:
             selected = eligible[:3]
             longshots = [
                 {
@@ -311,7 +340,7 @@ def main():
             longshots.sort(key=lambda item: item["hole_index"], reverse=True)
             output.update(
                 status="OK",
-                message="全1R〜12Rを比較し、指数75・一致度75%・データ取得率95%以上だけを厳格選抜",
+                message=f"公式開催{len(venues)}場・全{expected_races}Rを100%取得後、厳格選抜",
                 rankings=selected,
                 longshots=longshots[:3],
                 selection_policy=f"score>={PUBLIC_SCORE_MIN:.0f}, agreement>={PUBLIC_AGREEMENT_MIN:.0f}, data_rate>={PUBLIC_DATA_RATE_MIN:.0f}, compare=1R-12R, workers={MAX_WORKERS}",
@@ -320,7 +349,7 @@ def main():
         else:
             if all_races:
                 output.update(
-                    status="OK", message="ランキング基準通過なし。手動予想は取得成功レースを表示",
+                    status="OK", message=f"公式開催{len(venues)}場・全{expected_races}Rを100%取得。ランキング基準通過なし",
                     manual_count=len(all_races),
                 )
             else:

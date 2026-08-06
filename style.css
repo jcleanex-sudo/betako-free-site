@@ -99,6 +99,7 @@ input, select, form button {
   width: 100%; min-height: 48px; margin-top: 7px; padding: 0 12px;
   border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: #0b121b; font: 700 12px inherit;
 }
+input:disabled, select:disabled, button:disabled { cursor: not-allowed; opacity: .48; }
 select option { color: #111; background: white; }
 form button { cursor: pointer; color: #041315; border: 0; background: linear-gradient(135deg, var(--cyan), #7df6f1); font-weight: 900; }
 form button span { float: right; }

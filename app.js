@@ -5,10 +5,36 @@ const dateInput = document.querySelector("#raceDate");
 const pendingRefreshes = new Set();
 let latestManualPrediction = null;
 
-venues.forEach((venue, index) => venueSelect.add(new Option(`${String(index + 1).padStart(2, "0")} ${venue}`, venue)));
+venueSelect.replaceChildren(new Option("公式開催場を確認中", ""));
+venueSelect.disabled = true;
 for (let race = 1; race <= 12; race += 1) raceSelect.add(new Option(`${race}R`, String(race)));
-venueSelect.value = "大村";
 dateInput.value = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
+
+function populateActiveVenues(payload) {
+  const official = Array.isArray(payload.official_venues) && payload.official_venues.length
+    ? payload.official_venues
+    : [...new Set((payload.all_races || []).map((item) => item.venue))].map((venue) => {
+        const fetchedRaces = (payload.all_races || []).filter((item) => item.venue === venue).length;
+        return {
+          venue,
+          venue_id: String(venues.indexOf(venue) + 1).padStart(2, "0"),
+          fetched_races: fetchedRaces,
+          complete: fetchedRaces === 12,
+        };
+      });
+  const current = venueSelect.value;
+  venueSelect.replaceChildren(...official.map((item) => new Option(
+    `${item.venue_id} ${item.venue}${item.complete === false ? `（${item.fetched_races}/12R）` : ""}`,
+    item.venue,
+  )));
+  const available = payload.status === "OK" && official.length > 0 && official.every((item) => item.complete !== false);
+  venueSelect.disabled = !available;
+  document.querySelector("#predictionForm button[type='submit']").disabled = !available;
+  const preferred = official.some((item) => item.venue === current)
+    ? current
+    : payload.rankings?.[0]?.venue || official[0]?.venue || "";
+  venueSelect.value = preferred;
+}
 
 function buildBetPlan(contenders = [], leadingPick = "") {
   const contenderBoats = contenders.map((item) => String(item.boat));
@@ -326,13 +352,20 @@ function renderLongshots(longshots) {
 
 function renderRankings(payload) {
   window.betakoPredictions = payload;
+  populateActiveVenues(payload);
   renderDailyPerformance();
   const grid = document.querySelector("#rankingGrid");
   const status = document.querySelector("#dataStatus");
   const updated = document.querySelector("#dataUpdated");
   const rankings = Array.isArray(payload.rankings) ? payload.rankings : [];
   const longshots = Array.isArray(payload.longshots) ? payload.longshots : [];
-  status.textContent = payload.status === "OK" ? "公式データ反映" : "DATA BLOCKED";
+  const venueCount = Number(payload.venue_count || payload.official_venues?.length || new Set((payload.all_races || []).map((item) => item.venue)).size || 0);
+  const expectedRaces = Number(payload.expected_races || venueCount * 12 || 0);
+  const fetchedRaces = Number(payload.fetched_races || payload.all_races?.length || 0);
+  const collectionRate = Number(payload.collection_rate ?? (expectedRaces ? fetchedRaces / expectedRaces * 100 : 0));
+  status.textContent = payload.status === "OK"
+    ? `公式${venueCount}場 ${fetchedRaces}/${expectedRaces}R（${collectionRate.toFixed(0)}%）`
+    : `DATA BLOCKED ${fetchedRaces}/${expectedRaces}R（${collectionRate.toFixed(0)}%）`;
   updated.textContent = payload.updated_at ? `${payload.updated_at} 更新` : "更新時刻不明";
 
   if (!rankings.length) {
