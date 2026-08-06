@@ -272,6 +272,7 @@ def main():
         "rankings": [], "all_races": [], "longshots": [],
         "official_venues": [], "venue_count": 0, "expected_races": 0,
         "fetched_races": 0, "collection_rate": 0,
+        "reference_expected": 0, "reference_fetched": 0, "reference_rate": 0,
     }
     try:
         venues = discover_venues(date)
@@ -307,24 +308,50 @@ def main():
         expected_races = len(venues) * 12
         fetched_races = len(all_races)
         collection_rate = fetched_races / expected_races * 100 if expected_races else 0
-        complete = bool(venues) and fetched_races == expected_races and all(counts[stadium_id] == 12 for stadium_id in venues)
+        reference_expected = expected_races * 6 * 5
+        reference_fetched = sum(round(number(item.get("data_rate"), 0) / 100 * 6 * 5) for item in all_races)
+        reference_rate = reference_fetched / reference_expected * 100 if reference_expected else 0
+        reference_complete = bool(all_races) and all(number(item.get("data_rate"), 0) >= 100 for item in all_races)
+        complete = (
+            bool(venues)
+            and fetched_races == expected_races
+            and all(counts[stadium_id] == 12 for stadium_id in venues)
+            and reference_complete
+        )
         output.update(
             official_venues=[
                 {
                     "venue_id": stadium_id, "venue": STADIUMS[stadium_id],
                     "expected_races": 12, "fetched_races": counts[stadium_id],
-                    "complete": counts[stadium_id] == 12,
+                    "reference_rate": round(min(
+                        (item["data_rate"] for item in all_races if item["venue_id"] == stadium_id),
+                        default=0,
+                    ), 1),
+                    "complete": counts[stadium_id] == 12 and all(
+                        number(item.get("data_rate"), 0) >= 100
+                        for item in all_races if item["venue_id"] == stadium_id
+                    ),
                 }
                 for stadium_id in venues
             ],
             venue_count=len(venues), expected_races=expected_races,
             fetched_races=fetched_races, collection_rate=round(collection_rate, 1),
+            reference_expected=reference_expected, reference_fetched=reference_fetched,
+            reference_rate=round(reference_rate, 1),
         )
         if not complete:
             missing = [f"{STADIUMS[stadium_id]} {counts[stadium_id]}/12R" for stadium_id in venues if counts[stadium_id] != 12]
+            incomplete_references = [
+                f"{item['venue']}{item['race']}R {item['data_rate']:.1f}%"
+                for item in all_races if number(item.get("data_rate"), 0) < 100
+            ]
             output.update(
                 status="DATA BLOCKED",
-                message=f"公式開催データ未完了: {'、'.join(missing) or '開催場を取得できません'}",
+                message=(
+                    f"公式開催データ未完了: {'、'.join(missing)}"
+                    if missing else
+                    f"参考因子未完了: {'、'.join(incomplete_references) or '取得できません'}"
+                ),
                 rankings=[], longshots=[], manual_count=0,
             )
         elif eligible:
@@ -340,7 +367,7 @@ def main():
             longshots.sort(key=lambda item: item["hole_index"], reverse=True)
             output.update(
                 status="OK",
-                message=f"公式開催{len(venues)}場・全{expected_races}Rを100%取得後、厳格選抜",
+                message=f"公式開催{len(venues)}場・全{expected_races}R・参考因子{reference_expected}件を100%取得後、厳格選抜",
                 rankings=selected,
                 longshots=longshots[:3],
                 selection_policy=f"score>={PUBLIC_SCORE_MIN:.0f}, agreement>={PUBLIC_AGREEMENT_MIN:.0f}, data_rate>={PUBLIC_DATA_RATE_MIN:.0f}, compare=1R-12R, workers={MAX_WORKERS}",

@@ -14,17 +14,22 @@ function populateActiveVenues(payload) {
   const official = Array.isArray(payload.official_venues) && payload.official_venues.length
     ? payload.official_venues
     : [...new Set((payload.all_races || []).map((item) => item.venue))].map((venue) => {
-        const fetchedRaces = (payload.all_races || []).filter((item) => item.venue === venue).length;
+        const venueRaces = (payload.all_races || []).filter((item) => item.venue === venue);
+        const fetchedRaces = venueRaces.length;
+        const referenceRate = venueRaces.length
+          ? Math.min(...venueRaces.map((item) => Number(item.data_rate || 0)))
+          : 0;
         return {
           venue,
           venue_id: String(venues.indexOf(venue) + 1).padStart(2, "0"),
           fetched_races: fetchedRaces,
-          complete: fetchedRaces === 12,
+          reference_rate: referenceRate,
+          complete: fetchedRaces === 12 && referenceRate >= 100,
         };
       });
   const current = venueSelect.value;
   venueSelect.replaceChildren(...official.map((item) => new Option(
-    `${item.venue_id} ${item.venue}${item.complete === false ? `（${item.fetched_races}/12R）` : ""}`,
+    `${item.venue_id} ${item.venue}${item.complete === false ? `（${item.fetched_races}/12R・参考${Number(item.reference_rate || 0).toFixed(1)}%）` : ""}`,
     item.venue,
   )));
   const available = payload.status === "OK" && official.length > 0 && official.every((item) => item.complete !== false);
@@ -388,23 +393,38 @@ function renderLongshots(longshots) {
 function renderRankings(payload) {
   window.betakoPredictions = payload;
   populateActiveVenues(payload);
-  renderDailyPerformance();
   const grid = document.querySelector("#rankingGrid");
   const status = document.querySelector("#dataStatus");
   const updated = document.querySelector("#dataUpdated");
-  const rankings = Array.isArray(payload.rankings) ? payload.rankings : [];
-  const longshots = Array.isArray(payload.longshots) ? payload.longshots : [];
+  let rankings = Array.isArray(payload.rankings) ? payload.rankings : [];
+  let longshots = Array.isArray(payload.longshots) ? payload.longshots : [];
   const venueCount = Number(payload.venue_count || payload.official_venues?.length || new Set((payload.all_races || []).map((item) => item.venue)).size || 0);
   const expectedRaces = Number(payload.expected_races || venueCount * 12 || 0);
   const fetchedRaces = Number(payload.fetched_races || payload.all_races?.length || 0);
   const collectionRate = Number(payload.collection_rate ?? (expectedRaces ? fetchedRaces / expectedRaces * 100 : 0));
-  status.textContent = payload.status === "OK"
-    ? `公式${venueCount}場 ${fetchedRaces}/${expectedRaces}R（${collectionRate.toFixed(0)}%）`
-    : `DATA BLOCKED ${fetchedRaces}/${expectedRaces}R（${collectionRate.toFixed(0)}%）`;
+  const referenceExpected = Number(payload.reference_expected || expectedRaces * 6 * 5 || 0);
+  const referenceFetched = Number(payload.reference_fetched || Math.round((payload.all_races || []).reduce(
+    (total, item) => total + Number(item.data_rate || 0) / 100 * 6 * 5,
+    0,
+  )));
+  const referenceRate = Number(payload.reference_rate ?? (referenceExpected ? referenceFetched / referenceExpected * 100 : 0));
+  const fullyReady = payload.status === "OK" && collectionRate >= 100 && referenceRate >= 100;
+  if (!fullyReady) {
+    rankings = [];
+    longshots = [];
+  }
+  window.betakoPredictions = fullyReady ? payload : { ...payload, rankings: [], longshots: [] };
+  renderDailyPerformance();
+  status.textContent = fullyReady
+    ? `公式${venueCount}場 ${fetchedRaces}/${expectedRaces}R・参考${referenceFetched}/${referenceExpected}（100%）`
+    : `DATA BLOCKED ${fetchedRaces}/${expectedRaces}R・参考${referenceFetched}/${referenceExpected}（${referenceRate.toFixed(1)}%）`;
   updated.textContent = payload.updated_at ? `${payload.updated_at} 更新` : "更新時刻不明";
 
   if (!rankings.length) {
-    grid.innerHTML = `<article class="rankCard gold"><div class="rankTop"><span class="rankNumber">--</span><span class="candidate">見送り</span></div><h3>公開できる候補なし</h3><div class="index"><span>状態</span><strong>--</strong></div><div class="pick"><span>理由</span><b>${escapeHtml(payload.message || "データ不足")}</b></div><div class="meter"><i style="width:0"></i></div></article>`;
+    const blockedMessage = !fullyReady
+      ? `参考データが${referenceFetched}/${referenceExpected}件のため停止。全因子100%取得まで予想しません`
+      : payload.message || "基準通過なし";
+    grid.innerHTML = `<article class="rankCard gold"><div class="rankTop"><span class="rankNumber">--</span><span class="candidate">見送り</span></div><h3>公開できる候補なし</h3><div class="index"><span>状態</span><strong>--</strong></div><div class="pick"><span>理由</span><b>${escapeHtml(blockedMessage)}</b></div><div class="meter"><i style="width:0"></i></div></article>`;
     return;
   }
 
