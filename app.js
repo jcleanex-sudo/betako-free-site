@@ -48,6 +48,37 @@ function buildBetPlan(contenders = [], leadingPick = "") {
   };
 }
 
+function buildAxisEvidence(match) {
+  const contenders = match?.contenders || [];
+  const axisBoat = Number(String(match?.pick || "").split("-")[0]);
+  const axis = contenders.find((item) => Number(item.boat) === axisBoat) || contenders[0];
+  const runnerUp = contenders.find((item) => Number(item.boat) !== Number(axis?.boat));
+  if (!axis || !runnerUp) return [];
+
+  const axisProbability = Number(axis.relative_win_probability || 0);
+  const runnerUpProbability = Number(runnerUp.relative_win_probability || 0);
+  const probabilityGap = axisProbability - runnerUpProbability;
+  const modelPointGap = axisProbability > 0 && runnerUpProbability > 0
+    ? 14.16 * Math.log(axisProbability / runnerUpProbability)
+    : 0;
+  const evidence = [
+    `軸比較：${axis.boat}号艇 ${axis.name} ${axisProbability.toFixed(1)}%／次点 ${runnerUp.boat}号艇 ${runnerUp.name} ${runnerUpProbability.toFixed(1)}%（確率差 ${probabilityGap.toFixed(1)}pt・内部評価差 ${modelPointGap.toFixed(1)}点）`,
+  ];
+
+  if (axis.class === "B2") {
+    const courseText = Number(axis.boat) === 1
+      ? "1コース補正 +39.4点"
+      : `${axis.boat}コース補正を適用`;
+    evidence.push(`B2確認：級別補正 -1.4点を適用済み。${courseText}と基礎成績を合わせた結果です`);
+  }
+
+  const strict = Number(match.score) >= 75 && Number(match.agreement) >= 75 && Number(match.data_rate) >= 95;
+  evidence.push(strict
+    ? `採用判定：指数 ${Number(match.score).toFixed(1)}・因子一致 ${Number(match.agreement).toFixed(0)}%で厳格基準を通過`
+    : `見送り判定：指数 ${Number(match.score).toFixed(1)}・因子一致 ${Number(match.agreement).toFixed(0)}%。買い目は比較用で本線採用ではありません`);
+  return evidence;
+}
+
 function renderFormation(target, tickets) {
   if (!tickets.length) {
     target.classList.remove("singleFormation");
@@ -251,7 +282,9 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   decisionBadge.textContent = "見送り対象";
   const candidatePlan = buildBetPlan(match?.contenders, finalReady ? finalData.final_pick : match?.pick);
   const betPlan = finalMode && finalData?.ticket_plan ? finalData.ticket_plan : candidatePlan;
-  document.querySelector("#mainLabel").textContent = betPlan.ranked_by_edge ? "期待値上位6点" : "本線候補6点";
+  document.querySelector("#mainLabel").textContent = skipTarget
+    ? "参考買い目6点（見送り）"
+    : betPlan.ranked_by_edge ? "期待値上位6点" : "本線候補6点";
   renderFormation(document.querySelector("#mainPicks"), betPlan.main);
   renderFormation(document.querySelector("#coverPicks"), betPlan.cover);
   document.querySelector("#selectionText").textContent = finalReady
@@ -267,7 +300,9 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
       ? "公式データを取得できなかったレースです。DATA BLOCKEDとして見送ります。"
       : "選択日の予想データはありません。本日の日付を選択してください。";
   const reasons = document.querySelector("#predictionReasons");
-  const displayedReasons = finalReady ? finalData.reasons : (match?.reasons || []);
+  const displayedReasons = finalReady
+    ? finalData.reasons
+    : [...(match?.reasons || []), ...buildAxisEvidence(match)];
   const leadingPick = finalReady ? finalData.final_pick : match?.pick;
   const development = buildDevelopmentPrediction(leadingPick, displayedReasons, finalReady);
   document.querySelector("#developmentText").textContent = development;
