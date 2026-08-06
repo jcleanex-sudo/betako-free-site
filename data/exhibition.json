@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06 23:34 JST",
+  "updated_at": "2026-08-06 23:44 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -8459,6 +8459,129 @@
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=09&hd=20260806&rno=11"
       },
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=09&hd=20260806&rno=11"
+    },
+    {
+      "venue": "津",
+      "venue_id": "09",
+      "race": 12,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-4-2",
+      "final_pick": "1-2-4",
+      "final_score": 67.0,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速6m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "1-6-4",
+            "odds": 111.1,
+            "model_probability": 2.64,
+            "market_probability": 0.9,
+            "net_edge": -0.26
+          },
+          {
+            "pick": "1-6-2",
+            "odds": 137.0,
+            "model_probability": 2.41,
+            "market_probability": 0.73,
+            "net_edge": -0.32
+          },
+          {
+            "pick": "1-2-6",
+            "odds": 33.5,
+            "model_probability": 3.22,
+            "market_probability": 2.99,
+            "net_edge": -1.77
+          },
+          {
+            "pick": "2-1-6",
+            "odds": 123.6,
+            "model_probability": 0.92,
+            "market_probability": 0.81,
+            "net_edge": -1.89
+          },
+          {
+            "pick": "2-1-4",
+            "odds": 27.1,
+            "model_probability": 3.52,
+            "market_probability": 3.69,
+            "net_edge": -2.17
+          },
+          {
+            "pick": "4-1-2",
+            "odds": 21.7,
+            "model_probability": 3.72,
+            "market_probability": 4.61,
+            "net_edge": -2.89
+          }
+        ],
+        "cover": [
+          {
+            "pick": "4-1-6",
+            "odds": 39.3,
+            "model_probability": 1.06,
+            "market_probability": 2.54,
+            "net_edge": -3.48
+          },
+          {
+            "pick": "1-4-6",
+            "odds": 17.3,
+            "model_probability": 3.7,
+            "market_probability": 5.78,
+            "net_edge": -4.08
+          },
+          {
+            "pick": "1-2-3",
+            "odds": 11.3,
+            "model_probability": 6.05,
+            "market_probability": 8.85,
+            "net_edge": -4.8
+          },
+          {
+            "pick": "1-4-3",
+            "odds": 9.8,
+            "model_probability": 6.94,
+            "market_probability": 10.2,
+            "net_edge": -5.26
+          },
+          {
+            "pick": "1-4-2",
+            "odds": 6.1,
+            "model_probability": 12.95,
+            "market_probability": 16.39,
+            "net_edge": -5.44
+          },
+          {
+            "pick": "1-2-4",
+            "odds": 5.4,
+            "model_probability": 12.36,
+            "market_probability": 18.52,
+            "net_edge": -8.16
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "1-6-4",
+      "weather": "晴",
+      "wind_speed": 6.0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 111.1,
+        "model_probability": 2.64,
+        "market_probability": 0.9,
+        "net_edge": -0.26,
+        "deadline": "16:13",
+        "remaining_minutes": -452.1,
+        "message": "締切5分前を過ぎたため新規判定を停止",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=09&hd=20260806&rno=12"
+      },
+      "fetched_at": "2026-08-06T23:45:07+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=09&hd=20260806&rno=12"
     },
     {
       "venue": "三国",
@@ -20674,6 +20797,23 @@
       "market_probability": 66.67,
       "net_edge": -32.69,
       "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
+    },
+    {
+      "venue": "津",
+      "venue_id": "09",
+      "race": 12,
+      "boat": 4,
+      "name": "尾上 雅也",
+      "formation": "1-4-流し",
+      "time_rank": 4,
+      "deadline": "16:13",
+      "remaining_minutes": -452.1,
+      "status": "WATCH",
+      "min_odds": 6.1,
+      "model_probability": 26.05,
+      "market_probability": 65.57,
+      "net_edge": -41.52,
+      "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
       "venue": "三国",
