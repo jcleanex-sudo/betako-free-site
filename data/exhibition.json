@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06 15:10 JST",
+  "updated_at": "2026-08-06 15:11 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -2518,6 +2518,129 @@
       },
       "fetched_at": "2026-08-06T15:10:38+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=02&hd=20260806&rno=9"
+    },
+    {
+      "venue": "戸田",
+      "venue_id": "02",
+      "race": 10,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-5-3",
+      "final_pick": "1-6-2",
+      "final_score": 65.9,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速3m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "1-6-3",
+            "odds": 83.3,
+            "model_probability": 2.65,
+            "market_probability": 1.2,
+            "net_edge": -0.55
+          },
+          {
+            "pick": "1-5-2",
+            "odds": 19.3,
+            "model_probability": 6.26,
+            "market_probability": 5.18,
+            "net_edge": -0.92
+          },
+          {
+            "pick": "6-1-5",
+            "odds": 135.8,
+            "model_probability": 1.51,
+            "market_probability": 0.74,
+            "net_edge": -1.23
+          },
+          {
+            "pick": "1-6-2",
+            "odds": 60.3,
+            "model_probability": 2.39,
+            "market_probability": 1.66,
+            "net_edge": -1.27
+          },
+          {
+            "pick": "6-1-2",
+            "odds": 215.8,
+            "model_probability": 0.94,
+            "market_probability": 0.46,
+            "net_edge": -1.52
+          },
+          {
+            "pick": "1-6-5",
+            "odds": 29.2,
+            "model_probability": 3.86,
+            "market_probability": 3.42,
+            "net_edge": -1.56
+          }
+        ],
+        "cover": [
+          {
+            "pick": "2-1-5",
+            "odds": 51.0,
+            "model_probability": 2.11,
+            "market_probability": 1.96,
+            "net_edge": -1.85
+          },
+          {
+            "pick": "2-1-6",
+            "odds": 84.0,
+            "model_probability": 1.01,
+            "market_probability": 1.19,
+            "net_edge": -2.18
+          },
+          {
+            "pick": "1-2-6",
+            "odds": 27.3,
+            "model_probability": 2.53,
+            "market_probability": 3.66,
+            "net_edge": -3.13
+          },
+          {
+            "pick": "1-2-5",
+            "odds": 15.6,
+            "model_probability": 5.28,
+            "market_probability": 6.41,
+            "net_edge": -3.13
+          },
+          {
+            "pick": "1-5-6",
+            "odds": 15.9,
+            "model_probability": 4.84,
+            "market_probability": 6.29,
+            "net_edge": -3.45
+          },
+          {
+            "pick": "1-2-3",
+            "odds": 17.6,
+            "model_probability": 3.62,
+            "market_probability": 5.68,
+            "net_edge": -4.06
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "1-6-3",
+      "weather": "晴",
+      "wind_speed": 3.0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 83.3,
+        "model_probability": 2.65,
+        "market_probability": 1.2,
+        "net_edge": -0.55,
+        "deadline": "15:21",
+        "remaining_minutes": 8.9,
+        "message": "安全余白控除後の優位性が基準未満のため見送り",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=02&hd=20260806&rno=10"
+      },
+      "fetched_at": "2026-08-06T15:12:06+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=02&hd=20260806&rno=10"
     },
     {
       "venue": "平和島",
@@ -19187,6 +19310,23 @@
       "market_probability": 19.14,
       "net_edge": -7.96,
       "message": "締切5分前を過ぎたため新規判定を停止"
+    },
+    {
+      "venue": "戸田",
+      "venue_id": "02",
+      "race": 10,
+      "boat": 5,
+      "name": "岡村 仁",
+      "formation": "1-5-流し",
+      "time_rank": 6,
+      "deadline": "15:21",
+      "remaining_minutes": 8.9,
+      "status": "WATCH",
+      "min_odds": 15.9,
+      "model_probability": 20.69,
+      "market_probability": 25.16,
+      "net_edge": -6.47,
+      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
       "venue": "平和島",
