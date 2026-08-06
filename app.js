@@ -24,12 +24,12 @@ function populateActiveVenues(payload) {
           venue_id: String(venues.indexOf(venue) + 1).padStart(2, "0"),
           fetched_races: fetchedRaces,
           reference_rate: referenceRate,
-          complete: fetchedRaces === 12 && referenceRate >= 100,
+          complete: fetchedRaces === 12,
         };
       });
   const current = venueSelect.value;
   venueSelect.replaceChildren(...official.map((item) => new Option(
-    `${item.venue_id} ${item.venue}${item.complete === false ? `（${item.fetched_races}/12R・参考${Number(item.reference_rate || 0).toFixed(1)}%）` : ""}`,
+    `${item.venue_id} ${item.venue}${item.complete === false ? `（${item.fetched_races}/12R）` : ""}`,
     item.venue,
   )));
   const available = payload.status === "OK" && official.length > 0 && official.every((item) => item.complete !== false);
@@ -276,40 +276,55 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const cutoffReached = liveRemaining !== null && liveRemaining < 5;
   const valueStatus = cutoffReached ? "WATCH" : (value?.status || "DATA BLOCKED");
   const valueMessage = cutoffReached ? "締切5分前を過ぎたため新規判定を停止" : value?.message;
+  const referenceBlocked = Boolean(match) && Number(match.data_rate) < 100;
   const morningSkip = !match
     || match.label !== "厳格候補"
     || Number(match.score) < 75
     || Number(match.agreement) < 75
-    || Number(match.data_rate) < 95;
-  const skipTarget = finalMode ? !finalReady || valueStatus !== "UP" : morningSkip;
+    || referenceBlocked;
+  const skipTarget = referenceBlocked || (finalMode ? !finalReady || valueStatus !== "UP" : morningSkip);
   const decisionBadge = document.querySelector("#decisionBadge");
   decisionBadge.hidden = !skipTarget;
-  decisionBadge.textContent = "見送り対象";
-  const candidatePlan = buildBetPlan(match?.contenders, finalReady ? finalData.final_pick : match?.pick);
-  const betPlan = finalMode && finalData?.ticket_plan ? finalData.ticket_plan : candidatePlan;
-  document.querySelector("#mainLabel").textContent = skipTarget
+  decisionBadge.textContent = referenceBlocked ? "DATA BLOCKED" : "見送り対象";
+  const candidatePlan = referenceBlocked
+    ? { main: [], cover: [] }
+    : buildBetPlan(match?.contenders, finalReady ? finalData.final_pick : match?.pick);
+  const betPlan = referenceBlocked
+    ? candidatePlan
+    : finalMode && finalData?.ticket_plan ? finalData.ticket_plan : candidatePlan;
+  document.querySelector("#mainLabel").textContent = referenceBlocked
+    ? "予想停止（参考データ不足）"
+    : skipTarget
     ? "参考買い目6点（見送り）"
     : betPlan.ranked_by_edge ? "期待値上位6点" : "本線候補6点";
   renderFormation(document.querySelector("#mainPicks"), betPlan.main);
   renderFormation(document.querySelector("#coverPicks"), betPlan.cover);
-  document.querySelector("#selectionText").textContent = finalReady
-    ? `${venue} ${raceSelect.value}R・展示後指数 ${Math.round(finalData.final_score)}（FINAL）`
+  document.querySelector("#selectionText").textContent = referenceBlocked
+    ? `${venue} ${raceSelect.value}R・DATA BLOCKED（参考データ ${Number(match.data_rate).toFixed(1)}%）`
+    : finalReady
+      ? `${venue} ${raceSelect.value}R・展示後指数 ${Math.round(finalData.final_score)}（FINAL）`
     : match
       ? `${venue} ${raceSelect.value}R・期待度指数 ${Math.round(match.score)}（${finalMode ? finalData?.status || "WAIT" : match.label}）`
     : `${dateInput.value}・${venue} ${raceSelect.value}R・DATA BLOCKED`;
-  document.querySelector("#predictionDetail").textContent = finalReady
-    ? `期待値最上位 ${finalData.best_value_pick || finalData.final_pick}｜3連単オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜残り ${liveRemaining == null ? "--" : `${Math.max(0, liveRemaining).toFixed(0)}分`}｜判定 ${valueStatus}`
+  document.querySelector("#predictionDetail").textContent = referenceBlocked
+    ? `参考データ取得率 ${Number(match.data_rate).toFixed(1)}%｜100%未満のため買い目を生成しません`
+    : finalReady
+      ? `期待値最上位 ${finalData.best_value_pick || finalData.final_pick}｜3連単オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜残り ${liveRemaining == null ? "--" : `${Math.max(0, liveRemaining).toFixed(0)}分`}｜判定 ${valueStatus}`
     : match
       ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
     : dateMatches
       ? "公式データを取得できなかったレースです。DATA BLOCKEDとして見送ります。"
       : "選択日の予想データはありません。本日の日付を選択してください。";
   const reasons = document.querySelector("#predictionReasons");
-  const displayedReasons = finalReady
+  const displayedReasons = referenceBlocked
+    ? [`全国・当地・モーター・ボート・STのいずれかが欠損しています。100%取得までこのレースだけ予想を停止します`]
+    : finalReady
     ? finalData.reasons
     : [...(match?.reasons || []), ...buildAxisEvidence(match)];
-  const leadingPick = finalReady ? finalData.final_pick : match?.pick;
-  const development = buildDevelopmentPrediction(leadingPick, displayedReasons, finalReady);
+  const leadingPick = referenceBlocked ? "" : finalReady ? finalData.final_pick : match?.pick;
+  const development = referenceBlocked
+    ? "DATA BLOCKED：参考データが揃うまで展開予想を生成しません。"
+    : buildDevelopmentPrediction(leadingPick, displayedReasons, finalReady);
   document.querySelector("#developmentText").textContent = development;
   reasons.replaceChildren(...displayedReasons.map((reason) => {
     const item = document.createElement("li");
@@ -408,21 +423,27 @@ function renderRankings(payload) {
     0,
   )));
   const referenceRate = Number(payload.reference_rate ?? (referenceExpected ? referenceFetched / referenceExpected * 100 : 0));
-  const fullyReady = payload.status === "OK" && collectionRate >= 100 && referenceRate >= 100;
-  if (!fullyReady) {
+  const completeRaceCount = (payload.all_races || []).filter((item) => Number(item.data_rate) >= 100).length;
+  const coverageReady = payload.status === "OK" && collectionRate >= 100;
+  if (!coverageReady) {
     rankings = [];
     longshots = [];
+  } else {
+    rankings = rankings.filter((item) => Number(item.data_rate) >= 100);
+    longshots = longshots.filter((item) => (payload.all_races || []).some(
+      (race) => race.venue === item.venue && Number(race.race) === Number(item.race) && Number(race.data_rate) >= 100,
+    ));
   }
-  window.betakoPredictions = fullyReady ? payload : { ...payload, rankings: [], longshots: [] };
+  window.betakoPredictions = { ...payload, rankings, longshots };
   renderDailyPerformance();
-  status.textContent = fullyReady
-    ? `公式${venueCount}場 ${fetchedRaces}/${expectedRaces}R・参考${referenceFetched}/${referenceExpected}（100%）`
-    : `DATA BLOCKED ${fetchedRaces}/${expectedRaces}R・参考${referenceFetched}/${referenceExpected}（${referenceRate.toFixed(1)}%）`;
+  status.textContent = coverageReady
+    ? `公式${venueCount}場 ${fetchedRaces}/${expectedRaces}R・予想可能 ${completeRaceCount}/${expectedRaces}R（不足${expectedRaces - completeRaceCount}Rのみ停止）`
+    : `DATA BLOCKED ${fetchedRaces}/${expectedRaces}R（${collectionRate.toFixed(1)}%）`;
   updated.textContent = payload.updated_at ? `${payload.updated_at} 更新` : "更新時刻不明";
 
   if (!rankings.length) {
-    const blockedMessage = !fullyReady
-      ? `参考データが${referenceFetched}/${referenceExpected}件のため停止。全因子100%取得まで予想しません`
+    const blockedMessage = !coverageReady
+      ? `公式レース取得が${fetchedRaces}/${expectedRaces}Rのため全体停止`
       : payload.message || "基準通過なし";
     grid.innerHTML = `<article class="rankCard gold"><div class="rankTop"><span class="rankNumber">--</span><span class="candidate">見送り</span></div><h3>公開できる候補なし</h3><div class="index"><span>状態</span><strong>--</strong></div><div class="pick"><span>理由</span><b>${escapeHtml(blockedMessage)}</b></div><div class="meter"><i style="width:0"></i></div></article>`;
     return;
