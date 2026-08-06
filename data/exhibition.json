@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06 15:04 JST",
+  "updated_at": "2026-08-06 15:05 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -1780,6 +1780,129 @@
       },
       "fetched_at": "2026-08-06T15:04:51+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=02&hd=20260806&rno=3"
+    },
+    {
+      "venue": "戸田",
+      "venue_id": "02",
+      "race": 4,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-2-6",
+      "final_pick": "1-2-6",
+      "final_score": 56.3,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速0m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "1-2-5",
+            "odds": 45.9,
+            "model_probability": 7.16,
+            "market_probability": 2.18,
+            "net_edge": 2.98
+          },
+          {
+            "pick": "1-2-4",
+            "odds": 20.2,
+            "model_probability": 9.76,
+            "market_probability": 4.95,
+            "net_edge": 2.81
+          },
+          {
+            "pick": "1-2-6",
+            "odds": 16.3,
+            "model_probability": 10.2,
+            "market_probability": 6.13,
+            "net_edge": 2.07
+          },
+          {
+            "pick": "1-6-2",
+            "odds": 63.9,
+            "model_probability": 3.57,
+            "market_probability": 1.56,
+            "net_edge": 0.01
+          },
+          {
+            "pick": "1-4-2",
+            "odds": 45.1,
+            "model_probability": 3.4,
+            "market_probability": 2.22,
+            "net_edge": -0.82
+          },
+          {
+            "pick": "6-1-2",
+            "odds": 137.3,
+            "model_probability": 1.87,
+            "market_probability": 0.73,
+            "net_edge": -0.86
+          }
+        ],
+        "cover": [
+          {
+            "pick": "1-6-5",
+            "odds": 273.7,
+            "model_probability": 0.35,
+            "market_probability": 0.37,
+            "net_edge": -2.02
+          },
+          {
+            "pick": "6-1-4",
+            "odds": 306.9,
+            "model_probability": 0.25,
+            "market_probability": 0.33,
+            "net_edge": -2.08
+          },
+          {
+            "pick": "1-6-4",
+            "odds": 116.8,
+            "model_probability": 0.47,
+            "market_probability": 0.86,
+            "net_edge": -2.39
+          },
+          {
+            "pick": "2-1-4",
+            "odds": 12.6,
+            "model_probability": 7.37,
+            "market_probability": 7.94,
+            "net_edge": -2.57
+          },
+          {
+            "pick": "1-4-6",
+            "odds": 77.1,
+            "model_probability": 0.47,
+            "market_probability": 1.3,
+            "net_edge": -2.83
+          },
+          {
+            "pick": "2-1-6",
+            "odds": 9.8,
+            "model_probability": 7.69,
+            "market_probability": 10.2,
+            "net_edge": -4.51
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "1-2-5",
+      "weather": "晴",
+      "wind_speed": 0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 45.9,
+        "model_probability": 7.16,
+        "market_probability": 2.18,
+        "net_edge": 2.98,
+        "deadline": "12:14",
+        "remaining_minutes": -172.1,
+        "message": "締切5分前を過ぎたため新規判定を停止",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=02&hd=20260806&rno=4"
+      },
+      "fetched_at": "2026-08-06T15:06:03+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=02&hd=20260806&rno=4"
     },
     {
       "venue": "戸田",
@@ -18469,6 +18592,23 @@
       "model_probability": 12.74,
       "market_probability": 4.91,
       "net_edge": 5.83,
+      "message": "締切5分前を過ぎたため新規判定を停止"
+    },
+    {
+      "venue": "戸田",
+      "venue_id": "02",
+      "race": 4,
+      "boat": 4,
+      "name": "渡邉 健",
+      "formation": "1-4-流し",
+      "time_rank": 2,
+      "deadline": "12:14",
+      "remaining_minutes": -172.1,
+      "status": "WATCH",
+      "min_odds": 45.1,
+      "model_probability": 4.54,
+      "market_probability": 8.87,
+      "net_edge": -6.33,
       "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
