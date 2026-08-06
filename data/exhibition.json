@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06 21:12 JST",
+  "updated_at": "2026-08-06 23:23 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -18988,6 +18988,129 @@
     {
       "venue": "大村",
       "venue_id": "24",
+      "race": 1,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-5-2",
+      "final_pick": "1-2-5",
+      "final_score": 59.7,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速5m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "1-5-2",
+            "odds": 21.7,
+            "model_probability": 6.4,
+            "market_probability": 4.61,
+            "net_edge": -0.21
+          },
+          {
+            "pick": "5-1-2",
+            "odds": 64.8,
+            "model_probability": 3.13,
+            "market_probability": 1.54,
+            "net_edge": -0.41
+          },
+          {
+            "pick": "1-6-5",
+            "odds": 60.6,
+            "model_probability": 2.49,
+            "market_probability": 1.65,
+            "net_edge": -1.16
+          },
+          {
+            "pick": "1-5-3",
+            "odds": 27.1,
+            "model_probability": 4.21,
+            "market_probability": 3.69,
+            "net_edge": -1.48
+          },
+          {
+            "pick": "1-6-2",
+            "odds": 71.0,
+            "model_probability": 1.89,
+            "market_probability": 1.41,
+            "net_edge": -1.52
+          },
+          {
+            "pick": "2-1-5",
+            "odds": 41.9,
+            "model_probability": 2.72,
+            "market_probability": 2.39,
+            "net_edge": -1.67
+          }
+        ],
+        "cover": [
+          {
+            "pick": "1-5-6",
+            "odds": 31.9,
+            "model_probability": 3.2,
+            "market_probability": 3.13,
+            "net_edge": -1.93
+          },
+          {
+            "pick": "5-1-6",
+            "odds": 58.0,
+            "model_probability": 1.57,
+            "market_probability": 1.72,
+            "net_edge": -2.15
+          },
+          {
+            "pick": "2-1-6",
+            "odds": 64.3,
+            "model_probability": 1.04,
+            "market_probability": 1.56,
+            "net_edge": -2.52
+          },
+          {
+            "pick": "1-2-6",
+            "odds": 30.6,
+            "model_probability": 2.19,
+            "market_probability": 3.27,
+            "net_edge": -3.08
+          },
+          {
+            "pick": "1-2-5",
+            "odds": 12.4,
+            "model_probability": 5.77,
+            "market_probability": 8.06,
+            "net_edge": -4.29
+          },
+          {
+            "pick": "1-2-3",
+            "odds": 12.4,
+            "model_probability": 2.88,
+            "market_probability": 8.06,
+            "net_edge": -7.18
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "1-5-2",
+      "weather": "晴",
+      "wind_speed": 5.0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 21.7,
+        "model_probability": 6.4,
+        "market_probability": 4.61,
+        "net_edge": -0.21,
+        "deadline": "15:20",
+        "remaining_minutes": -483.6,
+        "message": "締切5分前を過ぎたため新規判定を停止",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=24&hd=20260806&rno=1"
+      },
+      "fetched_at": "2026-08-06T23:23:37+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=24&hd=20260806&rno=1"
+    },
+    {
+      "venue": "大村",
+      "venue_id": "24",
       "race": 7,
       "status": "FINAL",
       "message": "展示後再計算済み",
@@ -22002,6 +22125,23 @@
       "market_probability": 8.83,
       "net_edge": -0.24,
       "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
+    },
+    {
+      "venue": "大村",
+      "venue_id": "24",
+      "race": 1,
+      "boat": 5,
+      "name": "中嶋 誠一郎",
+      "formation": "1-5-流し",
+      "time_rank": 6,
+      "deadline": "15:20",
+      "remaining_minutes": -483.6,
+      "status": "WATCH",
+      "min_odds": 21.7,
+      "model_probability": 18.2,
+      "market_probability": 18.43,
+      "net_edge": -2.23,
+      "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
       "venue": "大村",
