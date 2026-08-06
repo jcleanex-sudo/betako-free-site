@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06 12:35 JST",
+  "updated_at": "2026-08-06 12:36 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -14358,6 +14358,129 @@
     {
       "venue": "徳山",
       "venue_id": "18",
+      "race": 3,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-4-3",
+      "final_pick": "1-6-3",
+      "final_score": 64.9,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速4m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "1-6-4",
+            "odds": 56.6,
+            "model_probability": 4.11,
+            "market_probability": 1.77,
+            "net_edge": 0.34
+          },
+          {
+            "pick": "1-6-3",
+            "odds": 45.1,
+            "model_probability": 4.11,
+            "market_probability": 2.22,
+            "net_edge": -0.11
+          },
+          {
+            "pick": "6-1-4",
+            "odds": 458.3,
+            "model_probability": 1.74,
+            "market_probability": 0.22,
+            "net_edge": -0.48
+          },
+          {
+            "pick": "6-1-3",
+            "odds": 329.8,
+            "model_probability": 1.74,
+            "market_probability": 0.3,
+            "net_edge": -0.56
+          },
+          {
+            "pick": "1-6-2",
+            "odds": 104.8,
+            "model_probability": 1.69,
+            "market_probability": 0.95,
+            "net_edge": -1.26
+          },
+          {
+            "pick": "3-1-6",
+            "odds": 38.4,
+            "model_probability": 2.05,
+            "market_probability": 2.6,
+            "net_edge": -2.55
+          }
+        ],
+        "cover": [
+          {
+            "pick": "3-1-4",
+            "odds": 25.0,
+            "model_probability": 3.07,
+            "market_probability": 4.0,
+            "net_edge": -2.93
+          },
+          {
+            "pick": "1-4-6",
+            "odds": 16.7,
+            "model_probability": 4.65,
+            "market_probability": 5.99,
+            "net_edge": -3.34
+          },
+          {
+            "pick": "1-4-3",
+            "odds": 9.7,
+            "model_probability": 6.95,
+            "market_probability": 10.31,
+            "net_edge": -5.36
+          },
+          {
+            "pick": "1-3-6",
+            "odds": 12.3,
+            "model_probability": 4.65,
+            "market_probability": 8.13,
+            "net_edge": -5.48
+          },
+          {
+            "pick": "1-3-2",
+            "odds": 12.1,
+            "model_probability": 2.85,
+            "market_probability": 8.26,
+            "net_edge": -7.41
+          },
+          {
+            "pick": "1-3-4",
+            "odds": 6.4,
+            "model_probability": 6.95,
+            "market_probability": 15.62,
+            "net_edge": -10.68
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "1-6-4",
+      "weather": "晴",
+      "wind_speed": 4.0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 56.6,
+        "model_probability": 4.11,
+        "market_probability": 1.77,
+        "net_edge": 0.34,
+        "deadline": "11:40",
+        "remaining_minutes": -56.7,
+        "message": "締切5分前を過ぎたため新規判定を停止",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=18&hd=20260806&rno=3"
+      },
+      "fetched_at": "2026-08-06T12:36:44+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=18&hd=20260806&rno=3"
+    },
+    {
+      "venue": "徳山",
+      "venue_id": "18",
       "race": 5,
       "status": "FINAL",
       "message": "展示後再計算済み",
@@ -19398,6 +19521,23 @@
       "model_probability": 23.82,
       "market_probability": 50.63,
       "net_edge": -28.81,
+      "message": "締切5分前を過ぎたため新規判定を停止"
+    },
+    {
+      "venue": "徳山",
+      "venue_id": "18",
+      "race": 3,
+      "boat": 6,
+      "name": "西橋 奈未",
+      "formation": "1-6-流し",
+      "time_rank": 1,
+      "deadline": "11:40",
+      "remaining_minutes": -56.7,
+      "status": "WATCH",
+      "min_odds": 45.1,
+      "model_probability": 11.63,
+      "market_probability": 8.87,
+      "net_edge": 0.76,
       "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
