@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06 23:44 JST",
+  "updated_at": "2026-08-07 11:00 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -15845,6 +15845,129 @@
     {
       "venue": "徳山",
       "venue_id": "18",
+      "race": 2,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-4-2",
+      "final_pick": "1-4-6",
+      "final_score": 51.3,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速4m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "1-6-4",
+            "odds": 99.7,
+            "model_probability": 2.46,
+            "market_probability": 1.0,
+            "net_edge": -0.54
+          },
+          {
+            "pick": "1-6-2",
+            "odds": 118.6,
+            "model_probability": 2.0,
+            "market_probability": 0.84,
+            "net_edge": -0.84
+          },
+          {
+            "pick": "6-1-4",
+            "odds": 299.1,
+            "model_probability": 1.4,
+            "market_probability": 0.33,
+            "net_edge": -0.93
+          },
+          {
+            "pick": "6-1-2",
+            "odds": 272.9,
+            "model_probability": 1.14,
+            "market_probability": 0.37,
+            "net_edge": -1.23
+          },
+          {
+            "pick": "1-6-5",
+            "odds": 181.8,
+            "model_probability": 1.01,
+            "market_probability": 0.55,
+            "net_edge": -1.54
+          },
+          {
+            "pick": "4-1-6",
+            "odds": 49.2,
+            "model_probability": 1.94,
+            "market_probability": 2.03,
+            "net_edge": -2.09
+          }
+        ],
+        "cover": [
+          {
+            "pick": "1-2-6",
+            "odds": 37.3,
+            "model_probability": 2.3,
+            "market_probability": 2.68,
+            "net_edge": -2.38
+          },
+          {
+            "pick": "4-1-2",
+            "odds": 24.8,
+            "model_probability": 3.46,
+            "market_probability": 4.03,
+            "net_edge": -2.57
+          },
+          {
+            "pick": "1-4-6",
+            "odds": 25.7,
+            "model_probability": 3.07,
+            "market_probability": 3.89,
+            "net_edge": -2.82
+          },
+          {
+            "pick": "1-4-5",
+            "odds": 19.5,
+            "model_probability": 2.78,
+            "market_probability": 5.13,
+            "net_edge": -4.35
+          },
+          {
+            "pick": "1-4-2",
+            "odds": 10.2,
+            "model_probability": 5.48,
+            "market_probability": 9.8,
+            "net_edge": -6.32
+          },
+          {
+            "pick": "1-2-4",
+            "odds": 10.6,
+            "model_probability": 5.05,
+            "market_probability": 9.43,
+            "net_edge": -6.38
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "1-6-4",
+      "weather": "晴",
+      "wind_speed": 4.0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 99.7,
+        "model_probability": 2.46,
+        "market_probability": 1.0,
+        "net_edge": -0.54,
+        "deadline": "11:08",
+        "remaining_minutes": 7.1,
+        "message": "安全余白控除後の優位性が基準未満のため見送り",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=18&hd=20260807&rno=2"
+      },
+      "fetched_at": "2026-08-07T11:00:55+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=18&hd=20260807&rno=2"
+    },
+    {
+      "venue": "徳山",
+      "venue_id": "18",
       "race": 3,
       "status": "FINAL",
       "message": "展示後再計算済み",
@@ -21817,6 +21940,23 @@
       "market_probability": 50.63,
       "net_edge": -28.81,
       "message": "締切5分前を過ぎたため新規判定を停止"
+    },
+    {
+      "venue": "徳山",
+      "venue_id": "18",
+      "race": 2,
+      "boat": 4,
+      "name": "川野 芽唯",
+      "formation": "1-4-流し",
+      "time_rank": 3,
+      "deadline": "11:08",
+      "remaining_minutes": 7.1,
+      "status": "WATCH",
+      "min_odds": 10.2,
+      "model_probability": 14.81,
+      "market_probability": 39.22,
+      "net_edge": -26.41,
+      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
       "venue": "徳山",
