@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08 17:23 JST",
+  "updated_at": "2026-08-08 17:30 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -14433,6 +14433,129 @@
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260805&rno=12"
     },
     {
+      "venue": "丸亀",
+      "venue_id": "15",
+      "race": 1,
+      "status": "FINAL",
+      "message": "展示後再計算済み",
+      "morning_pick": "1-3-2",
+      "final_pick": "1-3-2",
+      "final_score": 59.6,
+      "reasons": [
+        "展示最速は6号艇 6.00",
+        "風速3m・波高0cm・天候晴",
+        "朝の能力評価に展示順位とST展示順位を加えて再計算"
+      ],
+      "ticket_plan": {
+        "main": [
+          {
+            "pick": "3-1-2",
+            "odds": 30.5,
+            "model_probability": 5.6,
+            "market_probability": 3.28,
+            "net_edge": 0.32
+          },
+          {
+            "pick": "1-3-2",
+            "odds": 11.5,
+            "model_probability": 10.87,
+            "market_probability": 8.7,
+            "net_edge": 0.17
+          },
+          {
+            "pick": "1-4-3",
+            "odds": 31.5,
+            "model_probability": 4.9,
+            "market_probability": 3.17,
+            "net_edge": -0.27
+          },
+          {
+            "pick": "1-2-3",
+            "odds": 13.5,
+            "model_probability": 8.93,
+            "market_probability": 7.41,
+            "net_edge": -0.48
+          },
+          {
+            "pick": "2-1-3",
+            "odds": 31.7,
+            "model_probability": 4.31,
+            "market_probability": 3.15,
+            "net_edge": -0.84
+          },
+          {
+            "pick": "3-1-4",
+            "odds": 39.6,
+            "model_probability": 3.51,
+            "market_probability": 2.53,
+            "net_edge": -1.02
+          }
+        ],
+        "cover": [
+          {
+            "pick": "1-4-2",
+            "odds": 36.6,
+            "model_probability": 3.34,
+            "market_probability": 2.73,
+            "net_edge": -1.39
+          },
+          {
+            "pick": "1-2-4",
+            "odds": 24.4,
+            "model_probability": 3.82,
+            "market_probability": 4.1,
+            "net_edge": -2.28
+          },
+          {
+            "pick": "2-1-4",
+            "odds": 44.6,
+            "model_probability": 1.85,
+            "market_probability": 2.24,
+            "net_edge": -2.39
+          },
+          {
+            "pick": "1-3-4",
+            "odds": 13.7,
+            "model_probability": 6.82,
+            "market_probability": 7.3,
+            "net_edge": -2.48
+          },
+          {
+            "pick": "1-2-6",
+            "odds": 24.4,
+            "model_probability": 2.48,
+            "market_probability": 4.1,
+            "net_edge": -3.62
+          },
+          {
+            "pick": "1-3-6",
+            "odds": 13.6,
+            "model_probability": 4.42,
+            "market_probability": 7.35,
+            "net_edge": -4.93
+          }
+        ],
+        "ranked_by_edge": true
+      },
+      "best_value_pick": "3-1-2",
+      "weather": "晴",
+      "wind_speed": 3.0,
+      "wave_height": 0,
+      "value": {
+        "status": "WATCH",
+        "odds": 30.5,
+        "model_probability": 5.6,
+        "market_probability": 3.28,
+        "net_edge": 0.32,
+        "deadline": "15:22",
+        "remaining_minutes": -128.4,
+        "message": "締切5分前を過ぎたため新規判定を停止",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=15&hd=20260808&rno=1"
+      },
+      "fetched_at": "2026-08-08T17:30:25+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=15&hd=20260808&rno=1"
+    },
+    {
       "venue": "宮島",
       "venue_id": "17",
       "race": 1,
@@ -22228,6 +22351,23 @@
       "market_probability": 10.72,
       "net_edge": 0.38,
       "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
+    },
+    {
+      "venue": "丸亀",
+      "venue_id": "15",
+      "race": 1,
+      "boat": 3,
+      "name": "佐藤 太亮",
+      "formation": "1-3-流し",
+      "time_rank": 5,
+      "deadline": "15:22",
+      "remaining_minutes": -128.4,
+      "status": "WATCH",
+      "min_odds": 11.5,
+      "model_probability": 23.31,
+      "market_probability": 34.78,
+      "net_edge": -13.47,
+      "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
       "venue": "宮島",
