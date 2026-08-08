@@ -424,7 +424,19 @@ function renderRankings(payload) {
   )));
   const referenceRate = Number(payload.reference_rate ?? (referenceExpected ? referenceFetched / referenceExpected * 100 : 0));
   const completeRaceCount = (payload.all_races || []).filter((item) => Number(item.data_rate) >= 100).length;
-  const coverageReady = payload.status === "OK" && collectionRate >= 100;
+  const jstParts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date()).filter((part) => part.type !== "literal").map((part) => [part.type, part.value]));
+  const jstDate = `${jstParts.year}-${jstParts.month}-${jstParts.day}`;
+  const updateHour = Number(jstParts.hour || 0);
+  const waitingForMorningUpdate = payload.race_date !== jstDate && updateHour < 9;
+  const stalePrediction = payload.race_date !== jstDate && updateHour >= 9;
+  const coverageReady = payload.status === "OK" && collectionRate >= 100 && !stalePrediction;
   if (!coverageReady) {
     rankings = [];
     longshots = [];
@@ -436,13 +448,20 @@ function renderRankings(payload) {
   }
   window.betakoPredictions = { ...payload, rankings, longshots };
   renderDailyPerformance();
-  status.textContent = coverageReady
-    ? `公式${venueCount}場 ${fetchedRaces}/${expectedRaces}R・予想可能 ${completeRaceCount}/${expectedRaces}R（不足${expectedRaces - completeRaceCount}Rのみ停止）`
-    : `DATA BLOCKED ${fetchedRaces}/${expectedRaces}R（${collectionRate.toFixed(1)}%）`;
+  status.classList.toggle("staleTag", stalePrediction);
+  status.textContent = stalePrediction
+    ? `更新停止：${jstDate}の予想データ未取得`
+    : waitingForMorningUpdate
+      ? `本日8時の更新待ち（現在は${payload.race_date || "前日"}データ）`
+      : coverageReady
+        ? `公式${venueCount}場 ${fetchedRaces}/${expectedRaces}R・予想可能 ${completeRaceCount}/${expectedRaces}R（不足${expectedRaces - completeRaceCount}Rのみ停止）`
+        : `DATA BLOCKED ${fetchedRaces}/${expectedRaces}R（${collectionRate.toFixed(1)}%）`;
   updated.textContent = payload.updated_at ? `${payload.updated_at} 更新` : "更新時刻不明";
 
   if (!rankings.length) {
-    const blockedMessage = !coverageReady
+    const blockedMessage = stalePrediction
+      ? `${jstDate}の公式データが未更新です。古い予想は表示しません`
+      : !coverageReady
       ? `公式レース取得が${fetchedRaces}/${expectedRaces}Rのため全体停止`
       : payload.message || "基準通過なし";
     grid.innerHTML = `<article class="rankCard gold"><div class="rankTop"><span class="rankNumber">--</span><span class="candidate">見送り</span></div><h3>公開できる候補なし</h3><div class="index"><span>状態</span><strong>--</strong></div><div class="pick"><span>理由</span><b>${escapeHtml(blockedMessage)}</b></div><div class="meter"><i style="width:0"></i></div></article>`;

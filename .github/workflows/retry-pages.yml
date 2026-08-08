@@ -1,9 +1,9 @@
-name: Deploy BETAKO
+name: Retry BETAKO Pages once
 
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Deploy BETAKO"]
+    types: [completed]
 
 permissions:
   contents: read
@@ -15,7 +15,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  retry:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -23,10 +24,12 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: main
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
           path: .
-      - name: Deploy to GitHub Pages
+      - name: Retry GitHub Pages deployment
         id: deployment
         uses: actions/deploy-pages@v4

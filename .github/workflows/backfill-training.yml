@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: betako-data-updates
@@ -52,3 +53,7 @@ jobs:
             sleep 3
           done
           exit 1
+      - name: Request site publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main

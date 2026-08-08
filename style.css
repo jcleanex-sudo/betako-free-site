@@ -150,6 +150,7 @@ form button span { float: right; }
 
 .rankingSection, .dailySection, .longshotSection, .guideSection, .logicSection, .operations { padding: 90px 4px 0; scroll-margin-top: 40px; }
 .demoTag { padding: 5px 7px; border: 1px solid rgba(231,199,110,.25); border-radius: 999px; color: var(--gold); font-size: 9px; }
+.demoTag.staleTag { border-color: rgba(255,91,91,.55); background: rgba(255,91,91,.12); color: #ff8c8c; }
 .rankingGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .rankCard { position: relative; overflow: hidden; padding: 20px; border-radius: 17px; }
 .rankCard::before { content: ""; position: absolute; inset: 0 0 auto; height: 2px; background: var(--cyan); }
