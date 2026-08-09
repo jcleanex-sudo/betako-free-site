@@ -181,27 +181,22 @@ def _parse_exhibition_table(soup):
         rows = table.find_all("tr")
         for row in rows:
             cells = [cell.get_text(" ", strip=True) for cell in row.find_all(["td", "th"])]
-            joined = " ".join(cells)
-            if not joined:
-                continue
             boat = safe_int(cells[0] if cells else None)
             if not boat or not (1 <= boat <= 6):
                 continue
 
-            numbers = re.findall(r"-?\d+\.\d+|-?\d+", joined)
-            exhibition_time = None
-            tilt = None
-            weight = None
-            for number in numbers:
-                value = safe_float(number)
-                if value is None:
-                    continue
-                if exhibition_time is None and 6.0 <= value <= 7.5:
-                    exhibition_time = value
-                elif tilt is None and -1.5 <= value <= 3.0:
-                    tilt = value
-                elif weight is None and 40.0 <= value <= 70.0:
-                    weight = value
+            # The official table columns are fixed: boat, photo, racer,
+            # weight, exhibition time, tilt, ....  Do not scan every number
+            # in the row: boat 6 itself otherwise looks like a 6.00 time.
+            weight = safe_float(cells[3]) if len(cells) > 3 else None
+            exhibition_time = safe_float(cells[4]) if len(cells) > 4 else None
+            tilt = safe_float(cells[5]) if len(cells) > 5 else None
+            if exhibition_time is not None and not (6.0 <= exhibition_time <= 7.5):
+                exhibition_time = None
+            if weight is not None and not (40.0 <= weight <= 70.0):
+                weight = None
+            if tilt is not None and not (-1.5 <= tilt <= 3.0):
+                tilt = None
 
             exhibition[boat] = {
                 "boat": boat,
@@ -213,14 +208,14 @@ def _parse_exhibition_table(soup):
 
     start_table = soup.find("table", class_="is-w238")
     if start_table:
-        rows = start_table.find_all("tr")
-        for row in rows:
-            boat_span = row.find("span", class_=lambda c: c and "is-boatColor" in str(c))
+        for start_item in start_table.select(".table1_boatImage1"):
+            boat_span = start_item.select_one(".table1_boatImage1Number")
+            time_span = start_item.select_one(".table1_boatImage1Time")
             boat = safe_int(boat_span.get_text(" ", strip=True)) if boat_span else None
             if not boat:
                 continue
-            row_text = row.get_text(" ", strip=True)
-            st_match = re.search(r"F?\d+\.\d+", row_text)
+            st_text = time_span.get_text(" ", strip=True) if time_span else ""
+            st_match = re.search(r"F?(?:\d+)?\.\d+", st_text)
             st = st_match.group(0) if st_match else None
             exhibition.setdefault(boat, {
                 "boat": boat,
