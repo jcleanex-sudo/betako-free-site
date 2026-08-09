@@ -185,7 +185,8 @@ def final_prediction(prediction, realtime):
             "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
             "status": "WAIT", "message": "展示データ不足のため朝予想を維持", "morning_pick": prediction["pick"],
             "ticket_plan": plan, "best_value_pick": value_pick, "value": value,
-            "source_url": realtime.get("source_url"),
+            "exhibition": realtime.get("exhibition", []),
+            "fetched_at": realtime.get("fetched_at"), "source_url": realtime.get("source_url"),
         }
 
     by_boat = {item["boat"]: item for item in realtime["exhibition"]}
@@ -208,7 +209,8 @@ def final_prediction(prediction, realtime):
             "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
             "status": "WAIT", "message": "候補艇の展示データ不足", "morning_pick": prediction["pick"],
             "ticket_plan": plan, "best_value_pick": value_pick, "value": value,
-            "source_url": realtime.get("source_url"),
+            "exhibition": realtime.get("exhibition", []),
+            "fetched_at": realtime.get("fetched_at"), "source_url": realtime.get("source_url"),
         }
 
     final_pick = "-".join(str(item[0]["boat"]) for item in adjusted[:3])
@@ -233,6 +235,7 @@ def final_prediction(prediction, realtime):
         "final_pick": final_pick, "final_score": round(final_score, 1), "reasons": reasons,
         "ticket_plan": plan, "best_value_pick": value_pick,
         "weather": realtime.get("weather"), "wind_speed": wind, "wave_height": wave,
+        "exhibition": realtime.get("exhibition", []),
         "value": value,
         "fetched_at": realtime.get("fetched_at"), "source_url": realtime.get("source_url"),
     }

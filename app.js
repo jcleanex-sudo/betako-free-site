@@ -252,6 +252,21 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
   }
 }
 
+function renderExhibitionTimes(finalData, finalMode) {
+  let panel = document.querySelector("#exhibitionTimes");
+  if (!panel) {
+    panel = document.createElement("div");
+    panel.id = "exhibitionTimes";
+    panel.className = "exhibitionTimes";
+    document.querySelector("#predictionDetail").insertAdjacentElement("afterend", panel);
+  }
+  const rows = Array.isArray(finalData?.exhibition) ? finalData.exhibition : [];
+  panel.hidden = !finalMode || !rows.length;
+  panel.innerHTML = rows.length
+    ? `<div class="exhibitionTimesHead"><b>展示タイム</b><span>6艇リアルタイム</span></div><div class="exhibitionTimesGrid">${rows.map((item) => `<div class="exhibitionBoat boat${Number(item.boat) || 0}"><b>${Number(item.boat) || "--"}号艇</b><strong>${item.time == null ? "--" : Number(item.time).toFixed(2)}</strong><small>展示 ${item.time_rank || "--"}位｜ST ${item.st == null ? "--" : Number(item.st).toFixed(2)}${item.st_rank ? `（${item.st_rank}位）` : ""}</small></div>`).join("")}</div>`
+    : "";
+}
+
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const venue = venueSelect.value;
@@ -265,6 +280,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const finalMode = document.querySelector("#predictionType").value === "展示後AI最終予想";
   const finalData = window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value);
   const finalReady = finalMode && finalData?.status === "FINAL";
+  renderExhibitionTimes(finalData, finalMode);
   const exhibitionBadge = document.querySelector("#exhibitionBadge");
   exhibitionBadge.hidden = !finalMode || finalReady;
   exhibitionBadge.textContent = "展示前";
@@ -452,7 +468,7 @@ function renderRankings(payload) {
   status.textContent = stalePrediction
     ? `更新停止：${jstDate}の予想データ未取得`
     : waitingForMorningUpdate
-      ? `本日8時の更新待ち（現在は${payload.race_date || "前日"}データ）`
+      ? `本日8:15の更新待ち（現在は${payload.race_date || "前日"}データ）`
       : coverageReady
         ? `公式${venueCount}場 ${fetchedRaces}/${expectedRaces}R・予想可能 ${completeRaceCount}/${expectedRaces}R（不足${expectedRaces - completeRaceCount}Rのみ停止）`
         : `DATA BLOCKED ${fetchedRaces}/${expectedRaces}R（${collectionRate.toFixed(1)}%）`;
