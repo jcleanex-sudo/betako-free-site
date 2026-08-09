@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09 09:03 JST",
+  "updated_at": "2026-08-09 09:06 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -16272,6 +16272,62 @@
       "weather": "曇り",
       "wind_speed": 1.0,
       "wave_height": 0,
+      "exhibition": [
+        {
+          "boat": 1,
+          "time": null,
+          "tilt": 1.0,
+          "weight": null,
+          "st": null,
+          "time_rank": null,
+          "st_rank": null
+        },
+        {
+          "boat": 2,
+          "time": 6.81,
+          "tilt": 2.0,
+          "weight": 51.0,
+          "st": null,
+          "time_rank": 2,
+          "st_rank": null
+        },
+        {
+          "boat": 3,
+          "time": 6.89,
+          "tilt": 3.0,
+          "weight": 51.5,
+          "st": null,
+          "time_rank": 5,
+          "st_rank": null
+        },
+        {
+          "boat": 4,
+          "time": 6.83,
+          "tilt": -0.5,
+          "weight": 55.9,
+          "st": null,
+          "time_rank": 3,
+          "st_rank": null
+        },
+        {
+          "boat": 5,
+          "time": 6.84,
+          "tilt": -0.5,
+          "weight": 52.4,
+          "st": null,
+          "time_rank": 4,
+          "st_rank": null
+        },
+        {
+          "boat": 6,
+          "time": 6.0,
+          "tilt": 0.0,
+          "weight": 49.1,
+          "st": null,
+          "time_rank": 1,
+          "st_rank": null
+        }
+      ],
       "value": {
         "status": "WATCH",
         "odds": 18.5,
@@ -16279,11 +16335,11 @@
         "market_probability": 5.41,
         "net_edge": -0.89,
         "deadline": "08:48",
-        "remaining_minutes": -8.2,
+        "remaining_minutes": -18.5,
         "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=23&hd=20260809&rno=1"
       },
-      "fetched_at": "2026-08-09T08:56:13+09:00",
+      "fetched_at": "2026-08-09T09:06:32+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=23&hd=20260809&rno=1"
     },
     {
@@ -21315,7 +21371,7 @@
       "formation": "1-5-流し",
       "time_rank": 4,
       "deadline": "08:48",
-      "remaining_minutes": -8.2,
+      "remaining_minutes": -18.5,
       "status": "WATCH",
       "min_odds": 23.6,
       "model_probability": 14.19,
