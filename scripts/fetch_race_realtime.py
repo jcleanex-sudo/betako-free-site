@@ -200,6 +200,7 @@ def _parse_exhibition_table(soup):
 
             exhibition[boat] = {
                 "boat": boat,
+                "course": None,
                 "time": exhibition_time,
                 "tilt": tilt,
                 "weight": weight,
@@ -208,7 +209,7 @@ def _parse_exhibition_table(soup):
 
     start_table = soup.find("table", class_="is-w238")
     if start_table:
-        for start_item in start_table.select(".table1_boatImage1"):
+        for course, start_item in enumerate(start_table.select(".table1_boatImage1"), 1):
             boat_span = start_item.select_one(".table1_boatImage1Number")
             time_span = start_item.select_one(".table1_boatImage1Time")
             boat = safe_int(boat_span.get_text(" ", strip=True)) if boat_span else None
@@ -219,11 +220,13 @@ def _parse_exhibition_table(soup):
             st = st_match.group(0) if st_match else None
             exhibition.setdefault(boat, {
                 "boat": boat,
+                "course": None,
                 "time": None,
                 "tilt": None,
                 "weight": None,
                 "st": None,
             })
+            exhibition[boat]["course"] = course
             exhibition[boat]["st"] = st
 
     return [exhibition[boat] for boat in sorted(exhibition)]

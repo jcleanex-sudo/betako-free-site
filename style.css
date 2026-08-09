@@ -118,9 +118,13 @@ form button span { float: right; }
 .exhibitionTimesHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
 .exhibitionTimesHead b { color: var(--cyan); font-size: 12px; }
 .exhibitionTimesHead span { color: var(--muted); font-size: 8px; letter-spacing: .08em; }
+.startOrder { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:10px 0 14px; padding:10px 12px; border-radius:10px; background:rgba(255,255,255,.05); }
+.startOrder span { font-weight:800; letter-spacing:.12em; }
+.startOrder.changed { border:1px solid rgba(255,91,91,.65); background:rgba(255,91,91,.1); color:#ffd2d2; }
 .exhibitionTimesGrid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; }
 .exhibitionBoat { min-width: 0; padding: 9px; border: 1px solid rgba(143,174,202,.16); border-radius: 8px; background: #091724; }
 .exhibitionBoat b { display: block; color: #dfefff; font-size: 9px; }
+.exhibitionBoat b em { margin-left:5px; color:var(--muted); font-size:7px; font-style:normal; }
 .exhibitionBoat strong { display: block; margin: 5px 0; color: var(--cyan); font: 900 20px/1 monospace; }
 .exhibitionBoat small { display: block; color: var(--muted); font-size: 7px; line-height: 1.5; }
 .exhibitionBoat.boat1 { border-left: 3px solid #f4f4f4; }

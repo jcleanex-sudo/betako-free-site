@@ -191,12 +191,26 @@ def final_prediction(prediction, realtime):
 
     by_boat = {item["boat"]: item for item in realtime["exhibition"]}
     adjusted = []
+    course_values = {1: 7.0, 2: 3.0, 3: 1.5, 4: 0.0, 5: -1.0, 6: -2.0}
     for contender in prediction.get("contenders", []):
         exhibition = by_boat.get(contender["boat"], {})
         time_rank = exhibition.get("time_rank") or 6
         st_rank = exhibition.get("st_rank") or 6
-        adjusted_score = contender["relative_win_probability"] + (7 - time_rank) * 1.6 + (7 - st_rank) * 0.8
-        adjusted.append((contender, adjusted_score, exhibition))
+        actual_course = exhibition.get("course") or contender["boat"]
+        course_adjustment = course_values.get(actual_course, 0) - course_values.get(contender["boat"], 0)
+        adjusted_score = max(
+            0.1,
+            contender["relative_win_probability"]
+            + (7 - time_rank) * 1.6
+            + (7 - st_rank) * 0.8
+            + course_adjustment,
+        )
+        adjusted.append((contender, adjusted_score, exhibition, course_adjustment))
+    adjusted_total = sum(item[1] for item in adjusted) or 1
+    adjusted = [
+        ({**item[0], "relative_win_probability": round(item[1] / adjusted_total * 100, 2)}, item[1], item[2], item[3])
+        for item in adjusted
+    ]
     adjusted.sort(key=lambda item: item[1], reverse=True)
     if len(adjusted) < 3:
         plan = ticket_plan(prediction.get("contenders", []), prediction["pick"], realtime)
@@ -223,8 +237,11 @@ def final_prediction(prediction, realtime):
     reasons = [
         f"展示最速は{fastest['boat']}号艇 {fastest['time']:.2f}",
         f"風速{wind:g}m・波高{wave:g}cm・天候{realtime.get('weather') or '不明'}",
-        "朝の能力評価に展示順位とST展示順位を加えて再計算",
+        "朝の能力評価に展示順位・ST展示順位・実際の進入コースを加えて再計算",
     ]
+    start_order = [item["boat"] for item in sorted(realtime["exhibition"], key=lambda item: item.get("course") or item["boat"])]
+    if start_order != sorted(start_order):
+        reasons.insert(1, f"進入変化 {'-'.join(map(str, start_order))}（前付け反映）")
     adjusted_contenders = [item[0] for item in adjusted]
     plan = ticket_plan(adjusted_contenders, final_pick, realtime)
     value_pick = plan["main"][0]["pick"] if plan["main"] else final_pick
@@ -235,6 +252,7 @@ def final_prediction(prediction, realtime):
         "final_pick": final_pick, "final_score": round(final_score, 1), "reasons": reasons,
         "ticket_plan": plan, "best_value_pick": value_pick,
         "weather": realtime.get("weather"), "wind_speed": wind, "wave_height": wave,
+        "start_order": start_order,
         "exhibition": realtime.get("exhibition", []),
         "value": value,
         "fetched_at": realtime.get("fetched_at"), "source_url": realtime.get("source_url"),
