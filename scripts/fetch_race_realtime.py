@@ -107,6 +107,15 @@ def safe_float(value, default=None):
         return default
 
 
+def start_timing_value(value, default=99):
+    """Return exhibition ST as a sortable number; F.03 means -0.03."""
+    text = str(value or "").strip().upper()
+    timing = safe_float(text, None)
+    if timing is None:
+        return default
+    return -abs(timing) if text.startswith("F") else timing
+
+
 def safe_int(value, default=None):
     try:
         match = re.search(r"\d+", str(value))
@@ -302,7 +311,7 @@ def evaluate_exhibition(realtime):
     valid_st = [item for item in exhibition if item.get("st")]
 
     fastest = sorted(valid_times, key=lambda item: item["time"])
-    st_rank = sorted(valid_st, key=lambda item: safe_float(item["st"].replace("F", ""), 99))
+    st_rank = sorted(valid_st, key=lambda item: start_timing_value(item["st"]))
 
     comments = []
     if fastest:
@@ -339,7 +348,7 @@ def add_exhibition_ranks(exhibition):
     )
     st_ranked = sorted(
         [item for item in exhibition if item.get("st")],
-        key=lambda item: safe_float(str(item["st"]).replace("F", ""), 99),
+        key=lambda item: start_timing_value(item["st"]),
     )
     for rank, item in enumerate(time_ranked, 1):
         item["time_rank"] = rank

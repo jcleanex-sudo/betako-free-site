@@ -265,9 +265,14 @@ function renderExhibitionTimes(finalData, finalMode) {
     .sort((a, b) => (Number(a.course) || Number(a.boat)) - (Number(b.course) || Number(b.boat)))
     .map((item) => Number(item.boat));
   const entryChanged = startOrder.length === 6 && startOrder.some((boat, index) => boat !== index + 1);
+  const formatSt = (value) => {
+    if (value == null || value === "") return "--";
+    const text = String(value).toUpperCase();
+    return text.startsWith("F") ? text : Number(text).toFixed(2);
+  };
   panel.hidden = !finalMode || !rows.length;
   panel.innerHTML = rows.length
-    ? `<div class="exhibitionTimesHead"><b>展示タイム</b><span>6艇リアルタイム</span></div><div class="startOrder ${entryChanged ? "changed" : ""}"><b>${entryChanged ? "前付け・進入変化" : "枠なり進入"}</b><span>${startOrder.join(" - ")}</span></div><div class="exhibitionTimesGrid">${rows.map((item) => `<div class="exhibitionBoat boat${Number(item.boat) || 0}"><b>${Number(item.boat) || "--"}号艇 <em>${item.course ? `${Number(item.course)}コース` : ""}</em></b><strong>${item.time == null ? "--" : Number(item.time).toFixed(2)}</strong><small>展示 ${item.time_rank || "--"}位｜ST ${item.st == null ? "--" : Number(item.st).toFixed(2)}${item.st_rank ? `（${item.st_rank}位）` : ""}</small></div>`).join("")}</div>`
+    ? `<div class="exhibitionTimesHead"><b>展示タイム</b><span>6艇リアルタイム</span></div><div class="startOrder ${entryChanged ? "changed" : ""}"><b>${entryChanged ? "前付け・進入変化" : "枠なり進入"}</b><span>${startOrder.join(" - ")}</span></div><div class="exhibitionTimesGrid">${rows.map((item) => `<div class="exhibitionBoat boat${Number(item.boat) || 0}"><b>${Number(item.boat) || "--"}号艇 <em>${item.course ? `${Number(item.course)}コース` : ""}</em></b><strong>${item.time == null ? "--" : Number(item.time).toFixed(2)}</strong><small>展示 ${item.time_rank || "--"}位｜ST ${formatSt(item.st)}${item.st_rank ? `（${item.st_rank}位）` : ""}</small></div>`).join("")}</div>`
     : "";
 }
 
