@@ -173,8 +173,16 @@ def longshot_judgement(prediction, realtime):
 
 
 def final_prediction(prediction, realtime):
-    valid_times = [item for item in realtime.get("exhibition", []) if item.get("time") is not None]
-    if len(valid_times) < 4:
+    exhibition = realtime.get("exhibition", [])
+    valid_times = [item for item in exhibition if item.get("time") is not None]
+    complete_boats = {
+        item.get("boat") for item in exhibition
+        if item.get("boat") in range(1, 7)
+        and item.get("time") is not None
+        and item.get("course") in range(1, 7)
+        and item.get("st") not in (None, "")
+    }
+    if complete_boats != set(range(1, 7)):
         plan = ticket_plan(prediction.get("contenders", []), prediction["pick"], realtime)
         value_pick = plan["main"][0]["pick"] if plan["main"] else prediction["pick"]
         value = value_judgement(prediction.get("contenders", []), value_pick, realtime)
@@ -183,7 +191,7 @@ def final_prediction(prediction, realtime):
             value["message"] = "期待値条件は通過したが展示不足のためUPを保留"
         return {
             "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
-            "status": "WAIT", "message": "展示データ不足のため朝予想を維持", "morning_pick": prediction["pick"],
+            "status": "WAIT", "message": "6艇の展示タイム・進入・STが揃うまで朝予想を維持", "morning_pick": prediction["pick"],
             "ticket_plan": plan, "best_value_pick": value_pick, "value": value,
             "exhibition": realtime.get("exhibition", []),
             "fetched_at": realtime.get("fetched_at"), "source_url": realtime.get("source_url"),
