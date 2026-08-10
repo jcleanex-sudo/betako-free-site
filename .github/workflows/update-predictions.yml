@@ -48,3 +48,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run pages.yml --ref main
+      - name: Initialize today's exhibition data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update-exhibition.yml --ref main

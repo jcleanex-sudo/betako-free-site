@@ -234,6 +234,7 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
       const exhibitionResponse = await fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" });
       if (!exhibitionResponse.ok) continue;
       const payload = await exhibitionResponse.json();
+      if (payload.race_date !== raceDate) continue;
       const refreshed = payload.races?.find((item) => item.venue_id === venueId && String(item.race) === String(race));
       if (refreshed && (refreshed.fetched_at !== previousFetchedAt || payload.updated_at !== previousUpdatedAt)) {
         window.betakoExhibition = payload;
@@ -287,7 +288,10 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? (window.betakoPredictions?.all_races || window.betakoPredictions?.rankings || []).find((item) => item.venue === venue && String(item.race) === raceSelect.value)
     : null;
   const finalMode = document.querySelector("#predictionType").value === "展示後AI最終予想";
-  const finalData = window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value);
+  const exhibitionDateMatches = window.betakoExhibition?.race_date === dateInput.value;
+  const finalData = exhibitionDateMatches
+    ? window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value)
+    : null;
   const finalReady = finalMode && finalData?.status === "FINAL";
   renderExhibitionTimes(finalData, finalMode);
   const exhibitionBadge = document.querySelector("#exhibitionBadge");
@@ -407,7 +411,9 @@ function escapeHtml(value) {
 
 function renderLongshots(longshots) {
   const longshotGrid = document.querySelector("#longshotGrid");
-  const checks = window.betakoExhibition?.longshots || [];
+  const checks = window.betakoExhibition?.race_date === dateInput.value
+    ? (window.betakoExhibition?.longshots || [])
+    : [];
   longshotGrid.innerHTML = longshots.length ? longshots.map((item) => {
     const check = checks.find((candidate) => candidate.venue === item.venue && String(candidate.race) === String(item.race) && String(candidate.boat) === String(item.boat));
     const deadlineAt = check?.deadline ? new Date(`${dateInput.value}T${check.deadline}:00+09:00`) : null;
@@ -601,7 +607,9 @@ document.querySelector("#copyXPost").addEventListener("click", async () => {
 document.querySelector("#copyStaffShare").addEventListener("click", async () => {
   const rankings = window.betakoPredictions?.rankings || [];
   const longshots = window.betakoPredictions?.longshots || [];
-  const checks = window.betakoExhibition?.longshots || [];
+  const checks = window.betakoExhibition?.race_date === dateInput.value
+    ? (window.betakoExhibition?.longshots || [])
+    : [];
   const status = document.querySelector("#staffShareStatus");
   if (!rankings.length) {
     status.textContent = "共有できる予想データがありません。";
@@ -665,7 +673,9 @@ fetch(`data/model_calibration.json?ts=${Date.now()}`, { cache: "no-store" })
 fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((response) => response.ok ? response.json() : Promise.reject())
   .then((payload) => {
-    window.betakoExhibition = payload;
+    window.betakoExhibition = payload.race_date === dateInput.value
+      ? payload
+      : { race_date: payload.race_date || null, races: [], longshots: [] };
     renderLongshots(window.betakoPredictions?.longshots || []);
   })
   .catch(() => { window.betakoExhibition = { races: [] }; });

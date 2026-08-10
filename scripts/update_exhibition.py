@@ -264,7 +264,8 @@ def main():
     if not PREDICTIONS.exists():
         raise SystemExit("predictions.json is missing")
     payload = json.loads(PREDICTIONS.read_text(encoding="utf-8"))
-    date = now.strftime("%Y%m%d")
+    race_date = payload.get("race_date") or now.strftime("%Y-%m-%d")
+    date = race_date.replace("-", "")
     predictions = payload.get("all_races") or payload.get("rankings", [])
     target_venue = os.environ.get("TARGET_VENUE_ID", "").zfill(2)
     target_race_text = os.environ.get("TARGET_RACE", "")
@@ -311,19 +312,21 @@ def main():
     longshots.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
     if targeted and OUTPUT.exists():
         previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
-        race_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in races}
-        longshot_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in longshots}
-        races.extend(
-            item for item in previous.get("races", [])
-            if (str(item["venue_id"]).zfill(2), int(item["race"])) not in race_keys
-        )
-        longshots.extend(
-            item for item in previous.get("longshots", [])
-            if (str(item["venue_id"]).zfill(2), int(item["race"])) not in longshot_keys
-        )
+        if previous.get("race_date") == race_date:
+            race_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in races}
+            longshot_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in longshots}
+            races.extend(
+                item for item in previous.get("races", [])
+                if (str(item["venue_id"]).zfill(2), int(item["race"])) not in race_keys
+            )
+            longshots.extend(
+                item for item in previous.get("longshots", [])
+                if (str(item["venue_id"]).zfill(2), int(item["race"])) not in longshot_keys
+            )
         races.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
         longshots.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
     output = {
+        "race_date": race_date,
         "updated_at": now.strftime("%Y-%m-%d %H:%M JST"),
         "update_mode": "selected_race" if targeted else "all_races",
         "races": races, "longshots": longshots,
