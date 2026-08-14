@@ -207,6 +207,63 @@ function buildManualCopyText(payload) {
   return [fixedLines[0], `${developmentPrefix}${development}`, ...fixedLines.slice(1)].join("\n");
 }
 
+function buildNoGamiDoraPlan(main = [], cover = []) {
+  const tickets = [...main, ...cover].map((ticket) => ({
+    pick: ticketText(ticket),
+    odds: Number(typeof ticket === "string" ? 0 : ticket?.odds || 0),
+    netEdge: Number(typeof ticket === "string" ? Number.NEGATIVE_INFINITY : ticket?.net_edge),
+  }));
+  if (tickets.length !== 12 || tickets.some((ticket) => !ticket.pick || !Number.isFinite(ticket.odds) || ticket.odds <= 0)) {
+    return { status: "DATA BLOCKED", reason: "12点すべての3連単オッズが揃っていません。", dora: [], stakes: [] };
+  }
+  let best = null;
+  for (let first = 0; first < tickets.length; first += 1) {
+    for (let second = first + 1; second < tickets.length; second += 1) {
+      const doraIndexes = new Set([first, second]);
+      const stakes = tickets.map((ticket, index) => ({ ...ticket, stake: doraIndexes.has(index) ? 1000 : 100 }));
+      const totalStake = stakes.reduce((sum, ticket) => sum + ticket.stake, 0);
+      if (!stakes.every((ticket) => ticket.stake * ticket.odds >= totalStake)) continue;
+      const score = [first, second].reduce((sum, index) => sum + (Number.isFinite(tickets[index].netEdge) ? tickets[index].netEdge : -999), 0);
+      if (!best || score > best.score) best = { score, totalStake, stakes, dora: [tickets[first], tickets[second]] };
+    }
+  }
+  if (!best) return { status: "WATCH", reason: "ドラ2点を10倍にしても、12点すべてをガミなしにできません。", dora: [], stakes: [] };
+  return { status: "READY", reason: "全12点で的中時払戻しが総投資3,000円以上。", ...best };
+}
+
+function buildNoteDraft(payload) {
+  const date = String(payload.date || "").replaceAll("-", "/");
+  const doraPlan = buildNoGamiDoraPlan(payload.main, payload.cover);
+  const startOrder = (payload.exhibition || []).slice()
+    .sort((a, b) => (Number(a.course) || Number(a.boat)) - (Number(b.course) || Number(b.boat)))
+    .map((item) => item.boat).join("-");
+  const fastest = (payload.exhibition || []).filter((item) => item.time != null)
+    .sort((a, b) => Number(a.time) - Number(b.time))[0];
+  const bestSt = (payload.exhibition || []).filter((item) => item.st != null && Number(item.st) >= 0 && !String(item.st).toUpperCase().startsWith("F"))
+    .sort((a, b) => Number(a.st) - Number(b.st))[0];
+  const doraText = doraPlan.dora.length
+    ? doraPlan.dora.map((ticket) => `${ticket.pick} 各1,000円（${ticket.odds.toFixed(1)}倍）`).join("／")
+    : `設定なし（${doraPlan.reason}）`;
+  const regularText = doraPlan.stakes.length
+    ? doraPlan.stakes.filter((ticket) => ticket.stake === 100).map((ticket) => `${ticket.pick} 100円`).join("、")
+    : [...payload.main, ...payload.cover].map((ticket) => `${ticketText(ticket)} 100円`).join("、");
+  return [
+    "【水面ベタ子｜note用 展示後最終予想】",
+    `${date} ${payload.venue}${payload.race}R`, "",
+    `【現在判断】${payload.judgement}`,
+    `期待度指数 ${payload.score ?? "--"}／一致度 ${payload.agreement ?? "--"}%／データ取得率 ${payload.dataRate ?? "--"}%`, "",
+    "【展開予想】", payload.development, "",
+    "【進入・展示】",
+    `進入順 ${startOrder || "未確認"}${payload.entryChanged ? "（前付け・進入変化あり）" : "（枠なり）"}`,
+    `展示最速 ${fastest ? `${fastest.boat}号艇 ${Number(fastest.time).toFixed(2)}` : "未確認"}／ST展示トップ ${bestSt ? `${bestSt.boat}号艇 ${Number(bestSt.st).toFixed(2)}` : "未確認"}`, "",
+    "【買い目】", ...formationCopyLines("本線", payload.main), ...formationCopyLines("押さえ", payload.cover),
+    `ドラ：${doraText}`, `通常配分：${regularText}`, `資金判定：${doraPlan.status}｜${doraPlan.reason}`, "",
+    "【根拠】", ...(payload.reasons || []).slice(0, 5).map((reason) => `・${reason}`), "",
+    "【無効条件】", payload.invalidConditions, "",
+    "※検証中の分析情報です。的中・利益を保証しません。オッズ急変時は買い目と資金配分を再計算します。",
+  ].join("\n");
+}
+
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt, previousUpdatedAt }) {
@@ -377,8 +434,17 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     cover: betPlan.cover || [],
     detail: document.querySelector("#predictionDetail").textContent,
     invalidConditions: document.querySelector("#invalidConditions").textContent,
+    finalReady,
+    judgement: referenceBlocked ? "DATA BLOCKED" : finalReady ? valueStatus : "WATCH",
+    score: finalReady ? Math.round(finalData.final_score) : Math.round(match?.score || 0),
+    agreement: Math.round(match?.agreement || 0),
+    dataRate: Math.round(match?.data_rate || 0),
+    reasons: displayedReasons,
+    exhibition: finalData?.exhibition || [],
+    entryChanged: (finalData?.exhibition || []).some((item) => Number(item.course || item.boat) !== Number(item.boat)),
   };
   document.querySelector("#manualCopyStatus").textContent = "";
+  document.querySelector("#noteDraftPanel").hidden = true;
   document.querySelector("#selectionResult").hidden = false;
   if (finalMode && !finalReady && match) {
     void refreshSelectedRace({
@@ -402,6 +468,29 @@ document.querySelector("#copyManualPrediction").addEventListener("click", async 
     status.textContent = "X投稿用（140文字以内）でコピーしました。";
   } catch {
     status.textContent = "コピーできませんでした。ブラウザの許可を確認してください。";
+  }
+});
+
+document.querySelector("#createNoteDraft").addEventListener("click", async () => {
+  const status = document.querySelector("#manualCopyStatus");
+  const panel = document.querySelector("#noteDraftPanel");
+  if (!latestManualPrediction) {
+    status.textContent = "先に開催場とレースを選んで予想してください。";
+    return;
+  }
+  if (!latestManualPrediction.finalReady) {
+    status.textContent = "note用の最終買い目は、展示後AI最終予想が完成してから作成します。";
+    panel.hidden = true;
+    return;
+  }
+  const draft = buildNoteDraft(latestManualPrediction);
+  document.querySelector("#noteDraftText").textContent = draft;
+  panel.hidden = false;
+  try {
+    await navigator.clipboard.writeText(draft);
+    status.textContent = "note用の展開予想・買い目を作成してコピーしました。";
+  } catch {
+    status.textContent = "note用原稿を作成しました。下の原稿を選択してコピーしてください。";
   }
 });
 
