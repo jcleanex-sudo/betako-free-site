@@ -789,59 +789,96 @@ document.querySelector("#copyStaffShare").addEventListener("click", async () => 
   }
 });
 
-fetch(`data/predictions.json?ts=${Date.now()}`, { cache: "no-store" })
-  .then((response) => {
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response.json();
-  })
-  .then(renderRankings)
-  .catch(() => renderRankings({ status: "DATA BLOCKED", message: "予想データを取得できませんでした", rankings: [] }));
+const refreshDataButton = document.querySelector("#refreshDataButton");
+const refreshDataStatus = document.querySelector("#refreshDataStatus");
 
-fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
-  .then((response) => response.ok ? response.json() : Promise.reject())
-  .then((payload) => {
-    window.betakoPerformance = payload;
-    renderDailyPerformance();
-    renderTodayVenuePerformance();
-    const summary = payload.summary || {};
-    document.querySelector("#learningSamples").textContent = `${summary.samples || 0}件`;
-    document.querySelector("#learningHit").textContent = `${Number(summary.hit_rate || 0).toFixed(1)}%`;
-    document.querySelector("#learningNet").textContent = `${Number(summary.net_profit_yen || 0).toLocaleString("ja-JP")}円`;
-    document.querySelector("#learningRisk").textContent = `${summary.profit_factor ?? "--"} / ${Number(summary.max_drawdown_yen || 0).toLocaleString("ja-JP")}円`;
-    document.querySelector("#learningCi").textContent = summary.hit_rate_ci95 ? `${summary.hit_rate_ci95[0]}%—${summary.hit_rate_ci95[1]}%` : "集計開始待ち";
-    const renderTier = (name, tier) => {
-      const ci = tier.hit_rate_ci95 ? `${tier.hit_rate_ci95[0]}%—${tier.hit_rate_ci95[1]}%` : "--";
-      document.querySelector(`#${name}Samples`).textContent = `${tier.samples || 0}件`;
-      document.querySelector(`#${name}Metrics`).textContent = `純損益 ${Number(tier.net_profit_yen || 0).toLocaleString("ja-JP")}円｜PF ${tier.profit_factor ?? 0}｜DD ${Number(tier.max_drawdown_yen || 0).toLocaleString("ja-JP")}円｜95%CI ${ci}`;
-    };
-    renderTier("strict", payload.tiers?.strict || {});
-    renderTier("experimental", payload.tiers?.experimental || {});
-    const longshot = payload.longshot_summary || {};
-    const longshotCi = longshot.hit_rate_ci95 ? `${longshot.hit_rate_ci95[0]}%—${longshot.hit_rate_ci95[1]}%` : "--";
-    document.querySelector("#longshotSamples").textContent = `${longshot.samples || 0}件`;
-    document.querySelector("#longshotMetrics").textContent = `純損益 ${Number(longshot.net_profit_yen || 0).toLocaleString("ja-JP")}円｜PF ${longshot.profit_factor ?? 0}｜最大DD ${Number(longshot.max_drawdown_yen || 0).toLocaleString("ja-JP")}円｜95%CI ${longshotCi}`;
-  })
-  .catch(() => {});
+async function fetchFreshJson(path) {
+  const response = await fetch(`${path}?ts=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`${path} HTTP ${response.status}`);
+  return response.json();
+}
 
-fetch(`data/model_calibration.json?ts=${Date.now()}`, { cache: "no-store" })
-  .then((response) => response.ok ? response.json() : Promise.reject())
-  .then((payload) => {
-    document.querySelector("#historicalSamples").textContent = `${Number(payload.samples || 0).toLocaleString("ja-JP")}件`;
-    document.querySelector("#calibrationStatus").textContent = `${payload.status || "COLLECTING"}｜${payload.reason || "検証中"}`;
-  })
-  .catch(() => {});
+function applyPerformancePayload(payload) {
+  window.betakoPerformance = payload;
+  renderDailyPerformance();
+  renderTodayVenuePerformance();
+  const summary = payload.summary || {};
+  document.querySelector("#learningSamples").textContent = `${summary.samples || 0}件`;
+  document.querySelector("#learningHit").textContent = `${Number(summary.hit_rate || 0).toFixed(1)}%`;
+  document.querySelector("#learningNet").textContent = `${Number(summary.net_profit_yen || 0).toLocaleString("ja-JP")}円`;
+  document.querySelector("#learningRisk").textContent = `${summary.profit_factor ?? "--"} / ${Number(summary.max_drawdown_yen || 0).toLocaleString("ja-JP")}円`;
+  document.querySelector("#learningCi").textContent = summary.hit_rate_ci95 ? `${summary.hit_rate_ci95[0]}%—${summary.hit_rate_ci95[1]}%` : "集計開始待ち";
+  const renderTier = (name, tier) => {
+    const ci = tier.hit_rate_ci95 ? `${tier.hit_rate_ci95[0]}%—${tier.hit_rate_ci95[1]}%` : "--";
+    document.querySelector(`#${name}Samples`).textContent = `${tier.samples || 0}件`;
+    document.querySelector(`#${name}Metrics`).textContent = `純損益 ${Number(tier.net_profit_yen || 0).toLocaleString("ja-JP")}円｜PF ${tier.profit_factor ?? 0}｜DD ${Number(tier.max_drawdown_yen || 0).toLocaleString("ja-JP")}円｜95%CI ${ci}`;
+  };
+  renderTier("strict", payload.tiers?.strict || {});
+  renderTier("experimental", payload.tiers?.experimental || {});
+  const longshot = payload.longshot_summary || {};
+  const longshotCi = longshot.hit_rate_ci95 ? `${longshot.hit_rate_ci95[0]}%—${longshot.hit_rate_ci95[1]}%` : "--";
+  document.querySelector("#longshotSamples").textContent = `${longshot.samples || 0}件`;
+  document.querySelector("#longshotMetrics").textContent = `純損益 ${Number(longshot.net_profit_yen || 0).toLocaleString("ja-JP")}円｜PF ${longshot.profit_factor ?? 0}｜最大DD ${Number(longshot.max_drawdown_yen || 0).toLocaleString("ja-JP")}円｜95%CI ${longshotCi}`;
+}
 
-fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" })
-  .then((response) => response.ok ? response.json() : Promise.reject())
-  .then((payload) => {
-    window.betakoExhibition = payload.race_date === dateInput.value
-      ? payload
-      : { race_date: payload.race_date || null, races: [], longshots: [] };
-    renderLongshots(window.betakoPredictions?.longshots || []);
-  })
-  .catch(() => { window.betakoExhibition = { races: [] }; });
+function applyModelCalibration(payload) {
+  document.querySelector("#historicalSamples").textContent = `${Number(payload.samples || 0).toLocaleString("ja-JP")}件`;
+  document.querySelector("#calibrationStatus").textContent = `${payload.status || "COLLECTING"}｜${payload.reason || "検証中"}`;
+}
 
-fetch(`data/runtime.json?ts=${Date.now()}`, { cache: "no-store" })
-  .then((response) => response.ok ? response.json() : Promise.reject())
-  .then((payload) => { window.betakoRuntime = payload; })
-  .catch(() => { window.betakoRuntime = {}; });
+function applyExhibitionPayload(payload) {
+  window.betakoExhibition = payload.race_date === dateInput.value
+    ? payload
+    : { race_date: payload.race_date || null, races: [], longshots: [] };
+  renderLongshots(window.betakoPredictions?.longshots || []);
+}
+
+async function refreshAllData({ manual = false } = {}) {
+  refreshDataButton.disabled = true;
+  refreshDataButton.textContent = "↻ 取得中";
+  refreshDataStatus.className = "";
+  refreshDataStatus.textContent = manual ? "再取得中…" : "自動取得中…";
+
+  const results = await Promise.allSettled([
+    fetchFreshJson("data/predictions.json"),
+    fetchFreshJson("data/performance.json"),
+    fetchFreshJson("data/model_calibration.json"),
+    fetchFreshJson("data/exhibition.json"),
+    fetchFreshJson("data/runtime.json"),
+  ]);
+  const [predictions, performance, calibration, exhibition, runtime] = results;
+
+  if (predictions.status === "fulfilled") renderRankings(predictions.value);
+  else if (!window.betakoPredictions) renderRankings({ status: "DATA BLOCKED", message: "予想データを取得できませんでした。上の更新ボタンで再取得してください", rankings: [] });
+  if (exhibition.status === "fulfilled") applyExhibitionPayload(exhibition.value);
+  else if (!window.betakoExhibition) window.betakoExhibition = { races: [] };
+  if (performance.status === "fulfilled") applyPerformancePayload(performance.value);
+  if (calibration.status === "fulfilled") applyModelCalibration(calibration.value);
+  if (runtime.status === "fulfilled") window.betakoRuntime = runtime.value;
+  else if (!window.betakoRuntime) window.betakoRuntime = {};
+
+  const succeeded = results.filter((result) => result.status === "fulfilled").length;
+  refreshDataButton.disabled = false;
+  refreshDataButton.textContent = "↻ 最新データ";
+  if (succeeded === results.length) {
+    refreshDataStatus.className = "success";
+    refreshDataStatus.textContent = `${new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })} 更新完了`;
+  } else {
+    refreshDataStatus.className = "error";
+    refreshDataStatus.textContent = succeeded
+      ? `${succeeded}/${results.length}件取得・再試行可`
+      : "通信失敗・再試行してください";
+  }
+}
+
+refreshDataButton.addEventListener("click", () => { void refreshAllData({ manual: true }); });
+window.addEventListener("offline", () => {
+  refreshDataStatus.className = "error";
+  refreshDataStatus.textContent = "オフラインです";
+});
+window.addEventListener("online", () => {
+  refreshDataStatus.className = "";
+  refreshDataStatus.textContent = "通信復帰・更新できます";
+});
+
+void refreshAllData();
