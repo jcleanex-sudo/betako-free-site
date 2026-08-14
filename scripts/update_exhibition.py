@@ -320,7 +320,10 @@ def main():
     longshots.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
     if targeted and OUTPUT.exists():
         previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
-        if previous.get("race_date") == race_date:
+        if (
+            previous.get("race_date") == race_date
+            and previous.get("prediction_updated_at") == payload.get("updated_at")
+        ):
             race_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in races}
             longshot_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in longshots}
             races.extend(
@@ -335,6 +338,7 @@ def main():
         longshots.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
     output = {
         "race_date": race_date,
+        "prediction_updated_at": payload.get("updated_at"),
         "updated_at": now.strftime("%Y-%m-%d %H:%M JST"),
         "update_mode": "selected_race" if targeted else "all_races",
         "races": races, "longshots": longshots,

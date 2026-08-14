@@ -20,7 +20,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     env:
       BOATRACE_MAX_WORKERS: "4"
     steps:
@@ -32,12 +32,16 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python scripts/evaluate_results.py
       - run: python scripts/generate_predictions.py
-      - name: Save prediction data
+      - name: Build matching exhibition dataset
+        run: python scripts/update_exhibition.py
+      - name: Validate atomic public dataset
+        run: python scripts/validate_public_data.py
+      - name: Save validated prediction and exhibition data
         run: |
           git config user.name "betako-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/
-          git diff --cached --quiet || git commit -m "Update daily predictions"
+          git diff --cached --quiet || git commit -m "Update validated daily dataset"
           for attempt in 1 2 3; do
             git pull --rebase origin main
             if git push origin main; then exit 0; fi
@@ -48,7 +52,3 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run pages.yml --ref main
-      - name: Initialize today's exhibition data
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run update-exhibition.yml --ref main

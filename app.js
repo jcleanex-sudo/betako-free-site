@@ -5,6 +5,20 @@ const dateInput = document.querySelector("#raceDate");
 const pendingRefreshes = new Set();
 let latestManualPrediction = null;
 
+function exhibitionMatchesPrediction(exhibition = window.betakoExhibition, predictions = window.betakoPredictions) {
+  const quality = window.betakoQuality;
+  return Boolean(
+    quality?.status === "PASS"
+    && quality.race_date === dateInput.value
+    && quality.prediction_updated_at === predictions?.updated_at
+    && exhibition?.race_date
+    && exhibition.race_date === dateInput.value
+    && predictions?.race_date === dateInput.value
+    && exhibition.prediction_updated_at
+    && exhibition.prediction_updated_at === predictions.updated_at
+  );
+}
+
 venueSelect.replaceChildren(new Option("公式開催場を確認中", ""));
 venueSelect.disabled = true;
 for (let race = 1; race <= 12; race += 1) raceSelect.add(new Option(`${race}R`, String(race)));
@@ -121,6 +135,14 @@ function renderFormation(target, tickets) {
   }));
 }
 
+function renderPendingFormation(target) {
+  target.classList.add("singleFormation");
+  const card = document.createElement("div");
+  card.className = "formationCard pendingFormation";
+  card.innerHTML = `<div class="formationHeader"><b>DATA CHECK</b><em>確認中</em></div><div class="formationColumns">${["1着", "2着", "3着"].map((label) => `<section><small>${label}</small><div class="pendingChoice">取得中</div></section>`).join("")}</div>`;
+  target.replaceChildren(card);
+}
+
 function ticketText(ticket) {
   return typeof ticket === "string" ? ticket : ticket?.pick || "--";
 }
@@ -234,7 +256,7 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
       const exhibitionResponse = await fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" });
       if (!exhibitionResponse.ok) continue;
       const payload = await exhibitionResponse.json();
-      if (payload.race_date !== raceDate) continue;
+      if (payload.race_date !== raceDate || payload.prediction_updated_at !== window.betakoPredictions?.updated_at) continue;
       const refreshed = payload.races?.find((item) => item.venue_id === venueId && String(item.race) === String(race));
       if (refreshed && (refreshed.fetched_at !== previousFetchedAt || payload.updated_at !== previousUpdatedAt)) {
         window.betakoExhibition = payload;
@@ -288,7 +310,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? (window.betakoPredictions?.all_races || window.betakoPredictions?.rankings || []).find((item) => item.venue === venue && String(item.race) === raceSelect.value)
     : null;
   const finalMode = document.querySelector("#predictionType").value === "展示後AI最終予想";
-  const exhibitionDateMatches = window.betakoExhibition?.race_date === dateInput.value;
+  const exhibitionDateMatches = exhibitionMatchesPrediction();
   const finalData = exhibitionDateMatches
     ? window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value)
     : null;
@@ -322,12 +344,18 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? candidatePlan
     : finalMode && finalData?.ticket_plan ? finalData.ticket_plan : candidatePlan;
   document.querySelector("#mainLabel").textContent = referenceBlocked
-    ? "予想停止（参考データ不足）"
+    ? "本線・データ確認中"
     : skipTarget
     ? "参考買い目6点（見送り）"
     : betPlan.ranked_by_edge ? "期待値上位6点" : "本線候補6点";
-  renderFormation(document.querySelector("#mainPicks"), betPlan.main);
-  renderFormation(document.querySelector("#coverPicks"), betPlan.cover);
+  document.querySelector("#coverLabel").textContent = referenceBlocked ? "押さえ・データ確認中" : "押さえ6点";
+  if (referenceBlocked) {
+    renderPendingFormation(document.querySelector("#mainPicks"));
+    renderPendingFormation(document.querySelector("#coverPicks"));
+  } else {
+    renderFormation(document.querySelector("#mainPicks"), betPlan.main);
+    renderFormation(document.querySelector("#coverPicks"), betPlan.cover);
+  }
   document.querySelector("#selectionText").textContent = referenceBlocked
     ? `${venue} ${raceSelect.value}R・DATA BLOCKED（参考データ ${Number(match.data_rate).toFixed(1)}%）`
     : finalReady
@@ -411,7 +439,7 @@ function escapeHtml(value) {
 
 function renderLongshots(longshots) {
   const longshotGrid = document.querySelector("#longshotGrid");
-  const checks = window.betakoExhibition?.race_date === dateInput.value
+  const checks = exhibitionMatchesPrediction()
     ? (window.betakoExhibition?.longshots || [])
     : [];
   longshotGrid.innerHTML = longshots.length ? longshots.map((item) => {
@@ -607,7 +635,7 @@ document.querySelector("#copyXPost").addEventListener("click", async () => {
 document.querySelector("#copyStaffShare").addEventListener("click", async () => {
   const rankings = window.betakoPredictions?.rankings || [];
   const longshots = window.betakoPredictions?.longshots || [];
-  const checks = window.betakoExhibition?.race_date === dateInput.value
+  const checks = exhibitionMatchesPrediction()
     ? (window.betakoExhibition?.longshots || [])
     : [];
   const status = document.querySelector("#staffShareStatus");
@@ -629,13 +657,29 @@ document.querySelector("#copyStaffShare").addEventListener("click", async () => 
   }
 });
 
-fetch(`data/predictions.json?ts=${Date.now()}`, { cache: "no-store" })
-  .then((response) => {
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response.json();
+Promise.all([
+  fetch(`data/predictions.json?ts=${Date.now()}`, { cache: "no-store" }),
+  fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" }),
+  fetch(`data/quality.json?ts=${Date.now()}`, { cache: "no-store" }),
+])
+  .then(async (responses) => {
+    if (responses.some((response) => !response.ok)) throw new Error("dataset fetch failed");
+    const [predictions, exhibition, quality] = await Promise.all(responses.map((response) => response.json()));
+    const coherent = quality.status === "PASS"
+      && quality.race_date === predictions.race_date
+      && quality.prediction_updated_at === predictions.updated_at
+      && exhibition.race_date === predictions.race_date
+      && exhibition.prediction_updated_at === predictions.updated_at;
+    if (!coherent) throw new Error("dataset version mismatch");
+    window.betakoQuality = quality;
+    window.betakoExhibition = exhibition;
+    renderRankings(predictions);
   })
-  .then(renderRankings)
-  .catch(() => renderRankings({ status: "DATA BLOCKED", message: "予想データを取得できませんでした", rankings: [] }));
+  .catch(() => {
+    window.betakoQuality = { status: "DATA BLOCKED" };
+    window.betakoExhibition = { races: [], longshots: [] };
+    renderRankings({ status: "DATA BLOCKED", message: "検証済みデータを準備中です。全レースの表示枠は維持したまま自動再取得します。", rankings: [], all_races: [] });
+  });
 
 fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((response) => response.ok ? response.json() : Promise.reject())
@@ -669,16 +713,6 @@ fetch(`data/model_calibration.json?ts=${Date.now()}`, { cache: "no-store" })
     document.querySelector("#calibrationStatus").textContent = `${payload.status || "COLLECTING"}｜${payload.reason || "検証中"}`;
   })
   .catch(() => {});
-
-fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" })
-  .then((response) => response.ok ? response.json() : Promise.reject())
-  .then((payload) => {
-    window.betakoExhibition = payload.race_date === dateInput.value
-      ? payload
-      : { race_date: payload.race_date || null, races: [], longshots: [] };
-    renderLongshots(window.betakoPredictions?.longshots || []);
-  })
-  .catch(() => { window.betakoExhibition = { races: [] }; });
 
 fetch(`data/runtime.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((response) => response.ok ? response.json() : Promise.reject())

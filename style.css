@@ -139,6 +139,10 @@ form button span { float: right; }
 .formationRows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
 .formationRows.singleFormation { grid-template-columns: 1fr; }
 .formationCard { overflow: hidden; border: 1px solid rgba(64,226,231,.2); border-radius: 8px; background: #0a1420; }
+.pendingFormation { border-color: rgba(231,199,110,.28); background: linear-gradient(110deg, #0a1420 25%, #111f2c 45%, #0a1420 65%); background-size: 220% 100%; animation: pendingSweep 1.8s linear infinite; }
+.pendingFormation .formationHeader em { color: var(--gold); }
+.pendingChoice { padding: 8px 2px; border: 1px dashed rgba(231,199,110,.3); border-radius: 5px; color: var(--gold); font-size: 9px; text-align: center; }
+@keyframes pendingSweep { to { background-position: -220% 0; } }
 .formationHeader { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; color: var(--muted); background: rgba(64,226,231,.06); font: 800 8px monospace; }
 .formationHeader em { color: var(--cyan); font-style: normal; font-size: 10px; }
 .formationColumns { display: grid; grid-template-columns: repeat(3, 1fr); }

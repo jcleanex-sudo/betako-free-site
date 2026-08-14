@@ -300,6 +300,13 @@ def main():
             int(item["venue_id"]), item["race"],
         ))
         all_races = sorted(predictions, key=lambda item: (int(item["venue_id"]), item["race"]))
+        for prediction in all_races:
+            if number(prediction.get("data_rate"), 0) < 100:
+                prediction["label"] = "DATA BLOCKED"
+                prediction["invalid_conditions"] = [
+                    "参考データが100%揃うまで買い目を確定しない",
+                    *(prediction.get("invalid_conditions") or []),
+                ]
         output["all_races"] = all_races
         counts = {
             stadium_id: sum(1 for item in all_races if item["venue_id"] == stadium_id)
