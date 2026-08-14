@@ -165,6 +165,7 @@ form button span { float: right; }
 .developmentPrediction p { margin: 6px 0 0; color: #dce8f3; font-size: 11px; line-height: 1.7; }
 .manualCopyActions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 .manualCopyButton { width: auto; margin-top: 0; padding: 10px 15px; font-size: 11px; }
+.noteFreeButton { color: var(--cyan); border: 1px solid rgba(64,226,231,.4); background: rgba(64,226,231,.08); }
 .noteCopyButton { color: #17120a; background: linear-gradient(135deg, var(--gold), #fff0a8); }
 #manualCopyStatus { min-height: 1.3em; margin: 0; }
 .noteDraftPanel { margin-top: 13px; padding: 14px; border: 1px solid rgba(231,199,110,.35); border-radius: 10px; background: rgba(231,199,110,.055); }

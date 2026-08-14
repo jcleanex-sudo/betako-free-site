@@ -231,7 +231,7 @@ function buildNoGamiDoraPlan(main = [], cover = []) {
   return { status: "READY", reason: "全12点で的中時払戻しが総投資3,000円以上。", ...best };
 }
 
-function buildNoteDraft(payload) {
+function buildNoteDraft(payload, paid = false) {
   const date = String(payload.date || "").replaceAll("-", "/");
   const doraPlan = buildNoGamiDoraPlan(payload.main, payload.cover);
   const startOrder = (payload.exhibition || []).slice()
@@ -247,8 +247,8 @@ function buildNoteDraft(payload) {
   const regularText = doraPlan.stakes.length
     ? doraPlan.stakes.filter((ticket) => ticket.stake === 100).map((ticket) => `${ticket.pick} 100円`).join("、")
     : [...payload.main, ...payload.cover].map((ticket) => `${ticketText(ticket)} 100円`).join("、");
-  return [
-    "【水面ベタ子｜note用 展示後最終予想】",
+  const commonLines = [
+    `【水面ベタ子｜note ${paid ? "有料会員版" : "無料版"}】`,
     `${date} ${payload.venue}${payload.race}R`, "",
     `【現在判断】${payload.judgement}`,
     `期待度指数 ${payload.score ?? "--"}／一致度 ${payload.agreement ?? "--"}%／データ取得率 ${payload.dataRate ?? "--"}%`, "",
@@ -256,9 +256,18 @@ function buildNoteDraft(payload) {
     "【進入・展示】",
     `進入順 ${startOrder || "未確認"}${payload.entryChanged ? "（前付け・進入変化あり）" : "（枠なり）"}`,
     `展示最速 ${fastest ? `${fastest.boat}号艇 ${Number(fastest.time).toFixed(2)}` : "未確認"}／ST展示トップ ${bestSt ? `${bestSt.boat}号艇 ${Number(bestSt.st).toFixed(2)}` : "未確認"}`, "",
+    "【根拠】", ...(payload.reasons || []).slice(0, paid ? 5 : 3).map((reason) => `・${reason}`), "",
+  ];
+  const memberLines = paid ? [
     "【買い目】", ...formationCopyLines("本線", payload.main), ...formationCopyLines("押さえ", payload.cover),
     `ドラ：${doraText}`, `通常配分：${regularText}`, `資金判定：${doraPlan.status}｜${doraPlan.reason}`, "",
-    "【根拠】", ...(payload.reasons || []).slice(0, 5).map((reason) => `・${reason}`), "",
+    "【会員情報】本線・押さえ・ドラ・資金配分はオッズ更新時に再計算します。", "",
+  ] : [
+    "【無料公開範囲】",
+    "展開・進入・展示評価まで公開。具体的な本線6点・押さえ6点・ドラ2点・資金配分は有料会員版に掲載します。", "",
+  ];
+  return [
+    ...commonLines, ...memberLines,
     "【無効条件】", payload.invalidConditions, "",
     "※検証中の分析情報です。的中・利益を保証しません。オッズ急変時は買い目と資金配分を再計算します。",
   ].join("\n");
@@ -471,7 +480,7 @@ document.querySelector("#copyManualPrediction").addEventListener("click", async 
   }
 });
 
-document.querySelector("#createNoteDraft").addEventListener("click", async () => {
+async function createAndCopyNoteDraft(paid) {
   const status = document.querySelector("#manualCopyStatus");
   const panel = document.querySelector("#noteDraftPanel");
   if (!latestManualPrediction) {
@@ -483,15 +492,26 @@ document.querySelector("#createNoteDraft").addEventListener("click", async () =>
     panel.hidden = true;
     return;
   }
-  const draft = buildNoteDraft(latestManualPrediction);
+  const draft = buildNoteDraft(latestManualPrediction, paid);
+  document.querySelector("#noteDraftTitle").textContent = paid ? "note 有料会員版原稿" : "note 無料版原稿";
   document.querySelector("#noteDraftText").textContent = draft;
   panel.hidden = false;
   try {
     await navigator.clipboard.writeText(draft);
-    status.textContent = "note用の展開予想・買い目を作成してコピーしました。";
+    status.textContent = paid
+      ? "有料会員版（買い目・資金配分付き）を作成してコピーしました。"
+      : "無料版（展開予想まで）を作成してコピーしました。";
   } catch {
-    status.textContent = "note用原稿を作成しました。下の原稿を選択してコピーしてください。";
+    status.textContent = `${paid ? "有料会員版" : "無料版"}を作成しました。下の原稿を選択してコピーしてください。`;
   }
+}
+
+document.querySelector("#createFreeNoteDraft").addEventListener("click", () => {
+  void createAndCopyNoteDraft(false);
+});
+
+document.querySelector("#createPaidNoteDraft").addEventListener("click", () => {
+  void createAndCopyNoteDraft(true);
 });
 
 function escapeHtml(value) {
