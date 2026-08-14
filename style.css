@@ -168,7 +168,15 @@ form button span { float: right; }
 #manualCopyStatus { min-height: 1.3em; margin: 0; }
 .rankLead { min-height: 1.3em; margin: 10px 0 0; color: #bdcad7; font-size: 10px; }
 
-.rankingSection, .dailySection, .longshotSection, .guideSection, .logicSection, .operations { padding: 90px 4px 0; scroll-margin-top: 40px; }
+.venuePerformanceSection, .rankingSection, .dailySection, .longshotSection, .guideSection, .logicSection, .operations { padding: 90px 4px 0; scroll-margin-top: 40px; }
+.venueThresholds { margin-bottom: 14px; padding: 11px 13px; color: var(--muted); border: 1px solid var(--line); border-radius: 12px; background: rgba(8,13,20,.7); font-size: 11px; line-height: 1.7; }
+.venuePerformanceGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.venuePerformanceCard { padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: linear-gradient(145deg, rgba(16,27,40,.96), rgba(8,13,20,.94)); }
+.venuePerformanceCard > span { display: inline-block; padding: 4px 8px; color: var(--gold); border: 1px solid currentColor; border-radius: 999px; font-size: 9px; font-weight: 900; }
+.venuePerformanceCard.hot > span { color: var(--cyan); }
+.venuePerformanceCard h3 { margin: 12px 0 7px; font-size: 20px; }
+.venuePerformanceCard strong { color: var(--cyan); font: 900 20px monospace; }
+.venuePerformanceCard p, .venuePerformanceCard small { display: block; margin: 8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.65; }
 .demoTag { padding: 5px 7px; border: 1px solid rgba(231,199,110,.25); border-radius: 999px; color: var(--gold); font-size: 9px; }
 .demoTag.staleTag { border-color: rgba(255,91,91,.55); background: rgba(255,91,91,.12); color: #ff8c8c; }
 .rankingGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -274,6 +282,7 @@ footer small { color: #576778; font-size: 9px; text-align: right; }
   .predictCard, .logicSection, .operations article { padding: 20px; }
   .tierGrid { grid-template-columns: 1fr; }
   .todayRecord { grid-template-columns: 1fr 1fr; }
+  .venuePerformanceGrid { grid-template-columns: 1fr; }
   .dailyTable { overflow-x: auto; }
   .longshotPerformance { align-items: flex-start; flex-direction: column; gap: 6px; }
   .longshotPerformance strong { margin-left: 0; }

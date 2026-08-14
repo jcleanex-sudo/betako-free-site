@@ -43,6 +43,14 @@
     <div class="selectionResult" id="selectionResult" role="status" hidden><span id="venueCode">01</span><div><b class="exhibitionBadge" id="exhibitionBadge" hidden>展示前</b><b class="decisionBadge" id="decisionBadge" hidden>見送り対象</b><strong id="selectionText"></strong><small id="predictionDetail"></small><div class="ticketPlan"><section class="ticketGroup"><b id="mainLabel">本線候補6点</b><div class="formationRows" id="mainPicks">--</div></section><section class="ticketGroup"><b>押さえ6点</b><div class="formationRows" id="coverPicks">--</div></section></div><div class="developmentPrediction"><b>展開予想</b><p id="developmentText">--</p></div><ul id="predictionReasons"></ul><small id="invalidConditions"></small><div class="manualCopyActions"><button class="copyButton manualCopyButton" id="copyManualPrediction" type="button">X投稿用にコピー</button><small id="manualCopyStatus" role="status"></small></div></div></div>
   </section>
 
+  <section class="venuePerformanceSection" id="today-venues">
+    <div class="sectionHead"><div><p class="eyebrow">TODAY'S VENUE RESULTS</p><h2>本日当たっている競艇場</h2></div><p>朝に保存した全レース予想を、公式結果が確定したレースだけで会場別集計。手動予想の参考情報であり、予測確率には混ぜません。</p></div>
+    <div class="venueThresholds" id="venueThresholds">好調判定を読み込み中</div>
+    <div class="venuePerformanceGrid" id="venuePerformanceGrid" aria-live="polite">
+      <article class="venuePerformanceCard"><span>結果待ち</span><h3>本日の公式結果を確認中</h3><p>未確定レースは母数に含めません。</p></article>
+    </div>
+  </section>
+
   <section class="rankingSection" id="ranking">
     <div class="sectionHead"><div><p class="eyebrow">EXPECTATION RANKING</p><h2>期待度指数ランキング</h2></div><p><span class="demoTag" id="dataStatus">データ取得中</span> <span id="dataUpdated">毎朝8時ごろ更新</span><br><small>指数75・一致度75%以上だけを厳格公開</small></p></div>
     <div class="rankingGrid" id="rankingGrid" aria-live="polite">
@@ -88,6 +96,6 @@
 
   <footer><a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO</span></a><p>勝つことより先に、大きく負けないこと。</p><small>AI予想は検証中の分析情報です。舟券購入は自己責任で行ってください。</small></footer>
 </main>
-<script src="app.js?v=20260810-1"></script>
+<script src="app.js?v=20260815-1"></script>
 </body>
 </html>

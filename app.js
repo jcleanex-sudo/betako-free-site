@@ -479,6 +479,7 @@ function renderRankings(payload) {
   }
   window.betakoPredictions = { ...payload, rankings, longshots };
   renderDailyPerformance();
+  renderTodayVenuePerformance();
   status.classList.toggle("staleTag", stalePrediction);
   status.textContent = stalePrediction
     ? `更新停止：${jstDate}の予想データ未取得`
@@ -588,6 +589,37 @@ function renderDailyPerformance() {
     }).join("");
 }
 
+function renderTodayVenuePerformance() {
+  const container = document.querySelector("#venuePerformanceGrid");
+  const thresholdNode = document.querySelector("#venueThresholds");
+  if (!container || !thresholdNode) return;
+  const performance = window.betakoPerformance?.today_venue_performance;
+  const predictionDate = window.betakoPredictions?.race_date;
+  if (!performance || !predictionDate || performance.race_date !== predictionDate) {
+    thresholdNode.textContent = "本日分の結果照合待ち。未確定レースは母数に含めません。";
+    container.innerHTML = `<article class="venuePerformanceCard"><span>結果待ち</span><h3>まだ確定結果がありません</h3><p>結果が確定した会場から自動表示します。</p></article>`;
+    return;
+  }
+  const thresholds = performance.thresholds || {};
+  thresholdNode.textContent = `好調条件：${Number(thresholds.minimum_samples || 5)}件以上・的中率${Number(thresholds.minimum_hit_rate || 30)}%以上・純損益プラス・PF ${Number(thresholds.minimum_profit_factor || 1.2)}以上｜${performance.updated_at || "更新時刻不明"}`;
+  const venues = (performance.venues || []).filter((item) => Number(item.hits || 0) > 0);
+  if (!venues.length) {
+    container.innerHTML = `<article class="venuePerformanceCard"><span>WATCH</span><h3>的中会場はまだありません</h3><p>照合済みレースだけで判定しています。</p></article>`;
+    return;
+  }
+  container.innerHTML = venues.map((item) => {
+    const tone = item.status === "好調" ? "hot" : item.status === "サンプル不足" ? "sample" : "watch";
+    const pf = item.profit_factor === "∞" ? "∞" : Number(item.profit_factor || 0).toFixed(2);
+    return `<article class="venuePerformanceCard ${tone}">
+      <span>${escapeHtml(item.status || "WATCH")}</span>
+      <h3>${escapeHtml(item.venue)}</h3>
+      <strong>${Number(item.hits || 0)}的中 / ${Number(item.samples || 0)}R</strong>
+      <p>的中率 ${Number(item.hit_rate || 0).toFixed(1)}%｜純損益 ${Number(item.net_profit_yen || 0).toLocaleString("ja-JP")}円｜PF ${pf}</p>
+      <small>${Number(item.last_completed_race || 0)}Rまで結果確定</small>
+    </article>`;
+  }).join("");
+}
+
 document.querySelector("#copyXPost").addEventListener("click", async () => {
   const top = window.betakoPredictions?.rankings?.[0];
   const status = document.querySelector("#copyStatus");
@@ -642,6 +674,7 @@ fetch(`data/performance.json?ts=${Date.now()}`, { cache: "no-store" })
   .then((payload) => {
     window.betakoPerformance = payload;
     renderDailyPerformance();
+    renderTodayVenuePerformance();
     const summary = payload.summary || {};
     document.querySelector("#learningSamples").textContent = `${summary.samples || 0}件`;
     document.querySelector("#learningHit").textContent = `${Number(summary.hit_rate || 0).toFixed(1)}%`;

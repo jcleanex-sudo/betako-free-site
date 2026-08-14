@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 import re
+import argparse
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -15,6 +16,10 @@ DATA = ROOT / "data"
 PERFORMANCE = DATA / "performance.json"
 HEADERS = {"User-Agent": "Mozilla/5.0 BETAKO-Free/1.0", "Accept-Language": "ja-JP,ja;q=0.9"}
 EVALUATION_VERSION = "main6-v1"
+VENUE_MIN_SAMPLES = 5
+VENUE_MIN_HIT_RATE = 30.0
+VENUE_MIN_NET_PROFIT = 0
+VENUE_MIN_PROFIT_FACTOR = 1.2
 
 
 def build_main_tickets(prediction: dict) -> list[str]:
@@ -121,7 +126,86 @@ def score_tier(score, agreement=0):
     return "watch"
 
 
+def build_today_venue_performance(date: str, history: dict, previous: dict | None = None):
+    """Evaluate completed all-race predictions without mixing them into public top-3 stats."""
+    previous = previous if previous and previous.get("race_date") == date else {}
+    records = dict(previous.get("records") or {})
+    predictions = [
+        item for item in history.get("all_races", [])
+        if float(item.get("data_rate") or 0) >= 100 and item.get("label") != "DATA BLOCKED"
+    ]
+    valid_keys = {f"{date}-{item['venue_id']}-{item['race']}" for item in predictions}
+    records = {key: value for key, value in records.items() if key in valid_keys}
+
+    for prediction in predictions:
+        key = f"{date}-{prediction['venue_id']}-{prediction['race']}"
+        if key in records:
+            continue
+        try:
+            result = fetch_result(date, prediction["venue_id"], prediction["race"])
+        except requests.RequestException as exc:
+            print(f"{key}: {exc}")
+            continue
+        if not result:
+            continue
+        actual, payout = result
+        tickets = build_main_tickets(prediction)
+        stake = len(tickets) * 100
+        hit = actual in tickets
+        records[key] = {
+            "key": key,
+            "venue_id": prediction["venue_id"],
+            "venue": prediction["venue"],
+            "race": prediction["race"],
+            "hit": hit,
+            "actual": actual,
+            "payout_yen": payout,
+            "stake_yen": stake,
+            "profit_yen": payout - stake if hit else -stake,
+        }
+
+    grouped = {}
+    for record in records.values():
+        grouped.setdefault(record["venue"], {})[record["key"]] = record
+    venues = []
+    for venue, venue_records in grouped.items():
+        summary = summarize(venue_records)
+        if summary["samples"] < VENUE_MIN_SAMPLES:
+            status = "サンプル不足"
+        elif (
+            summary["hit_rate"] >= VENUE_MIN_HIT_RATE
+            and summary["net_profit_yen"] > VENUE_MIN_NET_PROFIT
+            and (summary["profit_factor"] == "∞" or float(summary["profit_factor"] or 0) >= VENUE_MIN_PROFIT_FACTOR)
+        ):
+            status = "好調"
+        else:
+            status = "WATCH"
+        venues.append({
+            "venue": venue,
+            **summary,
+            "status": status,
+            "last_completed_race": max(item["race"] for item in venue_records.values()),
+        })
+    venues.sort(key=lambda item: (-item["hits"], -item["hit_rate"], -item["samples"], item["venue"]))
+    return {
+        "race_date": f"{date[:4]}-{date[4:6]}-{date[6:]}",
+        "updated_at": datetime.now(JST).strftime("%Y-%m-%d %H:%M JST"),
+        "basis": "当日朝に保存した全レース予想のうち公式結果確定済みレースのみ",
+        "thresholds": {
+            "minimum_samples": VENUE_MIN_SAMPLES,
+            "minimum_hit_rate": VENUE_MIN_HIT_RATE,
+            "minimum_net_profit_yen": VENUE_MIN_NET_PROFIT,
+            "minimum_profit_factor": VENUE_MIN_PROFIT_FACTOR,
+        },
+        "records": records,
+        "venues": venues,
+    }
+
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--today-venues", action="store_true", help="Update today's completed all-race venue summary")
+    args = parser.parse_args()
     yesterday = (datetime.now(JST) - timedelta(days=1)).strftime("%Y%m%d")
     history_file = DATA / "history" / f"{yesterday}.json"
     payload = json.loads(PERFORMANCE.read_text(encoding="utf-8")) if PERFORMANCE.exists() else {"evaluated": {}}
@@ -193,6 +277,14 @@ def main():
                 "payout_yen": payout, "stake_yen": stake,
                 "profit_yen": payout - stake if hit else -stake,
             }
+    if args.today_venues:
+        today = datetime.now(JST).strftime("%Y%m%d")
+        today_history_file = DATA / "history" / f"{today}.json"
+        if today_history_file.exists():
+            today_history = json.loads(today_history_file.read_text(encoding="utf-8"))
+            payload["today_venue_performance"] = build_today_venue_performance(
+                today, today_history, payload.get("today_venue_performance")
+            )
     payload["updated_at"] = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
     payload["summary"] = summarize(records)
     payload["tiers"] = {
