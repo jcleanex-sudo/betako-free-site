@@ -233,6 +233,7 @@ function buildNoGamiDoraPlan(main = [], cover = []) {
 
 function buildNoteDraft(payload, paid = false) {
   const date = String(payload.date || "").replaceAll("-", "/");
+  const serious = ["WATCH", "DATA BLOCKED"].includes(payload.judgement);
   const doraPlan = buildNoGamiDoraPlan(payload.main, payload.cover);
   const startOrder = (payload.exhibition || []).slice()
     .sort((a, b) => (Number(a.course) || Number(a.boat)) - (Number(b.course) || Number(b.boat)))
@@ -247,28 +248,46 @@ function buildNoteDraft(payload, paid = false) {
   const regularText = doraPlan.stakes.length
     ? doraPlan.stakes.filter((ticket) => ticket.stake === 100).map((ticket) => `${ticket.pick} 100円`).join("、")
     : [...payload.main, ...payload.cover].map((ticket) => `${ticketText(ticket)} 100円`).join("、");
+  const opening = serious
+    ? payload.judgement === "DATA BLOCKED"
+      ? "私、水面ベタ子です。必要なデータが揃っていないため、今回は予想を出しません。"
+      : "私、水面ベタ子です。今回は無理をせず、見送りも含めて慎重に確認してください。"
+    : "私、水面ベタ子の展示後最終予想、いくよ〜！ アっチッチかもかも❤️";
+  const development = serious
+    ? `${payload.development}\n根拠が弱い状態では無理に勝負しません。`
+    : `${payload.development}\n私はこの展開を本線で見てるかもかも❤️`;
+  const reasonLines = (payload.reasons || []).slice(0, paid ? 5 : 3).map((reason) => serious
+    ? `・${reason}`
+    : `・${String(reason).replace(/[。.!！?？]+$/, "")}。ここを評価してるよ❤️`);
   const commonLines = [
     `【水面ベタ子｜note ${paid ? "有料会員版" : "無料版"}】`,
-    `${date} ${payload.venue}${payload.race}R`, "",
+    `${date} ${payload.venue}${payload.race}R`, opening, "",
     `【現在判断】${payload.judgement}`,
-    `期待度指数 ${payload.score ?? "--"}／一致度 ${payload.agreement ?? "--"}%／データ取得率 ${payload.dataRate ?? "--"}%`, "",
-    "【展開予想】", payload.development, "",
+    `期待度指数 ${payload.score ?? "--"}／一致度 ${payload.agreement ?? "--"}%／データ取得率 ${payload.dataRate ?? "--"}%`,
+    serious ? "数字と展示内容を確認し、慎重に判断しています。" : "数字だけじゃなく、展示の気配まで私がしっかり見たよ❤️", "",
+    "【展開予想】", development, "",
     "【進入・展示】",
     `進入順 ${startOrder || "未確認"}${payload.entryChanged ? "（前付け・進入変化あり）" : "（枠なり）"}`,
-    `展示最速 ${fastest ? `${fastest.boat}号艇 ${Number(fastest.time).toFixed(2)}` : "未確認"}／ST展示トップ ${bestSt ? `${bestSt.boat}号艇 ${Number(bestSt.st).toFixed(2)}` : "未確認"}`, "",
-    "【根拠】", ...(payload.reasons || []).slice(0, paid ? 5 : 3).map((reason) => `・${reason}`), "",
+    `展示最速 ${fastest ? `${fastest.boat}号艇 ${Number(fastest.time).toFixed(2)}` : "未確認"}／ST展示トップ ${bestSt ? `${bestSt.boat}号艇 ${Number(bestSt.st).toFixed(2)}` : "未確認"}`,
+    serious ? "進入や展示に不確定要素がある場合は見送ります。" : "進入とスリットの変化も見逃してないかもかも❤️", "",
+    "【私が見た根拠】", ...reasonLines, "",
   ];
   const memberLines = paid ? [
-    "【買い目】", ...formationCopyLines("本線", payload.main), ...formationCopyLines("押さえ", payload.cover),
-    `ドラ：${doraText}`, `通常配分：${regularText}`, `資金判定：${doraPlan.status}｜${doraPlan.reason}`, "",
-    "【会員情報】本線・押さえ・ドラ・資金配分はオッズ更新時に再計算します。", "",
+    serious ? "【買い目・資金配分】条件を満たしていないため、購入は推奨しません。" : "【有料会員さん用｜私の買い目と資金配分】",
+    ...formationCopyLines("本線", payload.main), ...formationCopyLines("押さえ", payload.cover),
+    `ドラ：${doraText}`, `通常配分：${regularText}`, `資金判定：${doraPlan.status}｜${doraPlan.reason}`,
+    serious ? "オッズと条件が改善するまでは購入しないでください。" : "ガミらないように配分して、ドラ2点で高回収を狙うかもかも❤️", "",
+    "【会員情報】本線・押さえ・ドラ・資金配分は、直前オッズで再計算します。", "",
   ] : [
     "【無料公開範囲】",
-    "展開・進入・展示評価まで公開。具体的な本線6点・押さえ6点・ドラ2点・資金配分は有料会員版に掲載します。", "",
+    serious
+      ? "展開・進入・展示評価まで公開します。条件が整うまでは具体的な買い目を出しません。"
+      : "無料版は展開・進入・展示評価までだよ。本線6点・押さえ6点・ドラ2点・資金配分は有料会員版で公開するかもかも❤️", "",
   ];
   return [
     ...commonLines, ...memberLines,
-    "【無効条件】", payload.invalidConditions, "",
+    "【無効条件】", payload.invalidConditions || "直前オッズ・進入・展示気配が想定から変わった場合", "",
+    serious ? "今回は慎重に判断してください。無理な購入はおすすめしません。" : "条件が崩れたら無理しないでね。次のアっチッチを一緒に待つよ❤️", "",
     "※検証中の分析情報です。的中・利益を保証しません。オッズ急変時は買い目と資金配分を再計算します。",
   ].join("\n");
 }
