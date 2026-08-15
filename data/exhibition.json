@@ -1,6 +1,6 @@
 {
   "race_date": "2026-08-15",
-  "updated_at": "2026-08-15 20:00 JST",
+  "updated_at": "2026-08-15 20:07 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -25330,175 +25330,193 @@
       "venue": "住之江",
       "venue_id": "12",
       "race": 11,
-      "status": "WAIT",
-      "message": "6艇の展示タイム・進入・STが揃うまで朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-2-3",
+      "final_pick": "1-2-3",
+      "final_score": 63.2,
+      "reasons": [
+        "展示最速は3号艇 6.84",
+        "風速1m・波高0cm・天候曇り",
+        "朝の能力評価に展示順位・ST展示順位・実際の進入コースを加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
-            "pick": "2-1-3",
-            "odds": 41.1,
-            "model_probability": 6.13,
-            "market_probability": 2.43,
-            "net_edge": 1.7
-          },
-          {
             "pick": "1-6-2",
-            "odds": 45.1,
-            "model_probability": 4.4,
-            "market_probability": 2.22,
-            "net_edge": 0.18
-          },
-          {
-            "pick": "1-6-3",
-            "odds": 189.4,
-            "model_probability": 2.49,
-            "market_probability": 0.53,
-            "net_edge": -0.04
+            "odds": 40.9,
+            "model_probability": 4.29,
+            "market_probability": 2.44,
+            "net_edge": -0.15
           },
           {
             "pick": "2-1-6",
-            "odds": 86.1,
-            "model_probability": 2.96,
-            "market_probability": 1.16,
-            "net_edge": -0.2
+            "odds": 79.2,
+            "model_probability": 3.05,
+            "market_probability": 1.26,
+            "net_edge": -0.21
           },
           {
-            "pick": "1-3-2",
-            "odds": 10.7,
-            "model_probability": 10.77,
-            "market_probability": 9.35,
-            "net_edge": -0.58
+            "pick": "1-6-3",
+            "odds": 39.3,
+            "model_probability": 3.5,
+            "market_probability": 2.54,
+            "net_edge": -1.04
           },
           {
-            "pick": "1-2-6",
-            "odds": 16.9,
-            "model_probability": 7.17,
-            "market_probability": 5.92,
-            "net_edge": -0.75
+            "pick": "2-1-3",
+            "odds": 28.2,
+            "model_probability": 4.18,
+            "market_probability": 3.55,
+            "net_edge": -1.37
+          },
+          {
+            "pick": "3-1-2",
+            "odds": 26.5,
+            "model_probability": 3.69,
+            "market_probability": 3.77,
+            "net_edge": -2.08
+          },
+          {
+            "pick": "3-1-6",
+            "odds": 39.8,
+            "model_probability": 2.19,
+            "market_probability": 2.51,
+            "net_edge": -2.32
           }
         ],
         "cover": [
           {
+            "pick": "1-2-6",
+            "odds": 12.9,
+            "model_probability": 5.18,
+            "market_probability": 7.75,
+            "net_edge": -4.57
+          },
+          {
             "pick": "1-2-5",
-            "odds": 26.3,
-            "model_probability": 5.05,
-            "market_probability": 3.8,
-            "net_edge": -0.75
-          },
-          {
-            "pick": "3-1-2",
-            "odds": 31.5,
-            "model_probability": 4.11,
-            "market_probability": 3.17,
-            "net_edge": -1.06
-          },
-          {
-            "pick": "3-1-6",
-            "odds": 157.8,
-            "model_probability": 1.12,
-            "market_probability": 0.63,
-            "net_edge": -1.51
+            "odds": 14.7,
+            "model_probability": 2.76,
+            "market_probability": 6.8,
+            "net_edge": -6.04
           },
           {
             "pick": "1-3-6",
-            "odds": 25.6,
-            "model_probability": 2.94,
-            "market_probability": 3.91,
-            "net_edge": -2.97
-          },
-          {
-            "pick": "1-2-3",
-            "odds": 5.7,
-            "model_probability": 14.82,
-            "market_probability": 17.54,
-            "net_edge": -4.72
+            "odds": 10.8,
+            "model_probability": 3.86,
+            "market_probability": 9.26,
+            "net_edge": -7.4
           },
           {
             "pick": "1-3-5",
-            "odds": 3.7,
-            "model_probability": 2.07,
-            "market_probability": 27.03,
-            "net_edge": -26.96
+            "odds": 11.0,
+            "model_probability": 2.06,
+            "market_probability": 9.09,
+            "net_edge": -9.03
+          },
+          {
+            "pick": "1-3-2",
+            "odds": 5.7,
+            "model_probability": 6.49,
+            "market_probability": 17.54,
+            "net_edge": -13.05
+          },
+          {
+            "pick": "1-2-3",
+            "odds": 4.6,
+            "model_probability": 7.1,
+            "market_probability": 21.74,
+            "net_edge": -16.64
           }
         ],
         "ranked_by_edge": true
       },
-      "best_value_pick": "2-1-3",
-      "value": {
-        "status": "WATCH",
-        "odds": 41.1,
-        "model_probability": 6.13,
-        "market_probability": 2.43,
-        "net_edge": 1.7,
-        "deadline": "20:08",
-        "remaining_minutes": 671.9,
-        "message": "安全余白控除後の優位性が基準未満のため見送り",
-        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=12&hd=20260815&rno=11"
-      },
+      "best_value_pick": "1-6-2",
+      "weather": "曇り",
+      "wind_speed": 1.0,
+      "wave_height": 0,
+      "start_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "exhibition": [
         {
           "boat": 1,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 1,
+          "time": 6.87,
+          "tilt": -0.5,
+          "weight": 52.0,
+          "st": "F.01",
+          "time_rank": 3,
+          "st_rank": 1
         },
         {
           "boat": 2,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 2,
+          "time": 6.91,
+          "tilt": -0.5,
+          "weight": 52.0,
+          "st": ".04",
+          "time_rank": 4,
+          "st_rank": 2
         },
         {
           "boat": 3,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 3,
+          "time": 6.84,
+          "tilt": 0.0,
+          "weight": 52.0,
+          "st": ".07",
+          "time_rank": 1,
+          "st_rank": 5
         },
         {
           "boat": 4,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 4,
+          "time": 6.92,
+          "tilt": -0.5,
+          "weight": 52.0,
+          "st": ".08",
+          "time_rank": 5,
+          "st_rank": 6
         },
         {
           "boat": 5,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 5,
+          "time": 6.95,
+          "tilt": -0.5,
+          "weight": 53.4,
+          "st": ".04",
+          "time_rank": 6,
+          "st_rank": 3
         },
         {
           "boat": 6,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 6,
+          "time": 6.85,
+          "tilt": -0.5,
+          "weight": 52.0,
+          "st": ".04",
+          "time_rank": 2,
+          "st_rank": 4
         }
       ],
-      "fetched_at": "2026-08-15T08:56:08+09:00",
+      "value": {
+        "status": "WATCH",
+        "odds": 40.9,
+        "model_probability": 4.29,
+        "market_probability": 2.44,
+        "net_edge": -0.15,
+        "deadline": "20:08",
+        "remaining_minutes": 0.0,
+        "message": "締切5分前を過ぎたため新規判定を停止",
+        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=12&hd=20260815&rno=11"
+      },
+      "fetched_at": "2026-08-15T20:07:57+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=12&hd=20260815&rno=11"
     },
     {
@@ -41024,15 +41042,15 @@
       "boat": 2,
       "name": "木下 翔太",
       "formation": "1-2-流し",
-      "time_rank": null,
+      "time_rank": 4,
       "deadline": "20:08",
-      "remaining_minutes": 671.9,
-      "status": "WAIT",
-      "min_odds": null,
-      "model_probability": null,
-      "market_probability": null,
-      "net_edge": null,
-      "message": "候補艇の展示データ待ち"
+      "remaining_minutes": 0.0,
+      "status": "WATCH",
+      "min_odds": 4.6,
+      "model_probability": 30.3,
+      "market_probability": 86.96,
+      "net_edge": -58.66,
+      "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
       "venue": "住之江",
