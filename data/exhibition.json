@@ -8414,89 +8414,89 @@
         "main": [
           {
             "pick": "1-5-2",
-            "odds": 25.5,
+            "odds": 25.2,
             "model_probability": 6.27,
-            "market_probability": 3.92,
-            "net_edge": 0.35
+            "market_probability": 3.97,
+            "net_edge": 0.3
           },
           {
             "pick": "1-2-5",
-            "odds": 26.9,
+            "odds": 24.4,
             "model_probability": 5.74,
-            "market_probability": 3.72,
-            "net_edge": 0.02
-          },
-          {
-            "pick": "2-1-5",
-            "odds": 56.7,
-            "model_probability": 3.05,
-            "market_probability": 1.76,
-            "net_edge": -0.71
+            "market_probability": 4.1,
+            "net_edge": -0.36
           },
           {
             "pick": "1-3-2",
-            "odds": 36.3,
+            "odds": 35.7,
             "model_probability": 3.93,
-            "market_probability": 2.75,
-            "net_edge": -0.82
-          },
-          {
-            "pick": "5-1-2",
-            "odds": 43.0,
-            "model_probability": 3.46,
-            "market_probability": 2.33,
+            "market_probability": 2.8,
             "net_edge": -0.87
           },
           {
+            "pick": "5-1-2",
+            "odds": 40.8,
+            "model_probability": 3.46,
+            "market_probability": 2.45,
+            "net_edge": -0.99
+          },
+          {
+            "pick": "2-1-5",
+            "odds": 48.7,
+            "model_probability": 3.05,
+            "market_probability": 2.05,
+            "net_edge": -1.0
+          },
+          {
             "pick": "1-2-3",
-            "odds": 31.2,
+            "odds": 30.5,
             "model_probability": 4.08,
-            "market_probability": 3.21,
-            "net_edge": -1.13
+            "market_probability": 3.28,
+            "net_edge": -1.2
           }
         ],
         "cover": [
           {
             "pick": "1-2-6",
-            "odds": 66.3,
+            "odds": 62.1,
             "model_probability": 2.31,
-            "market_probability": 1.51,
-            "net_edge": -1.2
+            "market_probability": 1.61,
+            "net_edge": -1.3
           },
           {
             "pick": "2-1-3",
-            "odds": 64.1,
+            "odds": 59.8,
             "model_probability": 2.17,
-            "market_probability": 1.56,
-            "net_edge": -1.39
-          },
-          {
-            "pick": "1-5-3",
-            "odds": 18.6,
-            "model_probability": 5.59,
-            "market_probability": 5.38,
-            "net_edge": -1.79
+            "market_probability": 1.67,
+            "net_edge": -1.5
           },
           {
             "pick": "5-1-3",
-            "odds": 32.1,
+            "odds": 30.5,
             "model_probability": 3.08,
-            "market_probability": 3.12,
-            "net_edge": -2.04
+            "market_probability": 3.28,
+            "net_edge": -2.2
+          },
+          {
+            "pick": "1-5-3",
+            "odds": 16.9,
+            "model_probability": 5.59,
+            "market_probability": 5.92,
+            "net_edge": -2.33
           },
           {
             "pick": "1-5-6",
-            "odds": 24.1,
+            "odds": 24.6,
             "model_probability": 3.16,
-            "market_probability": 4.15,
-            "net_edge": -2.99
+            "market_probability": 4.07,
+            "net_edge": -2.91
           },
           {
             "pick": "1-3-5",
-            "odds": 15.7,
+            "odds": 15.2,
             "model_probability": 4.93,
-            "market_probability": 6.37,
-            "net_edge": -3.44
+            "market_probability": 6.58,
+            "net_edge": -3.65
           }
         ],
         "ranked_by_edge": true
@@ -8504,13 +8504,13 @@
       "best_value_pick": "1-5-2",
       "value": {
         "status": "WATCH",
-        "odds": 25.5,
+        "odds": 25.2,
         "model_probability": 6.27,
-        "market_probability": 3.92,
-        "net_edge": 0.35,
+        "market_probability": 3.97,
+        "net_edge": 0.3,
         "deadline": "11:31",
-        "remaining_minutes": 6.1,
-        "message": "安全余白控除後の優位性が基準未満のため見送り",
+        "remaining_minutes": 3.7,
+        "message": "締切5分前を過ぎたため新規判定を停止",
         "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=06&hd=20260816&rno=1"
       },
       "exhibition": [
@@ -8575,7 +8575,7 @@
           "st_rank": 4
         }
       ],
-      "fetched_at": "2026-08-16T11:24:54+09:00",
+      "fetched_at": "2026-08-16T11:27:17+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=06&hd=20260816&rno=1"
     },
     {
@@ -34629,13 +34629,13 @@
       "formation": "1-5-流し",
       "time_rank": 5,
       "deadline": "11:31",
-      "remaining_minutes": 6.1,
+      "remaining_minutes": 3.7,
       "status": "WATCH",
-      "min_odds": 18.6,
+      "min_odds": 16.9,
       "model_probability": 16.87,
-      "market_probability": 21.51,
-      "net_edge": -6.64,
-      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
+      "market_probability": 23.67,
+      "net_edge": -8.8,
+      "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
       "venue": "浜名湖",
