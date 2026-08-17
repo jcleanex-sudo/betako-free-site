@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+from itertools import permutations
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -13,6 +14,18 @@ ROOT = Path(__file__).resolve().parents[1]
 PREDICTIONS = ROOT / "data" / "predictions.json"
 OUTPUT = ROOT / "data" / "exhibition.json"
 MAX_WORKERS = max(1, min(4, int(os.environ.get("BOATRACE_EXHIBITION_WORKERS", "4"))))
+
+MARKET_LABELS = {
+    "single": "単勝", "exacta": "2連単", "quinella": "2連複",
+    "trio": "3連複", "trifecta": "3連単",
+}
+MARKET_RULES = {
+    "single": {"margin": 2.0, "min_edge": 3.0, "min_probability": 25.0},
+    "exacta": {"margin": 2.5, "min_edge": 5.0, "min_probability": 12.0},
+    "quinella": {"margin": 2.0, "min_edge": 4.0, "min_probability": 22.0},
+    "trio": {"margin": 2.5, "min_edge": 4.0, "min_probability": 15.0},
+    "trifecta": {"margin": 3.0, "min_edge": 5.0, "min_probability": 5.0},
+}
 
 
 def ordered_trifecta_probability(contenders, pick):
@@ -30,6 +43,89 @@ def ordered_trifecta_probability(contenders, pick):
         if remaining_total <= 0:
             break
     return round(max(0.0, min(1.0, probability)) * 100, 2)
+
+
+def ordered_finish_probability(contenders, boats):
+    weights = {str(item["boat"]): max(0.1, float(item["relative_win_probability"])) for item in contenders}
+    if not boats or any(boat not in weights for boat in boats) or len(set(boats)) != len(boats):
+        return None
+    remaining = sum(weights.values())
+    probability = 1.0
+    for boat in boats:
+        probability *= weights[boat] / remaining
+        remaining -= weights[boat]
+    return probability * 100
+
+
+def market_probability(contenders, market, pick):
+    boats = str(pick).split("-")
+    if market == "single":
+        return ordered_finish_probability(contenders, boats)
+    if market in ("exacta", "trifecta"):
+        return ordered_finish_probability(contenders, boats)
+    if market in ("quinella", "trio"):
+        values = [ordered_finish_probability(contenders, order) for order in permutations(boats)]
+        return sum(value for value in values if value is not None)
+    return None
+
+
+def remaining_minutes(odds_payload):
+    deadline = odds_payload.get("deadline")
+    if not deadline:
+        return deadline, None
+    try:
+        deadline_at = datetime.combine(datetime.now(JST).date(), datetime.strptime(deadline, "%H:%M").time(), JST)
+        return deadline, round((deadline_at - datetime.now(JST)).total_seconds() / 60, 1)
+    except ValueError:
+        return None, None
+
+
+def compare_markets(contenders, realtime):
+    payload = realtime.get("odds") or {}
+    deadline, minutes = remaining_minutes(payload)
+    markets = payload.get("markets") or {}
+    if payload.get("status") != "OK" or set(markets) != set(MARKET_LABELS) or minutes is None:
+        return {
+            "status": "DATA BLOCKED", "bet_type": None, "bet_type_label": None,
+            "pick": None, "odds": None, "model_probability": None,
+            "market_probability": None, "net_edge": None, "expected_profit_yen": None,
+            "deadline": deadline, "remaining_minutes": minutes,
+            "message": "5券種の展示後オッズが100%揃っていないため予想停止",
+            "ranking": [], "data_rate": 0,
+        }
+
+    rows = []
+    for market, odds_map in markets.items():
+        rule = MARKET_RULES[market]
+        for pick, odds in odds_map.items():
+            probability = market_probability(contenders, market, pick)
+            if probability is None or not odds or odds <= 1:
+                continue
+            implied = 100 / float(odds)
+            edge = probability - implied - rule["margin"]
+            expected_profit = probability / 100 * float(odds) * 100 - 100
+            qualifies = probability >= rule["min_probability"] and edge >= rule["min_edge"] and expected_profit > 0
+            rows.append({
+                "bet_type": market, "bet_type_label": MARKET_LABELS[market], "pick": pick,
+                "odds": round(float(odds), 1), "model_probability": round(probability, 2),
+                "market_probability": round(implied, 2), "net_edge": round(edge, 2),
+                "expected_profit_yen": round(expected_profit), "qualifies": qualifies,
+            })
+    qualified = [row for row in rows if row["qualifies"]]
+    qualified.sort(key=lambda row: (row["expected_profit_yen"], row["net_edge"], row["model_probability"]), reverse=True)
+    fallback = sorted(rows, key=lambda row: (row["net_edge"], row["model_probability"]), reverse=True)
+    best = (qualified or fallback or [None])[0]
+    if not best:
+        return {"status": "DATA BLOCKED", "message": "有効なオッズなし", "ranking": [], "data_rate": 100}
+    status = "UP" if qualified and minutes >= 5 else "WATCH"
+    message = "期待値・的中確率の両基準を通過" if status == "UP" else "期待値基準未満のため見送り"
+    if minutes < 5:
+        message = "締切5分前を過ぎたため新規判定を停止"
+    return {
+        **best, "status": status, "deadline": deadline, "remaining_minutes": minutes,
+        "message": message, "ranking": (qualified or fallback)[:6], "data_rate": 100,
+        "source_urls": payload.get("source_urls", {}),
+    }
 
 
 def value_judgement(contenders, pick, realtime):
@@ -252,13 +348,14 @@ def final_prediction(prediction, realtime):
         reasons.insert(1, f"進入変化 {'-'.join(map(str, start_order))}（前付け反映）")
     adjusted_contenders = [item[0] for item in adjusted]
     plan = ticket_plan(adjusted_contenders, final_pick, realtime)
-    value_pick = plan["main"][0]["pick"] if plan["main"] else final_pick
-    value = value_judgement(adjusted_contenders, value_pick, realtime)
+    value = compare_markets(adjusted_contenders, realtime)
+    value_pick = value.get("pick") or (plan["main"][0]["pick"] if plan["main"] else final_pick)
     return {
         "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
         "status": "FINAL", "message": "展示後再計算済み", "morning_pick": prediction["pick"],
         "final_pick": final_pick, "final_score": round(final_score, 1), "reasons": reasons,
         "ticket_plan": plan, "best_value_pick": value_pick,
+        "market_comparison": value.get("ranking", []),
         "weather": realtime.get("weather"), "wind_speed": wind, "wave_height": wave,
         "start_order": start_order,
         "exhibition": realtime.get("exhibition", []),

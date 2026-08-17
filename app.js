@@ -362,6 +362,33 @@ function renderExhibitionTimes(finalData, finalMode) {
     : "";
 }
 
+function renderMarketComparison(finalData, finalReady) {
+  const panel = document.querySelector("#marketComparison");
+  const rows = Array.isArray(finalData?.market_comparison) ? finalData.market_comparison : [];
+  panel.hidden = !finalReady;
+  if (!finalReady) {
+    panel.replaceChildren();
+    return;
+  }
+  const value = finalData?.value || {};
+  const heading = document.createElement("div");
+  heading.className = "marketComparisonHead";
+  heading.innerHTML = `<b>5券種 期待値ランキング</b><span>公式オッズ取得率 ${Number(value.data_rate || 0)}%</span>`;
+  const list = document.createElement("div");
+  list.className = "marketComparisonList";
+  if (!rows.length) {
+    list.textContent = "DATA BLOCKED：5券種のオッズが揃うまで予想を出しません。";
+  } else {
+    rows.slice(0, 6).forEach((row, index) => {
+      const item = document.createElement("div");
+      item.className = `marketRow ${index === 0 ? "best" : ""}`;
+      item.innerHTML = `<strong>${index + 1}</strong><b>${escapeHtml(row.bet_type_label)} ${escapeHtml(row.pick)}</b><span>${Number(row.odds).toFixed(1)}倍</span><small>的中推定 ${Number(row.model_probability).toFixed(1)}%｜net edge ${Number(row.net_edge).toFixed(1)}%｜100円期待損益 ${Number(row.expected_profit_yen) >= 0 ? "+" : ""}${Number(row.expected_profit_yen)}円</small>`;
+      list.append(item);
+    });
+  }
+  panel.replaceChildren(heading, list);
+}
+
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const venue = venueSelect.value;
@@ -379,6 +406,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     : null;
   const finalReady = finalMode && finalData?.status === "FINAL";
   renderExhibitionTimes(finalData, finalMode);
+  renderMarketComparison(finalData, finalReady);
   const exhibitionBadge = document.querySelector("#exhibitionBadge");
   exhibitionBadge.hidden = !finalMode || finalReady;
   exhibitionBadge.textContent = "展示前";
@@ -423,7 +451,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   document.querySelector("#predictionDetail").textContent = referenceBlocked
     ? `参考データ取得率 ${Number(match.data_rate).toFixed(1)}%｜100%未満のため買い目を生成しません`
     : finalReady
-      ? `期待値最上位 ${finalData.best_value_pick || finalData.final_pick}｜3連単オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜残り ${liveRemaining == null ? "--" : `${Math.max(0, liveRemaining).toFixed(0)}分`}｜判定 ${valueStatus}`
+      ? `期待値最上位 ${value?.bet_type_label || "券種未確定"} ${finalData.best_value_pick || finalData.final_pick}｜オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜的中推定 ${value?.model_probability == null ? "--" : `${value.model_probability}%`}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜残り ${liveRemaining == null ? "--" : `${Math.max(0, liveRemaining).toFixed(0)}分`}｜判定 ${valueStatus}`
     : match
       ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
     : dateMatches
@@ -448,7 +476,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   document.querySelector("#invalidConditions").textContent = finalReady
     ? `期待値判定：${valueMessage || "オッズ未公開のため判定なし"}｜無効条件：締切5分未満、オッズ急変、展示データ欠損、公式情報取得失敗`
     : finalMode && !finalReady
-    ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}｜締切 ${value?.deadline || "未取得"}｜期待値判定 ${valueStatus}：${valueMessage || "3連単オッズ未公開"}`
+    ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}｜締切 ${value?.deadline || "未取得"}｜期待値判定 ${valueStatus}：${valueMessage || "5券種オッズ未公開"}`
     : match
       ? `無効条件：${(match.invalid_conditions || []).join("／")}`
     : `見送り条件：${dateMatches ? "公式データの取得失敗" : "選択日が本日ではない"}`;

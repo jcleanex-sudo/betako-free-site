@@ -190,6 +190,10 @@ def _parse_exhibition_table(soup):
         rows = table.find_all("tr")
         for row in rows:
             cells = [cell.get_text(" ", strip=True) for cell in row.find_all(["td", "th"])]
+            # Nested maintenance tables also contain bare numbers. Only the
+            # six racer rows have the fixed six-column prefix below.
+            if len(cells) < 6:
+                continue
             boat = safe_int(cells[0] if cells else None)
             if not boat or not (1 <= boat <= 6):
                 continue
@@ -269,6 +273,68 @@ def _parse_trifecta_odds(soup):
     return odds
 
 
+def _odds_tables(soup):
+    return [table for table in soup.select("table") if table.select(".oddsPoint")]
+
+
+def _parse_single_odds(soup):
+    tables = _odds_tables(soup)
+    if not tables:
+        return {}
+    odds = {}
+    for row in tables[0].select("tr")[1:]:
+        cells = row.select(":scope > th, :scope > td")
+        if len(cells) < 3:
+            continue
+        boat = safe_int(cells[0].get_text(" ", strip=True))
+        value = safe_float(cells[-1].get_text(" ", strip=True))
+        if boat in range(1, 7) and value and value > 1:
+            odds[str(boat)] = value
+    return odds
+
+
+def _parse_pair_table(table, unordered=False):
+    """Parse the official 6-column exacta/quinella matrix."""
+    odds = {}
+    for row in table.select("tr")[1:]:
+        cells = row.select(":scope > th, :scope > td")
+        for first_index in range(6):
+            pair = cells[first_index * 2:first_index * 2 + 2]
+            if len(pair) != 2:
+                continue
+            second = safe_int(pair[0].get_text(" ", strip=True))
+            value = safe_float(pair[1].get_text(" ", strip=True))
+            first = first_index + 1
+            if second not in range(1, 7) or second == first or not value or value <= 1:
+                continue
+            boats = sorted((first, second)) if unordered else (first, second)
+            odds["-".join(map(str, boats))] = value
+    return odds
+
+
+def _parse_trio_odds(soup):
+    tables = _odds_tables(soup)
+    if not tables:
+        return {}
+    # Official table is a triangular matrix. Its DOM order is stable:
+    # second=2..5, third=second+1..6, first=1..second-1.
+    combinations = [
+        f"{first}-{second}-{third}"
+        for second in range(2, 6)
+        for third in range(second + 1, 7)
+        for first in range(1, second)
+    ]
+    points = tables[0].select(".oddsPoint")
+    if len(points) != len(combinations):
+        return {}
+    odds = {}
+    for combination, point in zip(combinations, points):
+        value = safe_float(point.get_text(" ", strip=True))
+        if value and value > 1:
+            odds[combination] = value
+    return odds
+
+
 def _parse_deadline(soup, race_number):
     for row in soup.select("table tr"):
         text = row.get_text(" ", strip=True)
@@ -305,6 +371,61 @@ def fetch_trifecta_odds(stadium_id: str, race_number: int, race_date: str) -> di
         }
 
 
+def fetch_all_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
+    """Fetch all five requested markets only after exhibition is available."""
+    stadium_id = str(stadium_id).zfill(2)
+    race_number = int(race_number)
+    race_date_compact = normalize_race_date(race_date)
+    params = {"jcd": stadium_id, "hd": race_date_compact, "rno": race_number}
+    market_specs = {
+        "single": ("/oddstf", lambda soup: _parse_single_odds(soup), 6),
+        "exacta": ("/odds2tf", None, 30),
+        "quinella": ("/odds2tf", None, 15),
+        "trio": ("/odds3f", lambda soup: _parse_trio_odds(soup), 20),
+        "trifecta": ("/odds3t", lambda soup: _parse_trifecta_odds(soup), 120),
+    }
+    soups = {}
+    sources = {}
+    errors = {}
+    deadline = None
+    for path in ("/oddstf", "/odds2tf", "/odds3f", "/odds3t"):
+        sources[path] = f"{BASE_URL}{path}?jcd={stadium_id}&hd={race_date_compact}&rno={race_number}"
+        try:
+            soup = BeautifulSoup(_fetch_html(path, params), "lxml")
+            soups[path] = soup
+            deadline = deadline or _parse_deadline(soup, race_number)
+        except Exception as exc:
+            errors[path] = str(exc)
+    markets = {}
+    counts = {}
+    for name, (path, parser, expected) in market_specs.items():
+        soup = soups.get(path)
+        if soup is None:
+            markets[name] = {}
+        elif name == "exacta":
+            tables = _odds_tables(soup)
+            markets[name] = _parse_pair_table(tables[0]) if tables else {}
+        elif name == "quinella":
+            tables = _odds_tables(soup)
+            markets[name] = _parse_pair_table(tables[1], unordered=True) if len(tables) > 1 else {}
+        else:
+            markets[name] = parser(soup)
+        counts[name] = len(markets[name])
+        if counts[name] != expected:
+            errors[name] = f"expected {expected}, got {counts[name]}"
+    complete = not errors and bool(deadline)
+    return {
+        "status": "OK" if complete else "DATA BLOCKED",
+        "markets": markets,
+        # Backward compatibility for the existing 3連単 formation UI.
+        "odds": markets.get("trifecta", {}),
+        "counts": counts,
+        "deadline": deadline,
+        "fetched_at": datetime.now(JST).isoformat(timespec="seconds"),
+        "source_url": sources["/odds3t"],
+        "source_urls": sources,
+        "errors": errors,
+    }
 def evaluate_exhibition(realtime):
     exhibition = realtime.get("exhibition") or []
     valid_times = [item for item in exhibition if item.get("time") is not None]
@@ -396,7 +517,7 @@ def fetch_exhibition(stadium_id: str, race_number: int, race_date: str) -> dict:
         exhibition = add_exhibition_ranks(_parse_exhibition_table(soup))
         # 展示がまだ公開されていないレースの120通りオッズ取得は省略する。
         # 全レース巡回時の公式サイト負荷を抑え、展示公開後だけ期待値を計算する。
-        odds = fetch_trifecta_odds(stadium_id, race_number, race_date_compact) if len(exhibition) >= 4 else None
+        odds = fetch_all_odds(stadium_id, race_number, race_date_compact) if len(exhibition) == 6 else None
         realtime = {
             "stadium_id": stadium_id,
             "stadium_name": STADIUM_NAMES.get(stadium_id, f"場{stadium_id}"),
