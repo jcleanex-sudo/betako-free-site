@@ -183,6 +183,14 @@ function formationCopyLines(label, tickets) {
   });
 }
 
+function portfolioCopyLines(portfolio = {}) {
+  const labels = { trio: "3連複", exacta: "2連単", quinella: "2連複" };
+  return Object.entries(labels).map(([market, label]) => {
+    const picks = (portfolio[market] || []).map(ticketText).filter((pick) => pick !== "--");
+    return picks.length ? `${label}:${picks.join("・")}(${picks.length}点)` : null;
+  }).filter(Boolean);
+}
+
 function buildDevelopmentPrediction(leadingPick, reasons = [], finalReady = false) {
   const boats = String(leadingPick || "").split("-").filter(Boolean);
   if (boats.length < 3) return "データ不足のため展開を確定できません。見送り対象です。";
@@ -194,10 +202,11 @@ function buildDevelopmentPrediction(leadingPick, reasons = [], finalReady = fals
 
 function buildManualCopyText(payload) {
   const date = String(payload.date || "").replaceAll("-", "/");
+  const fixedPortfolio = payload.portfolio && Object.keys(payload.portfolio).length;
   const fixedLines = [
     `${date} ${payload.venue}${payload.race}R`,
-    ...formationCopyLines("本線", payload.main),
-    ...formationCopyLines("押さえ", payload.cover),
+    ...formationCopyLines(fixedPortfolio ? "3連単" : "本線", payload.main),
+    ...(fixedPortfolio ? portfolioCopyLines(payload.portfolio) : formationCopyLines("押さえ", payload.cover)),
     "※検証中・的中利益保証なし",
   ];
   const maxJapaneseCharacters = 140;
@@ -234,7 +243,13 @@ function buildNoGamiDoraPlan(main = [], cover = []) {
 function buildNoteDraft(payload, paid = false) {
   const date = String(payload.date || "").replaceAll("-", "/");
   const serious = ["WATCH", "DATA BLOCKED"].includes(payload.judgement);
-  const doraPlan = buildNoGamiDoraPlan(payload.main, payload.cover);
+  const fixedPortfolio = payload.portfolio && Object.keys(payload.portfolio).length;
+  const portfolioTickets = fixedPortfolio
+    ? ["trio", "exacta", "quinella"].flatMap((market) => payload.portfolio[market] || [])
+    : [];
+  const doraPlan = fixedPortfolio
+    ? { status: "FIXED", reason: "固定13点・各100円", dora: [], stakes: [] }
+    : buildNoGamiDoraPlan(payload.main, payload.cover);
   const startOrder = (payload.exhibition || []).slice()
     .sort((a, b) => (Number(a.course) || Number(a.boat)) - (Number(b.course) || Number(b.boat)))
     .map((item) => item.boat).join("-");
@@ -245,7 +260,9 @@ function buildNoteDraft(payload, paid = false) {
   const doraText = doraPlan.dora.length
     ? doraPlan.dora.map((ticket) => `${ticket.pick} 各1,000円（${ticket.odds.toFixed(1)}倍）`).join("／")
     : `設定なし（${doraPlan.reason}）`;
-  const regularText = doraPlan.stakes.length
+  const regularText = fixedPortfolio
+    ? [...payload.main, ...portfolioTickets].map((ticket) => `${ticketText(ticket)} 100円`).join("、")
+    : doraPlan.stakes.length
     ? doraPlan.stakes.filter((ticket) => ticket.stake === 100).map((ticket) => `${ticket.pick} 100円`).join("、")
     : [...payload.main, ...payload.cover].map((ticket) => `${ticketText(ticket)} 100円`).join("、");
   const opening = serious
@@ -274,8 +291,9 @@ function buildNoteDraft(payload, paid = false) {
   ];
   const memberLines = paid ? [
     serious ? "【買い目・資金配分】条件を満たしていないため、購入は推奨しません。" : "【有料会員さん用｜私の買い目と資金配分】",
-    ...formationCopyLines("本線", payload.main), ...formationCopyLines("押さえ", payload.cover),
-    `ドラ：${doraText}`, `通常配分：${regularText}`, `資金判定：${doraPlan.status}｜${doraPlan.reason}`,
+    ...formationCopyLines(fixedPortfolio ? "3連単" : "本線", payload.main),
+    ...(fixedPortfolio ? portfolioCopyLines(payload.portfolio) : formationCopyLines("押さえ", payload.cover)),
+    ...(fixedPortfolio ? [] : [`ドラ：${doraText}`]), `通常配分：${regularText}`, `資金判定：${doraPlan.status}｜${doraPlan.reason}`,
     serious ? "オッズと条件が改善するまでは購入しないでください。" : "ガミらないように配分して、ドラ2点で高回収を狙うかもかも❤️", "",
     "【会員情報】本線・押さえ・ドラ・資金配分は、直前オッズで再計算します。", "",
   ] : [
@@ -389,6 +407,31 @@ function renderMarketComparison(finalData, finalReady) {
   panel.replaceChildren(heading, list);
 }
 
+function renderFixedPortfolio(portfolio, finalReady) {
+  const panel = document.querySelector("#marketTicketPlan");
+  panel.hidden = !finalReady;
+  if (!finalReady) {
+    panel.replaceChildren();
+    return;
+  }
+  const definitions = [
+    ["trio", "3連複", 2], ["exacta", "2連単", 2], ["quinella", "2連複", 3],
+  ];
+  const heading = document.createElement("div");
+  heading.className = "marketTicketHead";
+  heading.innerHTML = "<b>固定13点プラン</b><span>3連単6＋3連複2＋2連単2＋2連複3</span>";
+  const groups = document.createElement("div");
+  groups.className = "marketTicketGroups";
+  definitions.forEach(([market, label, expected]) => {
+    const tickets = portfolio?.[market] || [];
+    const group = document.createElement("section");
+    const chips = tickets.map((ticket) => `<span class="${ticket.qualifies ? "qualified" : "reference"}">${escapeHtml(ticket.pick)} <small>${Number(ticket.odds).toFixed(1)}倍</small></span>`).join("");
+    group.innerHTML = `<b>${label} ${expected}点</b><div>${chips || '<span class="reference">DATA BLOCKED</span>'}</div>`;
+    groups.append(group);
+  });
+  panel.replaceChildren(heading, groups);
+}
+
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const venue = venueSelect.value;
@@ -407,6 +450,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const finalReady = finalMode && finalData?.status === "FINAL";
   renderExhibitionTimes(finalData, finalMode);
   renderMarketComparison(finalData, finalReady);
+  renderFixedPortfolio(finalData?.value?.portfolio, finalReady);
   const exhibitionBadge = document.querySelector("#exhibitionBadge");
   exhibitionBadge.hidden = !finalMode || finalReady;
   exhibitionBadge.textContent = "展示前";
@@ -434,8 +478,11 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const betPlan = referenceBlocked
     ? candidatePlan
     : finalMode && finalData?.ticket_plan ? finalData.ticket_plan : candidatePlan;
+  document.querySelector("#coverGroup").hidden = finalReady;
   document.querySelector("#mainLabel").textContent = referenceBlocked
     ? "予想停止（参考データ不足）"
+    : finalReady
+    ? "3連単 本線6点"
     : skipTarget
     ? "参考買い目6点（見送り）"
     : betPlan.ranked_by_edge ? "期待値上位6点" : "本線候補6点";
@@ -488,6 +535,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     mainLabel: document.querySelector("#mainLabel").textContent,
     main: betPlan.main || [],
     cover: betPlan.cover || [],
+    portfolio: value?.portfolio || null,
     detail: document.querySelector("#predictionDetail").textContent,
     invalidConditions: document.querySelector("#invalidConditions").textContent,
     finalReady,
@@ -845,6 +893,11 @@ function applyPerformancePayload(payload) {
   document.querySelector("#marketByType").textContent = Object.entries(marketLabels)
     .map(([key, label]) => `${label}${Number(payload.market_by_type?.[key]?.samples || 0)}件`)
     .join("｜");
+  const portfolio = payload.portfolio_summary || {};
+  document.querySelector("#portfolioSamples").textContent = `${Number(portfolio.samples || 0)}件`;
+  document.querySelector("#portfolioPerformance").textContent = Number(portfolio.samples || 0)
+    ? `${Number(portfolio.hit_rate || 0).toFixed(1)}% / ${Number(portfolio.net_profit_yen || 0).toLocaleString("ja-JP")}円`
+    : "集計開始待ち";
   const renderTier = (name, tier) => {
     const ci = tier.hit_rate_ci95 ? `${tier.hit_rate_ci95[0]}%—${tier.hit_rate_ci95[1]}%` : "--";
     document.querySelector(`#${name}Samples`).textContent = `${tier.samples || 0}件`;

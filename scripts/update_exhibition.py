@@ -26,6 +26,7 @@ MARKET_RULES = {
     "trio": {"margin": 2.5, "min_edge": 4.0, "min_probability": 15.0},
     "trifecta": {"margin": 3.0, "min_edge": 5.0, "min_probability": 5.0},
 }
+PORTFOLIO_COUNTS = {"trifecta": 6, "trio": 2, "exacta": 2, "quinella": 3}
 
 
 def ordered_trifecta_probability(contenders, pick):
@@ -91,7 +92,7 @@ def compare_markets(contenders, realtime):
             "market_probability": None, "net_edge": None, "expected_profit_yen": None,
             "deadline": deadline, "remaining_minutes": minutes,
             "message": "5券種の展示後オッズが100%揃っていないため予想停止",
-            "ranking": [], "data_rate": 0,
+            "ranking": [], "portfolio": {}, "portfolio_points": 0, "data_rate": 0,
         }
 
     rows = []
@@ -116,14 +117,24 @@ def compare_markets(contenders, realtime):
     fallback = sorted(rows, key=lambda row: (row["net_edge"], row["model_probability"]), reverse=True)
     best = (qualified or fallback or [None])[0]
     if not best:
-        return {"status": "DATA BLOCKED", "message": "有効なオッズなし", "ranking": [], "data_rate": 100}
+        return {"status": "DATA BLOCKED", "message": "有効なオッズなし", "ranking": [], "portfolio": {}, "portfolio_points": 0, "data_rate": 100}
+    portfolio = {}
+    for market, count in PORTFOLIO_COUNTS.items():
+        market_rows = [row for row in rows if row["bet_type"] == market]
+        market_rows.sort(
+            key=lambda row: (row["qualifies"], row["expected_profit_yen"], row["net_edge"], row["model_probability"]),
+            reverse=True,
+        )
+        portfolio[market] = market_rows[:count]
     status = "UP" if qualified and minutes >= 5 else "WATCH"
     message = "期待値・的中確率の両基準を通過" if status == "UP" else "期待値基準未満のため見送り"
     if minutes < 5:
         message = "締切5分前を過ぎたため新規判定を停止"
     return {
         **best, "status": status, "deadline": deadline, "remaining_minutes": minutes,
-        "message": message, "ranking": (qualified or fallback)[:6], "data_rate": 100,
+        "message": message, "ranking": (qualified or fallback)[:6],
+        "portfolio": portfolio, "portfolio_points": sum(len(items) for items in portfolio.values()),
+        "data_rate": 100,
         "source_urls": payload.get("source_urls", {}),
     }
 
@@ -349,6 +360,9 @@ def final_prediction(prediction, realtime):
     adjusted_contenders = [item[0] for item in adjusted]
     plan = ticket_plan(adjusted_contenders, final_pick, realtime)
     value = compare_markets(adjusted_contenders, realtime)
+    portfolio_trifecta = (value.get("portfolio") or {}).get("trifecta") or []
+    if len(portfolio_trifecta) == PORTFOLIO_COUNTS["trifecta"]:
+        plan = {"main": portfolio_trifecta, "cover": [], "ranked_by_edge": True}
     value_pick = value.get("pick") or (plan["main"][0]["pick"] if plan["main"] else final_pick)
     return {
         "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],

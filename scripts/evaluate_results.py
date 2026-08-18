@@ -23,6 +23,7 @@ RESULT_MARKETS = {
     "3連複": "trio", "3連単": "trifecta",
 }
 UNORDERED_MARKETS = {"quinella", "trio"}
+PORTFOLIO_COUNTS = {"trifecta": 6, "trio": 2, "exacta": 2, "quinella": 3}
 _RESULT_CACHE = {}
 VENUE_MIN_SAMPLES = 5
 VENUE_MIN_HIT_RATE = 30.0
@@ -219,6 +220,61 @@ def evaluate_market_recommendations(date: str, exhibition: dict, records: dict):
     return records
 
 
+def evaluate_fixed_portfolios(date: str, exhibition: dict, records: dict):
+    """Evaluate the fixed 13-ticket strategy as one 1,300-yen race portfolio."""
+    candidates = exhibition.get("recommendations") or exhibition.get("races", [])
+    for race_item in candidates:
+        value = race_item.get("value") or {}
+        portfolio = value.get("portfolio") or {}
+        if (
+            race_item.get("status") != "FINAL"
+            or value.get("status") != "UP"
+            or int(value.get("data_rate") or 0) != 100
+            or any(len(portfolio.get(market) or []) != count for market, count in PORTFOLIO_COUNTS.items())
+        ):
+            continue
+        venue_id = str(race_item.get("venue_id") or "").zfill(2)
+        race = int(race_item.get("race") or 0)
+        key = f"{date}-{venue_id}-{race}-fixed13"
+        if records.get(key, {}).get("evaluation_version") == MARKET_EVALUATION_VERSION:
+            continue
+        try:
+            result = fetch_all_results(date, venue_id, race)
+        except requests.RequestException as exc:
+            print(f"{key}: {exc}")
+            continue
+        if not result:
+            continue
+        ticket_results = []
+        payout = 0
+        for market, count in PORTFOLIO_COUNTS.items():
+            actual = result.get(market)
+            if not actual:
+                ticket_results = []
+                break
+            for ticket in portfolio[market][:count]:
+                predicted = normalize_result_pick(ticket.get("pick"), market)
+                hit = predicted == actual["pick"]
+                if hit:
+                    payout += int(actual["payout_yen"])
+                ticket_results.append({
+                    "bet_type": market, "predicted": predicted, "actual": actual["pick"],
+                    "hit": hit, "odds_at_prediction": ticket.get("odds"),
+                })
+        if len(ticket_results) != sum(PORTFOLIO_COUNTS.values()):
+            continue
+        stake = len(ticket_results) * 100
+        records[key] = {
+            "key": key, "venue_id": venue_id, "venue": race_item.get("venue"), "race": race,
+            "strategy": "fixed13", "tickets": ticket_results,
+            "hit": any(ticket["hit"] for ticket in ticket_results),
+            "hit_count": sum(ticket["hit"] for ticket in ticket_results),
+            "payout_yen": payout, "stake_yen": stake, "profit_yen": payout - stake,
+            "evaluation_version": MARKET_EVALUATION_VERSION,
+        }
+    return records
+
+
 def build_today_venue_performance(date: str, history: dict, previous: dict | None = None):
     """Evaluate completed all-race predictions without mixing them into public top-3 stats."""
     previous = previous if previous and previous.get("race_date") == date else {}
@@ -305,6 +361,7 @@ def main():
     records = payload.setdefault("evaluated", {})
     longshot_records = payload.setdefault("longshot_evaluated", {})
     market_records = payload.setdefault("market_evaluated", {})
+    portfolio_records = payload.setdefault("portfolio_evaluated", {})
     existing_daily = payload.get("daily", {})
     if history_file.exists():
         history = json.loads(history_file.read_text(encoding="utf-8"))
@@ -387,6 +444,7 @@ def main():
             allowed_dates.add(datetime.now(JST).strftime("%Y%m%d"))
         if exhibition_date in allowed_dates:
             evaluate_market_recommendations(exhibition_date, exhibition, market_records)
+            evaluate_fixed_portfolios(exhibition_date, exhibition, portfolio_records)
     payload["updated_at"] = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
     payload["summary"] = summarize(records)
     payload["tiers"] = {
@@ -401,6 +459,8 @@ def main():
         for market in RESULT_MARKETS.values()
     }
     payload["market_daily"] = build_daily_summaries(market_records)
+    payload["portfolio_summary"] = summarize(portfolio_records)
+    payload["portfolio_daily"] = build_daily_summaries(portfolio_records)
     PERFORMANCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(payload["summary"], ensure_ascii=False))
 
