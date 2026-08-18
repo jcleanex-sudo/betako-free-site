@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18 08:36 JST",
+  "updated_at": "2026-08-19 01:54 JST",
   "evaluated": {
     "20260803-22-6": {
       "key": "20260803-22-6",
@@ -1035,6 +1035,75 @@
       "agreement": 100.0,
       "tier": "strict",
       "evaluation_version": "main6-v1"
+    },
+    "20260818-14-11": {
+      "key": "20260818-14-11",
+      "venue": "鳴門",
+      "race": 11,
+      "predicted": "1-2-3",
+      "predicted_tickets": [
+        "1-2-3",
+        "1-3-2",
+        "1-2-4",
+        "1-3-4",
+        "1-4-2",
+        "1-4-3"
+      ],
+      "actual": "1-2-3",
+      "hit": true,
+      "payout_yen": 540,
+      "stake_yen": 600,
+      "profit_yen": -60,
+      "score": 82.7,
+      "agreement": 100.0,
+      "tier": "strict",
+      "evaluation_version": "main6-v1"
+    },
+    "20260818-11-10": {
+      "key": "20260818-11-10",
+      "venue": "びわこ",
+      "race": 10,
+      "predicted": "1-4-3",
+      "predicted_tickets": [
+        "1-4-3",
+        "1-3-4",
+        "1-4-2",
+        "1-3-2",
+        "1-2-4",
+        "1-2-3"
+      ],
+      "actual": "3-1-2",
+      "hit": false,
+      "payout_yen": 6620,
+      "stake_yen": 600,
+      "profit_yen": -600,
+      "score": 81.6,
+      "agreement": 100.0,
+      "tier": "strict",
+      "evaluation_version": "main6-v1"
+    },
+    "20260818-10-11": {
+      "key": "20260818-10-11",
+      "venue": "三国",
+      "race": 11,
+      "predicted": "1-2-3",
+      "predicted_tickets": [
+        "1-2-3",
+        "1-3-2",
+        "1-2-5",
+        "1-3-5",
+        "1-5-2",
+        "1-5-3"
+      ],
+      "actual": "2-3-1",
+      "hit": false,
+      "payout_yen": 12850,
+      "stake_yen": 600,
+      "profit_yen": -600,
+      "score": 79.1,
+      "agreement": 100.0,
+      "tier": "strict",
+      "evaluation_version": "main6-v1"
     }
   },
   "longshot_evaluated": {
@@ -1622,32 +1691,71 @@
       "payout_yen": 1090,
       "stake_yen": 400,
       "profit_yen": -400
+    },
+    "20260818-10-11-longshot": {
+      "key": "20260818-10-11-longshot",
+      "venue": "三国",
+      "race": 11,
+      "candidate_boat": 2,
+      "candidate_name": "武田 光史",
+      "formation": "1-2-流し",
+      "actual": "2-3-1",
+      "hit": false,
+      "payout_yen": 12850,
+      "stake_yen": 400,
+      "profit_yen": -400
+    },
+    "20260818-11-10-longshot": {
+      "key": "20260818-11-10-longshot",
+      "venue": "びわこ",
+      "race": 10,
+      "candidate_boat": 4,
+      "candidate_name": "片橋 幸貴",
+      "formation": "1-4-流し",
+      "actual": "3-1-2",
+      "hit": false,
+      "payout_yen": 6620,
+      "stake_yen": 400,
+      "profit_yen": -400
+    },
+    "20260818-14-11-longshot": {
+      "key": "20260818-14-11-longshot",
+      "venue": "鳴門",
+      "race": 11,
+      "candidate_boat": 2,
+      "candidate_name": "福田 宗平",
+      "formation": "1-2-流し",
+      "actual": "1-2-3",
+      "hit": true,
+      "payout_yen": 540,
+      "stake_yen": 400,
+      "profit_yen": 140
     }
   },
   "summary": {
-    "samples": 45,
-    "hits": 18,
-    "hit_rate": 40.0,
+    "samples": 48,
+    "hits": 19,
+    "hit_rate": 39.6,
     "hit_rate_ci95": [
       27.0,
-      54.5
+      53.7
     ],
-    "net_profit_yen": -7850,
-    "profit_factor": 0.52,
-    "max_drawdown_yen": 9730
+    "net_profit_yen": -9110,
+    "profit_factor": 0.48,
+    "max_drawdown_yen": 10940
   },
   "tiers": {
     "strict": {
-      "samples": 45,
-      "hits": 18,
-      "hit_rate": 40.0,
+      "samples": 48,
+      "hits": 19,
+      "hit_rate": 39.6,
       "hit_rate_ci95": [
         27.0,
-        54.5
+        53.7
       ],
-      "net_profit_yen": -7850,
-      "profit_factor": 0.52,
-      "max_drawdown_yen": 9730
+      "net_profit_yen": -9110,
+      "profit_factor": 0.48,
+      "max_drawdown_yen": 10940
     },
     "experimental": {
       "samples": 0,
@@ -1660,16 +1768,16 @@
     }
   },
   "longshot_summary": {
-    "samples": 45,
-    "hits": 6,
-    "hit_rate": 13.3,
+    "samples": 48,
+    "hits": 7,
+    "hit_rate": 14.6,
     "hit_rate_ci95": [
-      6.3,
-      26.2
+      7.2,
+      27.2
     ],
-    "net_profit_yen": -8230,
-    "profit_factor": 0.47,
-    "max_drawdown_yen": 8230
+    "net_profit_yen": -8890,
+    "profit_factor": 0.46,
+    "max_drawdown_yen": 9030
   },
   "daily": {
     "20260803": {
@@ -1911,6 +2019,91 @@
       "net_profit_yen": 50,
       "profit_factor": 1.08,
       "max_drawdown_yen": 600
+    },
+    "20260818": {
+      "date": "2026-08-18",
+      "published": 3,
+      "evaluated": 3,
+      "pending": 0,
+      "samples": 3,
+      "hits": 1,
+      "hit_rate": 33.3,
+      "hit_rate_ci95": [
+        6.1,
+        79.2
+      ],
+      "net_profit_yen": -1260,
+      "profit_factor": 0.0,
+      "max_drawdown_yen": 1260
     }
-  }
+  },
+  "market_evaluated": {},
+  "portfolio_evaluated": {},
+  "market_summary": {
+    "samples": 0,
+    "hits": 0,
+    "hit_rate": 0,
+    "hit_rate_ci95": null,
+    "net_profit_yen": 0,
+    "profit_factor": 0,
+    "max_drawdown_yen": 0
+  },
+  "market_by_type": {
+    "single": {
+      "samples": 0,
+      "hits": 0,
+      "hit_rate": 0,
+      "hit_rate_ci95": null,
+      "net_profit_yen": 0,
+      "profit_factor": 0,
+      "max_drawdown_yen": 0
+    },
+    "exacta": {
+      "samples": 0,
+      "hits": 0,
+      "hit_rate": 0,
+      "hit_rate_ci95": null,
+      "net_profit_yen": 0,
+      "profit_factor": 0,
+      "max_drawdown_yen": 0
+    },
+    "quinella": {
+      "samples": 0,
+      "hits": 0,
+      "hit_rate": 0,
+      "hit_rate_ci95": null,
+      "net_profit_yen": 0,
+      "profit_factor": 0,
+      "max_drawdown_yen": 0
+    },
+    "trio": {
+      "samples": 0,
+      "hits": 0,
+      "hit_rate": 0,
+      "hit_rate_ci95": null,
+      "net_profit_yen": 0,
+      "profit_factor": 0,
+      "max_drawdown_yen": 0
+    },
+    "trifecta": {
+      "samples": 0,
+      "hits": 0,
+      "hit_rate": 0,
+      "hit_rate_ci95": null,
+      "net_profit_yen": 0,
+      "profit_factor": 0,
+      "max_drawdown_yen": 0
+    }
+  },
+  "market_daily": {},
+  "portfolio_summary": {
+    "samples": 0,
+    "hits": 0,
+    "hit_rate": 0,
+    "hit_rate_ci95": null,
+    "net_profit_yen": 0,
+    "profit_factor": 0,
+    "max_drawdown_yen": 0
+  },
+  "portfolio_daily": {}
 }
