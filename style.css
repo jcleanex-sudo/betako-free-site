@@ -6,13 +6,13 @@
   --panel-soft: #0a1018;
   --line: rgba(154, 190, 224, .17);
   --ink: #f4f8fc;
-  --muted: #8d9aaa;
+  --muted: #bcc7d3;
   --cyan: #40e2e7;
   --blue: #387cf5;
   --gold: #e7c76e;
 }
 
-.marketComparison{margin:18px 0;padding:16px;border:1px solid #c9d9ea;border-radius:14px;background:#f7fbff}.marketComparisonHead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}.marketComparisonHead b{color:#0b477d}.marketComparisonHead span{font-size:12px;color:#557086}.marketComparisonList{display:grid;gap:7px}.marketRow{display:grid;grid-template-columns:28px minmax(105px,1fr) 70px minmax(220px,2fr);gap:8px;align-items:center;padding:9px 10px;border-radius:10px;background:#fff;border:1px solid #dce8f2}.marketRow>strong{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#dceaf6;color:#155887}.marketRow>span{text-align:right;font-weight:700}.marketRow>small{color:#48677f}.marketRow.best{border-color:#17a1d8;background:#effbff}.marketRow.best>strong{background:#0d91c9;color:#fff}@media(max-width:700px){.marketComparisonHead{align-items:flex-start;flex-direction:column}.marketRow{grid-template-columns:28px 1fr 65px}.marketRow>small{grid-column:2/4}}
+.marketComparison{margin:18px 0;padding:16px;border:1px solid #8db6d5;border-radius:14px;background:#f7fbff;color:#102d44}.marketComparisonHead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}.marketComparisonHead b{color:#073e6b}.marketComparisonHead span{font-size:12px;font-weight:700;color:#294f6c}.marketComparisonList{display:grid;gap:7px;color:#102d44}.marketRow{display:grid;grid-template-columns:28px minmax(105px,1fr) 70px minmax(220px,2fr);gap:8px;align-items:center;padding:9px 10px;border-radius:10px;background:#fff;border:1px solid #b9d0e2;color:#102d44}.marketRow>strong{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#dceaf6;color:#104f7e}.marketRow>b,.marketRow>span{color:#0a2d49;font-weight:800}.marketRow>span{text-align:right}.marketRow>small{color:#294f6c;font-weight:700}.marketRow.best{border-color:#087eae;background:#eaf9ff}.marketRow.best>strong{background:#087eae;color:#fff}@media(max-width:700px){.marketComparisonHead{align-items:flex-start;flex-direction:column}.marketRow{grid-template-columns:28px 1fr 65px}.marketRow>small{grid-column:2/4}}
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -25,6 +25,7 @@ body {
     var(--bg);
   font-family: Arial, "Noto Sans JP", sans-serif;
 }
+p, small, dd { font-weight: 500; }
 a { color: inherit; }
 button { font: inherit; }
 main { width: min(100% - 32px, 1180px); margin: 0 auto; overflow: hidden; }
