@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from fetch_race_realtime import fetch_exhibition
+from fetch_race_realtime import empty_realtime, fetch_exhibition
 
 JST = timezone(timedelta(hours=9))
 ROOT = Path(__file__).resolve().parents[1]
@@ -390,6 +390,7 @@ def main():
     target_race_text = os.environ.get("TARGET_RACE", "")
     target_race = int(target_race_text) if target_race_text.isdigit() else None
     targeted = bool(target_venue and target_race)
+    initialize_only = os.environ.get("INITIALIZE_ONLY") == "1"
     if targeted:
         predictions = [
             item for item in predictions
@@ -400,7 +401,15 @@ def main():
 
     def update_one(prediction):
         try:
-            realtime = fetch_exhibition(prediction["venue_id"], prediction["race"], date)
+            if initialize_only:
+                realtime = empty_realtime(prediction["venue_id"], prediction["race"], date)
+                realtime["exhibition"] = [
+                    {"boat": boat, "course": None, "time": None, "tilt": None,
+                     "weight": None, "st": None, "time_rank": None, "st_rank": None}
+                    for boat in range(1, 7)
+                ]
+            else:
+                realtime = fetch_exhibition(prediction["venue_id"], prediction["race"], date)
             return final_prediction(prediction, realtime), longshot_judgement(prediction, realtime)
         except Exception as exc:
             race = {
@@ -468,12 +477,13 @@ def main():
     output = {
         "race_date": race_date,
         "updated_at": now.strftime("%Y-%m-%d %H:%M JST"),
-        "update_mode": "selected_race" if targeted else "all_races",
+        "update_mode": "morning_skeleton" if initialize_only else "selected_race" if targeted else "all_races",
         "races": races, "longshots": longshots, "recommendations": recommendations,
     }
     OUTPUT.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({
         "targets": len(predictions), "stored_races": len(races), "targeted": targeted,
+        "initialize_only": initialize_only,
         "final": sum(item["status"] == "FINAL" for item in races), "workers": MAX_WORKERS,
     }, ensure_ascii=False))
 

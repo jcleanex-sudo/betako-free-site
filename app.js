@@ -345,6 +345,60 @@ async function fetchLiveExhibition() {
   return response.json();
 }
 
+function parseOfficialExhibitionHtml(html) {
+  const documentNode = new DOMParser().parseFromString(html, "text/html");
+  const byBoat = new Map();
+  const numberFrom = (value) => {
+    const match = String(value || "").replaceAll(",", "").match(/-?\d+(?:\.\d+)?/);
+    return match ? Number(match[0]) : null;
+  };
+  documentNode.querySelectorAll("table.is-w748 tr").forEach((row) => {
+    const cells = Array.from(row.children)
+      .filter((cell) => ["TD", "TH"].includes(cell.tagName))
+      .map((cell) => cell.textContent.trim());
+    if (cells.length < 6) return;
+    const boat = numberFrom(cells[0]);
+    if (!Number.isInteger(boat) || boat < 1 || boat > 6) return;
+    const weightValue = numberFrom(cells[3]);
+    const timeValue = numberFrom(cells[4]);
+    const tiltValue = numberFrom(cells[5]);
+    byBoat.set(boat, {
+      boat,
+      course: null,
+      time: timeValue >= 6 && timeValue <= 7.5 ? timeValue : null,
+      tilt: tiltValue >= -1.5 && tiltValue <= 3 ? tiltValue : null,
+      weight: weightValue >= 40 && weightValue <= 70 ? weightValue : null,
+      st: null,
+      time_rank: null,
+      st_rank: null,
+    });
+  });
+  documentNode.querySelectorAll("table.is-w238 .table1_boatImage1").forEach((item, index) => {
+    const boat = numberFrom(item.querySelector(".table1_boatImage1Number")?.textContent);
+    if (!Number.isInteger(boat) || boat < 1 || boat > 6) return;
+    const stText = item.querySelector(".table1_boatImage1Time")?.textContent.trim() || "";
+    const st = stText.match(/F?(?:\d+)?\.\d+/)?.[0] || null;
+    const current = byBoat.get(boat) || { boat, time: null, tilt: null, weight: null, time_rank: null, st_rank: null };
+    byBoat.set(boat, { ...current, course: index + 1, st });
+  });
+  const rows = [...byBoat.values()].sort((a, b) => a.boat - b.boat);
+  rows.filter((item) => item.time != null).sort((a, b) => a.time - b.time)
+    .forEach((item, index) => { item.time_rank = index + 1; });
+  const stValue = (value) => String(value || "").startsWith("F")
+    ? -Number(String(value).slice(1))
+    : Number(value);
+  rows.filter((item) => item.st != null).sort((a, b) => stValue(a.st) - stValue(b.st))
+    .forEach((item, index) => { item.st_rank = index + 1; });
+  return rows;
+}
+
+async function fetchOfficialExhibitionPreview(api, venueId, race, raceDate) {
+  const query = new URLSearchParams({ venue_id: venueId, race: String(race), race_date: raceDate });
+  const response = await fetch(`${api.replace(/\/$/, "")}/official-preview?${query}`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`preview ${response.status}`);
+  return parseOfficialExhibitionHtml(await response.text());
+}
+
 async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt, previousUpdatedAt }) {
   const api = window.betakoRuntime?.on_demand_api;
   const badge = document.querySelector("#exhibitionBadge");
@@ -358,12 +412,22 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
   detail.textContent = "選択したレースの展示データだけを取得しています（通常1〜3分）。";
 
   try {
+    const previewPromise = fetchOfficialExhibitionPreview(api, venueId, race, raceDate).catch(() => []);
     const response = await fetch(`${api.replace(/\/$/, "")}/refresh`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ venue_id: venueId, race, race_date: raceDate }),
     });
     if (!response.ok) throw new Error(`refresh ${response.status}`);
+    const previewRows = await previewPromise;
+    if (previewRows.length) {
+      renderExhibitionTimes({ exhibition: previewRows }, true);
+      const completePreview = previewRows.length === 6 && previewRows.every((item) => item.time != null);
+      badge.textContent = completePreview ? "展示取得済・予想計算中" : "展示公開待ち・予想計算中";
+      detail.textContent = completePreview
+        ? "展示タイム・進入・STを公式から直接取得しました。固定13点を計算しています。"
+        : "公式ページを直接確認しました。未公開項目を待ちながら固定13点を計算しています。";
+    }
 
     for (let attempt = 0; attempt < 36; attempt += 1) {
       if (attempt > 0) await delay(5000);

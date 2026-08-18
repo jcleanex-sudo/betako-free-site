@@ -11,7 +11,6 @@ on:
 
 permissions:
   contents: write
-  actions: write
 
 concurrency:
   group: betako-data-updates
@@ -32,6 +31,8 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python scripts/evaluate_results.py
       - run: python scripts/generate_predictions.py
+      - name: Initialize exhibition placeholders without official-site sweep
+        run: INITIALIZE_ONLY=1 python scripts/update_exhibition.py
       - name: Save prediction data
         run: |
           git config user.name "betako-bot"
@@ -44,7 +45,3 @@ jobs:
             sleep 3
           done
           exit 1
-      - name: Initialize today's exhibition data
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run update-exhibition.yml --ref main

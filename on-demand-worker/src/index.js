@@ -17,13 +17,54 @@ const todayJst = () => new Intl.DateTimeFormat("sv-SE", {
 export default {
   async fetch(request, env, ctx) {
     const origin = request.headers.get("Origin") || "";
+    const url = new URL(request.url);
     if (request.method === "OPTIONS") {
       return origin === env.ALLOWED_ORIGIN ? json({ ok: true }, 204, origin) : json({ error: "origin blocked" }, 403, "null");
     }
-    if (request.method === "GET" && new URL(request.url).pathname === "/health") {
+    if (request.method === "GET" && url.pathname === "/health") {
       return json({ ok: true, service: "betako-on-demand" }, 200, origin === env.ALLOWED_ORIGIN ? origin : "null");
     }
-    if (request.method !== "POST" || new URL(request.url).pathname !== "/refresh") {
+    if (request.method === "GET" && url.pathname === "/official-preview") {
+      if (origin !== env.ALLOWED_ORIGIN) return json({ error: "origin blocked" }, 403, "null");
+      const venueId = String(url.searchParams.get("venue_id") || "").padStart(2, "0");
+      const race = Number(url.searchParams.get("race"));
+      const raceDate = url.searchParams.get("race_date") || "";
+      if (!/^\d{2}$/.test(venueId) || Number(venueId) < 1 || Number(venueId) > 24 || !Number.isInteger(race) || race < 1 || race > 12) {
+        return json({ error: "invalid race" }, 400, origin);
+      }
+      if (raceDate !== todayJst()) return json({ error: "only today's race can be fetched" }, 400, origin);
+
+      const officialUrl = new URL("https://www.boatrace.jp/owpc/pc/race/beforeinfo");
+      officialUrl.search = new URLSearchParams({ jcd: venueId, hd: raceDate.replaceAll("-", ""), rno: String(race) });
+      try {
+        const official = await fetch(officialUrl, {
+          headers: {
+            "user-agent": "Mozilla/5.0 BETAKO-Realtime/1.0",
+            "accept": "text/html,application/xhtml+xml",
+            "accept-language": "ja",
+          },
+        });
+        if (!official.ok || !official.body) {
+          console.error(JSON.stringify({ event: "official_preview_failed", status: official.status, venueId, race }));
+          return json({ error: "official preview failed" }, 502, origin);
+        }
+        console.log(JSON.stringify({ event: "official_preview_ok", venueId, race }));
+        return new Response(official.body, {
+          status: 200,
+          headers: {
+            "content-type": "text/html; charset=utf-8",
+            "access-control-allow-origin": origin,
+            "vary": "Origin",
+            "cache-control": "no-store",
+            "x-content-type-options": "nosniff",
+          },
+        });
+      } catch (error) {
+        console.error(JSON.stringify({ event: "official_preview_error", venueId, race, error: String(error) }));
+        return json({ error: "official preview unavailable" }, 502, origin);
+      }
+    }
+    if (request.method !== "POST" || url.pathname !== "/refresh") {
       return json({ error: "not found" }, 404, origin === env.ALLOWED_ORIGIN ? origin : "null");
     }
     if (origin !== env.ALLOWED_ORIGIN) return json({ error: "origin blocked" }, 403, "null");
