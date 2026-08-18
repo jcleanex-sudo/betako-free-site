@@ -1,6 +1,6 @@
 {
   "race_date": "2026-08-18",
-  "updated_at": "2026-08-18 11:11 JST",
+  "updated_at": "2026-08-18 11:30 JST",
   "update_mode": "selected_race",
   "races": [
     {
@@ -13948,175 +13948,340 @@
       "venue": "鳴門",
       "venue_id": "14",
       "race": 7,
-      "status": "WAIT",
-      "message": "6艇の展示タイム・進入・STが揃うまで朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-3-5",
+      "final_pick": "1-3-2",
+      "final_score": 44.0,
+      "reasons": [
+        "展示最速は2号艇 6.76",
+        "風速3m・波高0cm・天候晴",
+        "朝の能力評価に展示順位・ST展示順位・実際の進入コースを加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
-            "pick": "1-3-5",
-            "odds": 89.1,
-            "model_probability": 5.38,
-            "market_probability": 1.12,
-            "net_edge": 2.26
-          },
-          {
             "pick": "3-1-2",
-            "odds": 114.5,
-            "model_probability": 4.31,
-            "market_probability": 0.87,
-            "net_edge": 1.44
+            "odds": 42.6,
+            "model_probability": 3.52,
+            "market_probability": 2.35,
+            "net_edge": -0.83
           },
           {
             "pick": "1-3-2",
-            "odds": 89.1,
-            "model_probability": 4.51,
-            "market_probability": 1.12,
-            "net_edge": 1.39
+            "odds": 27.9,
+            "model_probability": 3.73,
+            "market_probability": 3.58,
+            "net_edge": -1.85
           },
           {
             "pick": "3-1-5",
-            "odds": 51.7,
-            "model_probability": 5.14,
-            "market_probability": 1.93,
-            "net_edge": 1.21
+            "odds": 30.1,
+            "model_probability": 3.46,
+            "market_probability": 3.32,
+            "net_edge": -1.86
           },
           {
-            "pick": "5-1-3",
-            "odds": 114.5,
-            "model_probability": 3.55,
-            "market_probability": 0.87,
-            "net_edge": 0.68
+            "pick": "1-3-4",
+            "odds": 58.3,
+            "model_probability": 1.65,
+            "market_probability": 1.72,
+            "net_edge": -2.07
           },
           {
             "pick": "1-5-3",
-            "odds": 59.4,
-            "model_probability": 4.27,
-            "market_probability": 1.68,
-            "net_edge": 0.59
+            "odds": 30.3,
+            "model_probability": 3.08,
+            "market_probability": 3.3,
+            "net_edge": -2.22
+          },
+          {
+            "pick": "1-2-4",
+            "odds": 69.5,
+            "model_probability": 0.92,
+            "market_probability": 1.44,
+            "net_edge": -2.52
           }
         ],
         "cover": [
           {
-            "pick": "1-2-3",
-            "odds": 48.6,
-            "model_probability": 3.39,
-            "market_probability": 2.06,
-            "net_edge": -0.67
-          },
-          {
-            "pick": "1-2-5",
-            "odds": 89.1,
-            "model_probability": 2.09,
-            "market_probability": 1.12,
-            "net_edge": -1.03
-          },
-          {
-            "pick": "5-1-2",
-            "odds": 84.4,
-            "model_probability": 1.84,
-            "market_probability": 1.18,
-            "net_edge": -1.34
+            "pick": "2-1-3",
+            "odds": 29.2,
+            "model_probability": 2.67,
+            "market_probability": 3.42,
+            "net_edge": -2.75
           },
           {
             "pick": "1-5-2",
-            "odds": 50.1,
-            "model_probability": 2.21,
-            "market_probability": 2.0,
-            "net_edge": -1.79
+            "odds": 30.0,
+            "model_probability": 2.04,
+            "market_probability": 3.33,
+            "net_edge": -3.29
           },
           {
-            "pick": "1-3-4",
-            "odds": 66.8,
-            "model_probability": 1.43,
-            "market_probability": 1.5,
-            "net_edge": -2.07
+            "pick": "1-3-5",
+            "odds": 19.9,
+            "model_probability": 3.67,
+            "market_probability": 5.03,
+            "net_edge": -3.36
           },
           {
-            "pick": "1-5-4",
-            "odds": 37.3,
-            "model_probability": 0.7,
-            "market_probability": 2.68,
-            "net_edge": -3.98
+            "pick": "1-2-3",
+            "odds": 22.1,
+            "model_probability": 3.15,
+            "market_probability": 4.52,
+            "net_edge": -3.37
+          },
+          {
+            "pick": "2-1-5",
+            "odds": 27.8,
+            "model_probability": 1.74,
+            "market_probability": 3.6,
+            "net_edge": -3.86
+          },
+          {
+            "pick": "1-2-5",
+            "odds": 23.8,
+            "model_probability": 2.05,
+            "market_probability": 4.2,
+            "net_edge": -4.15
           }
         ],
         "ranked_by_edge": true
       },
-      "best_value_pick": "1-3-5",
-      "value": {
-        "status": "WATCH",
-        "odds": 89.1,
-        "model_probability": 5.38,
-        "market_probability": 1.12,
-        "net_edge": 2.26,
-        "deadline": "11:27",
-        "remaining_minutes": 148.8,
-        "message": "安全余白控除後の優位性が基準未満のため見送り",
-        "source_url": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=14&hd=20260818&rno=7"
-      },
+      "best_value_pick": "4",
+      "market_comparison": [
+        {
+          "bet_type": "single",
+          "bet_type_label": "単勝",
+          "pick": "4",
+          "odds": 55.1,
+          "model_probability": 7.31,
+          "market_probability": 1.81,
+          "net_edge": 3.5,
+          "expected_profit_yen": 303,
+          "qualifies": false
+        },
+        {
+          "bet_type": "single",
+          "bet_type_label": "単勝",
+          "pick": "5",
+          "odds": 8.4,
+          "model_probability": 16.28,
+          "market_probability": 11.9,
+          "net_edge": 2.38,
+          "expected_profit_yen": 37,
+          "qualifies": false
+        },
+        {
+          "bet_type": "single",
+          "bet_type_label": "単勝",
+          "pick": "1",
+          "odds": 4.0,
+          "model_probability": 29.24,
+          "market_probability": 25.0,
+          "net_edge": 2.24,
+          "expected_profit_yen": 17,
+          "qualifies": false
+        },
+        {
+          "bet_type": "exacta",
+          "bet_type_label": "2連単",
+          "pick": "1-3",
+          "odds": 15.0,
+          "model_probability": 10.32,
+          "market_probability": 6.67,
+          "net_edge": 1.16,
+          "expected_profit_yen": 55,
+          "qualifies": false
+        },
+        {
+          "bet_type": "quinella",
+          "bet_type_label": "2連複",
+          "pick": "1-3",
+          "odds": 5.9,
+          "model_probability": 20.06,
+          "market_probability": 16.95,
+          "net_edge": 1.11,
+          "expected_profit_yen": 18,
+          "qualifies": false
+        },
+        {
+          "bet_type": "single",
+          "bet_type_label": "単勝",
+          "pick": "6",
+          "odds": 36.7,
+          "model_probability": 5.65,
+          "market_probability": 2.72,
+          "net_edge": 0.93,
+          "expected_profit_yen": 107,
+          "qualifies": false
+        }
+      ],
+      "weather": "晴",
+      "wind_speed": 3.0,
+      "wave_height": 0,
+      "start_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "exhibition": [
         {
           "boat": 1,
-          "course": null,
-          "time": null,
-          "tilt": null,
+          "course": 1,
+          "time": 6.79,
+          "tilt": 0.0,
           "weight": 52.9,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".03",
+          "time_rank": 2,
+          "st_rank": 1
         },
         {
           "boat": 2,
-          "course": null,
-          "time": null,
-          "tilt": null,
+          "course": 2,
+          "time": 6.76,
+          "tilt": 0.0,
           "weight": 47.7,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".19",
+          "time_rank": 1,
+          "st_rank": 6
         },
         {
           "boat": 3,
-          "course": null,
-          "time": null,
-          "tilt": null,
+          "course": 3,
+          "time": 6.84,
+          "tilt": 0.0,
           "weight": 52.0,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".06",
+          "time_rank": 3,
+          "st_rank": 3
         },
         {
           "boat": 4,
-          "course": null,
-          "time": null,
-          "tilt": null,
+          "course": 4,
+          "time": 6.85,
+          "tilt": 0.0,
           "weight": 52.0,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".07",
+          "time_rank": 4,
+          "st_rank": 5
         },
         {
           "boat": 5,
-          "course": null,
-          "time": null,
-          "tilt": null,
+          "course": 5,
+          "time": 6.89,
+          "tilt": 0.0,
           "weight": 54.7,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".05",
+          "time_rank": 5,
+          "st_rank": 2
         },
         {
           "boat": 6,
-          "course": null,
-          "time": null,
-          "tilt": null,
+          "course": 6,
+          "time": 6.94,
+          "tilt": -0.5,
           "weight": 52.2,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".06",
+          "time_rank": 6,
+          "st_rank": 4
         }
       ],
-      "fetched_at": "2026-08-18T08:58:13+09:00",
+      "value": {
+        "bet_type": "single",
+        "bet_type_label": "単勝",
+        "pick": "4",
+        "odds": 55.1,
+        "model_probability": 7.31,
+        "market_probability": 1.81,
+        "net_edge": 3.5,
+        "expected_profit_yen": 303,
+        "qualifies": false,
+        "status": "WATCH",
+        "deadline": "11:27",
+        "remaining_minutes": -4.2,
+        "message": "締切5分前を過ぎたため新規判定を停止",
+        "ranking": [
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "4",
+            "odds": 55.1,
+            "model_probability": 7.31,
+            "market_probability": 1.81,
+            "net_edge": 3.5,
+            "expected_profit_yen": 303,
+            "qualifies": false
+          },
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "5",
+            "odds": 8.4,
+            "model_probability": 16.28,
+            "market_probability": 11.9,
+            "net_edge": 2.38,
+            "expected_profit_yen": 37,
+            "qualifies": false
+          },
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "1",
+            "odds": 4.0,
+            "model_probability": 29.24,
+            "market_probability": 25.0,
+            "net_edge": 2.24,
+            "expected_profit_yen": 17,
+            "qualifies": false
+          },
+          {
+            "bet_type": "exacta",
+            "bet_type_label": "2連単",
+            "pick": "1-3",
+            "odds": 15.0,
+            "model_probability": 10.32,
+            "market_probability": 6.67,
+            "net_edge": 1.16,
+            "expected_profit_yen": 55,
+            "qualifies": false
+          },
+          {
+            "bet_type": "quinella",
+            "bet_type_label": "2連複",
+            "pick": "1-3",
+            "odds": 5.9,
+            "model_probability": 20.06,
+            "market_probability": 16.95,
+            "net_edge": 1.11,
+            "expected_profit_yen": 18,
+            "qualifies": false
+          },
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "6",
+            "odds": 36.7,
+            "model_probability": 5.65,
+            "market_probability": 2.72,
+            "net_edge": 0.93,
+            "expected_profit_yen": 107,
+            "qualifies": false
+          }
+        ],
+        "data_rate": 100,
+        "source_urls": {
+          "/oddstf": "https://www.boatrace.jp/owpc/pc/race/oddstf?jcd=14&hd=20260818&rno=7",
+          "/odds2tf": "https://www.boatrace.jp/owpc/pc/race/odds2tf?jcd=14&hd=20260818&rno=7",
+          "/odds3f": "https://www.boatrace.jp/owpc/pc/race/odds3f?jcd=14&hd=20260818&rno=7",
+          "/odds3t": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=14&hd=20260818&rno=7"
+        }
+      },
+      "fetched_at": "2026-08-18T11:31:11+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=14&hd=20260818&rno=7"
     },
     {
@@ -27184,15 +27349,15 @@
       "boat": 5,
       "name": "中村 尊",
       "formation": "1-5-流し",
-      "time_rank": null,
+      "time_rank": 5,
       "deadline": "11:27",
-      "remaining_minutes": 148.8,
-      "status": "WAIT",
-      "min_odds": null,
-      "model_probability": null,
-      "market_probability": null,
-      "net_edge": null,
-      "message": "候補艇の展示データ待ち"
+      "remaining_minutes": -4.2,
+      "status": "WATCH",
+      "min_odds": 30.0,
+      "model_probability": 7.85,
+      "market_probability": 13.33,
+      "net_edge": -7.49,
+      "message": "締切5分前を過ぎたため新規判定を停止"
     },
     {
       "venue": "鳴門",
