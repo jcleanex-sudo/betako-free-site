@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="全国24場を複数モデルで分析するボートレースAI BETAKO">
   <title>BETAKO | データで選ぶボートレースAI</title>
-  <link rel="stylesheet" href="style.css?v=20260818-3">
+  <link rel="stylesheet" href="style.css?v=20260819-1">
 </head>
 <body>
 <main id="top">
@@ -32,7 +32,7 @@
   </section>
 
   <section class="predictCard" id="predict">
-      <div class="sectionHead"><div><p class="eyebrow">RACE SELECT</p><h2>開催場を選んで予想</h2></div><p>本日開催の全会場・全1R〜12Rを手動選択。本線6点・押さえ6点をフォーメーション形式で確認できます。</p></div>
+      <div class="sectionHead"><div><p class="eyebrow">RACE SELECT</p><h2>開催場を選んで予想</h2></div><p>本日開催の全会場・全1R〜12Rを手動選択。展示・オッズ確定後は固定13点を期待値順に確認できます。</p></div>
     <form id="predictionForm">
       <label>開催日<input id="raceDate" type="date" required></label>
       <label>開催場<select id="venue"></select></label>
@@ -40,7 +40,7 @@
       <label>予想タイプ<select id="predictionType"><option>朝AI予想</option><option>展示後AI最終予想</option></select></label>
       <button type="submit">このレースを分析 <span>→</span></button>
     </form>
-    <div class="selectionResult" id="selectionResult" role="status" hidden><span id="venueCode">01</span><div><b class="exhibitionBadge" id="exhibitionBadge" hidden>展示前</b><b class="decisionBadge" id="decisionBadge" hidden>見送り対象</b><strong id="selectionText"></strong><small id="predictionDetail"></small><div class="marketComparison" id="marketComparison" hidden></div><div class="marketTicketPlan" id="marketTicketPlan" hidden></div><div class="ticketPlan"><section class="ticketGroup"><b id="mainLabel">本線候補6点</b><div class="formationRows" id="mainPicks">--</div></section><section class="ticketGroup" id="coverGroup"><b>押さえ6点</b><div class="formationRows" id="coverPicks">--</div></section></div><div class="developmentPrediction"><b>展開予想</b><p id="developmentText">--</p></div><ul id="predictionReasons"></ul><small id="invalidConditions"></small><div class="manualCopyActions"><button class="copyButton manualCopyButton" id="copyManualPrediction" type="button">X投稿用にコピー</button><button class="copyButton manualCopyButton noteFreeButton" id="createFreeNoteDraft" type="button">note無料版を作成</button><button class="copyButton manualCopyButton noteCopyButton" id="createPaidNoteDraft" type="button">有料会員版を作成</button><small id="manualCopyStatus" role="status"></small></div><section class="noteDraftPanel" id="noteDraftPanel" hidden><b id="noteDraftTitle">note用原稿</b><pre id="noteDraftText"></pre></section></div></div>
+    <div class="selectionResult" id="selectionResult" role="status" hidden><span id="venueCode">01</span><div><b class="exhibitionBadge" id="exhibitionBadge" hidden>展示前</b><b class="decisionBadge" id="decisionBadge" hidden>見送り対象</b><strong id="selectionText"></strong><small id="predictionDetail"></small><div class="marketComparison" id="marketComparison" hidden></div><div class="marketTicketPlan" id="marketTicketPlan" hidden></div><div class="ticketPlan"><section class="ticketGroup"><b id="mainLabel">3連単候補6点</b><div class="formationRows" id="mainPicks">--</div></section><section class="ticketGroup" id="coverGroup"><b>展示前の追加候補</b><div class="formationRows" id="coverPicks">--</div></section></div><div class="developmentPrediction"><b>展開予想</b><p id="developmentText">--</p></div><ul id="predictionReasons"></ul><small id="invalidConditions"></small><div class="manualCopyActions"><button class="copyButton manualCopyButton" id="copyManualPrediction" type="button">X投稿用にコピー</button><button class="copyButton manualCopyButton noteFreeButton" id="createFreeNoteDraft" type="button">note無料版を作成</button><button class="copyButton manualCopyButton noteCopyButton" id="createPaidNoteDraft" type="button">有料会員版を作成</button><small id="manualCopyStatus" role="status"></small></div><section class="noteDraftPanel" id="noteDraftPanel" hidden><b id="noteDraftTitle">note用原稿</b><pre id="noteDraftText"></pre></section></div></div>
   </section>
 
   <section class="venuePerformanceSection" id="today-venues">
@@ -59,7 +59,7 @@
   </section>
 
   <section class="dailySection" id="daily-performance">
-    <div class="sectionHead"><div><p class="eyebrow">DAILY PERFORMANCE</p><h2>毎日の予想記録</h2></div><p>公開した本線6点を日別に保存。結果待ちを0的中として扱わず、公式結果との照合後に確定します。</p></div>
+    <div class="sectionHead"><div><p class="eyebrow">DAILY PERFORMANCE</p><h2>毎日の予想記録</h2></div><p>公開予想を日別に保存。結果待ちを0的中として扱わず、固定13点も公式結果との照合後に別集計します。</p></div>
     <div class="todayRecord">
       <article><span>今日の公開予想</span><strong id="todayPublished">--</strong></article>
       <article><span>結果照合済み</span><strong id="todayEvaluated">--</strong></article>
@@ -96,6 +96,6 @@
 
   <footer><a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO</span></a><p>勝つことより先に、大きく負けないこと。</p><small>AI予想は検証中の分析情報です。舟券購入は自己責任で行ってください。</small></footer>
 </main>
-<script src="app.js?v=20260818-3"></script>
+<script src="app.js?v=20260819-1"></script>
 </body>
 </html>

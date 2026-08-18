@@ -236,7 +236,7 @@ function buildNoGamiDoraPlan(main = [], cover = []) {
       if (!best || score > best.score) best = { score, totalStake, stakes, dora: [tickets[first], tickets[second]] };
     }
   }
-  if (!best) return { status: "WATCH", reason: "ドラ2点を10倍にしても、12点すべてをガミなしにできません。", dora: [], stakes: [] };
+  if (!best) return { status: "WATCH", reason: "旧配分では全候補をガミなしにできません。", dora: [], stakes: [] };
   return { status: "READY", reason: "全12点で的中時払戻しが総投資3,000円以上。", ...best };
 }
 
@@ -294,13 +294,21 @@ function buildNoteDraft(payload, paid = false) {
     ...formationCopyLines(fixedPortfolio ? "3連単" : "本線", payload.main),
     ...(fixedPortfolio ? portfolioCopyLines(payload.portfolio) : formationCopyLines("押さえ", payload.cover)),
     ...(fixedPortfolio ? [] : [`ドラ：${doraText}`]), `通常配分：${regularText}`, `資金判定：${doraPlan.status}｜${doraPlan.reason}`,
-    serious ? "オッズと条件が改善するまでは購入しないでください。" : "ガミらないように配分して、ドラ2点で高回収を狙うかもかも❤️", "",
-    "【会員情報】本線・押さえ・ドラ・資金配分は、直前オッズで再計算します。", "",
+    serious
+      ? "オッズと条件が改善するまでは購入しないでください。"
+      : fixedPortfolio
+        ? "各100円・合計1,300円。4券種を期待値順に選んだ固定13点で検証するかもかも❤️"
+        : "直前オッズを確認して資金配分を調整するかもかも❤️", "",
+    fixedPortfolio
+      ? "【会員情報】3連単6点・3連複2点・2連単2点・2連複3点を、直前オッズで期待値順に再計算します。"
+      : "【会員情報】本線・押さえ・ドラ・資金配分は、直前オッズで再計算します。", "",
   ] : [
     "【無料公開範囲】",
     serious
       ? "展開・進入・展示評価まで公開します。条件が整うまでは具体的な買い目を出しません。"
-      : "無料版は展開・進入・展示評価までだよ。本線6点・押さえ6点・ドラ2点・資金配分は有料会員版で公開するかもかも❤️", "",
+      : fixedPortfolio
+        ? "無料版は展開・進入・展示評価までだよ。固定13点（3連単6・3連複2・2連単2・2連複3）は有料会員版で公開するかもかも❤️"
+        : "無料版は展開・進入・展示評価までだよ。買い目と資金配分は有料会員版で公開するかもかも❤️", "",
   ];
   return [
     ...commonLines, ...memberLines,
