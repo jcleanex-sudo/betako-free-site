@@ -268,7 +268,7 @@ def _parse_trifecta_odds(soup):
     odds = {}
     for combination, point in zip(combinations, points):
         value = safe_float(point.get_text(" ", strip=True))
-        if value is not None and value > 1:
+        if value is not None and value >= 1:
             odds[combination] = value
     return odds
 
@@ -288,7 +288,7 @@ def _parse_single_odds(soup):
             continue
         boat = safe_int(cells[0].get_text(" ", strip=True))
         value = safe_float(cells[-1].get_text(" ", strip=True))
-        if boat in range(1, 7) and value and value > 1:
+        if boat in range(1, 7) and value is not None and value >= 1:
             odds[str(boat)] = value
     return odds
 
@@ -305,7 +305,7 @@ def _parse_pair_table(table, unordered=False):
             second = safe_int(pair[0].get_text(" ", strip=True))
             value = safe_float(pair[1].get_text(" ", strip=True))
             first = first_index + 1
-            if second not in range(1, 7) or second == first or not value or value <= 1:
+            if second not in range(1, 7) or second == first or value is None or value < 1:
                 continue
             boats = sorted((first, second)) if unordered else (first, second)
             odds["-".join(map(str, boats))] = value
@@ -330,7 +330,7 @@ def _parse_trio_odds(soup):
     odds = {}
     for combination, point in zip(combinations, points):
         value = safe_float(point.get_text(" ", strip=True))
-        if value and value > 1:
+        if value is not None and value >= 1:
             odds[combination] = value
     return odds
 
@@ -517,7 +517,17 @@ def fetch_exhibition(stadium_id: str, race_number: int, race_date: str) -> dict:
         exhibition = add_exhibition_ranks(_parse_exhibition_table(soup))
         # 展示がまだ公開されていないレースの120通りオッズ取得は省略する。
         # 全レース巡回時の公式サイト負荷を抑え、展示公開後だけ期待値を計算する。
-        odds = fetch_all_odds(stadium_id, race_number, race_date_compact) if len(exhibition) == 6 else None
+        exhibition_ready = (
+            len(exhibition) == 6
+            and {item.get("boat") for item in exhibition} == set(range(1, 7))
+            and all(
+                item.get("time") is not None
+                and item.get("course") in range(1, 7)
+                and item.get("st") not in (None, "")
+                for item in exhibition
+            )
+        )
+        odds = fetch_all_odds(stadium_id, race_number, race_date_compact) if exhibition_ready else None
         realtime = {
             "stadium_id": stadium_id,
             "stadium_name": STADIUM_NAMES.get(stadium_id, f"場{stadium_id}"),
