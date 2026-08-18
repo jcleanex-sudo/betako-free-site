@@ -16,6 +16,14 @@ DATA = ROOT / "data"
 PERFORMANCE = DATA / "performance.json"
 HEADERS = {"User-Agent": "Mozilla/5.0 BETAKO-Free/1.0", "Accept-Language": "ja-JP,ja;q=0.9"}
 EVALUATION_VERSION = "main6-v1"
+MARKET_EVALUATION_VERSION = "five-market-ev-v1"
+EXHIBITION = DATA / "exhibition.json"
+RESULT_MARKETS = {
+    "単勝": "single", "2連単": "exacta", "2連複": "quinella",
+    "3連複": "trio", "3連単": "trifecta",
+}
+UNORDERED_MARKETS = {"quinella", "trio"}
+_RESULT_CACHE = {}
 VENUE_MIN_SAMPLES = 5
 VENUE_MIN_HIT_RATE = 30.0
 VENUE_MIN_NET_PROFIT = 0
@@ -35,7 +43,21 @@ def build_main_tickets(prediction: dict) -> list[str]:
     ]
 
 
-def fetch_result(date: str, venue_id: str, race: int):
+def normalize_result_pick(value: str, market: str):
+    boats = re.findall(r"[1-6]", str(value or ""))
+    expected = {"single": 1, "exacta": 2, "quinella": 2, "trio": 3, "trifecta": 3}[market]
+    if len(boats) < expected:
+        return None
+    boats = boats[:expected]
+    if market in UNORDERED_MARKETS:
+        boats.sort()
+    return "-".join(boats)
+
+
+def fetch_all_results(date: str, venue_id: str, race: int):
+    cache_key = (str(date), str(venue_id).zfill(2), int(race))
+    if cache_key in _RESULT_CACHE:
+        return _RESULT_CACHE[cache_key]
     response = requests.get(
         "https://www.boatrace.jp/owpc/pc/race/raceresult",
         params={"hd": date, "jcd": venue_id, "rno": race},
@@ -43,15 +65,31 @@ def fetch_result(date: str, venue_id: str, race: int):
         timeout=20,
     )
     response.raise_for_status()
-    soup = BeautifulSoup(response.text, "lxml")
+    soup = BeautifulSoup(response.content, "lxml")
+    results = {}
     for tbody in soup.select("tbody"):
-        cells = [cell.get_text(strip=True) for cell in tbody.select("td")]
-        if cells and cells[0] == "3連単":
-            combo_match = re.search(r"([1-6])-([1-6])-([1-6])", cells[1] if len(cells) > 1 else "")
-            payout_match = re.search(r"([\d,]+)", cells[2] if len(cells) > 2 else "")
-            if combo_match:
-                return combo_match.group(0), int(payout_match.group(1).replace(",", "")) if payout_match else 0
-    return None
+        cells = [cell.get_text(" ", strip=True) for cell in tbody.select("td")]
+        if not cells or cells[0] not in RESULT_MARKETS:
+            continue
+        market = RESULT_MARKETS[cells[0]]
+        pick = normalize_result_pick(cells[1] if len(cells) > 1 else "", market)
+        payout_match = re.search(r"([\d,]+)", cells[2] if len(cells) > 2 else "")
+        if pick and payout_match:
+            results[market] = {
+                "pick": pick,
+                "payout_yen": int(payout_match.group(1).replace(",", "")),
+            }
+    result = results if "trifecta" in results else None
+    _RESULT_CACHE[cache_key] = result
+    return result
+
+
+def fetch_result(date: str, venue_id: str, race: int):
+    results = fetch_all_results(date, venue_id, race)
+    if not results:
+        return None
+    trifecta = results["trifecta"]
+    return trifecta["pick"], trifecta["payout_yen"]
 
 
 def wilson_interval(hits: int, samples: int):
@@ -124,6 +162,61 @@ def score_tier(score, agreement=0):
     if value >= 60:
         return "experimental"
     return "watch"
+
+
+def evaluate_market_recommendations(date: str, exhibition: dict, records: dict):
+    """Score only final five-market recommendations that passed the UP gate."""
+    candidates = exhibition.get("recommendations") or exhibition.get("races", [])
+    for race_item in candidates:
+        value = race_item.get("value") or {}
+        market = value.get("bet_type")
+        predicted = value.get("pick")
+        if (
+            race_item.get("status") != "FINAL"
+            or value.get("status") != "UP"
+            or market not in RESULT_MARKETS.values()
+            or not predicted
+            or int(value.get("data_rate") or 0) != 100
+        ):
+            continue
+        venue_id = str(race_item.get("venue_id") or "").zfill(2)
+        race = int(race_item.get("race") or 0)
+        key = f"{date}-{venue_id}-{race}-{market}"
+        if records.get(key, {}).get("evaluation_version") == MARKET_EVALUATION_VERSION:
+            continue
+        try:
+            result = fetch_all_results(date, venue_id, race)
+        except requests.RequestException as exc:
+            print(f"{key}: {exc}")
+            continue
+        actual = (result or {}).get(market)
+        if not actual:
+            continue
+        normalized_prediction = normalize_result_pick(predicted, market)
+        hit = normalized_prediction == actual["pick"]
+        stake = 100
+        payout = int(actual["payout_yen"])
+        records[key] = {
+            "key": key,
+            "venue_id": venue_id,
+            "venue": race_item.get("venue"),
+            "race": race,
+            "bet_type": market,
+            "bet_type_label": value.get("bet_type_label"),
+            "predicted": normalized_prediction,
+            "actual": actual["pick"],
+            "odds_at_prediction": value.get("odds"),
+            "model_probability": value.get("model_probability"),
+            "market_probability": value.get("market_probability"),
+            "net_edge": value.get("net_edge"),
+            "expected_profit_yen": value.get("expected_profit_yen"),
+            "hit": hit,
+            "payout_yen": payout,
+            "stake_yen": stake,
+            "profit_yen": payout - stake if hit else -stake,
+            "evaluation_version": MARKET_EVALUATION_VERSION,
+        }
+    return records
 
 
 def build_today_venue_performance(date: str, history: dict, previous: dict | None = None):
@@ -211,6 +304,7 @@ def main():
     payload = json.loads(PERFORMANCE.read_text(encoding="utf-8")) if PERFORMANCE.exists() else {"evaluated": {}}
     records = payload.setdefault("evaluated", {})
     longshot_records = payload.setdefault("longshot_evaluated", {})
+    market_records = payload.setdefault("market_evaluated", {})
     existing_daily = payload.get("daily", {})
     if history_file.exists():
         history = json.loads(history_file.read_text(encoding="utf-8"))
@@ -285,6 +379,14 @@ def main():
             payload["today_venue_performance"] = build_today_venue_performance(
                 today, today_history, payload.get("today_venue_performance")
             )
+    if EXHIBITION.exists():
+        exhibition = json.loads(EXHIBITION.read_text(encoding="utf-8"))
+        exhibition_date = str(exhibition.get("race_date") or "").replace("-", "")
+        allowed_dates = {yesterday}
+        if args.today_venues:
+            allowed_dates.add(datetime.now(JST).strftime("%Y%m%d"))
+        if exhibition_date in allowed_dates:
+            evaluate_market_recommendations(exhibition_date, exhibition, market_records)
     payload["updated_at"] = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
     payload["summary"] = summarize(records)
     payload["tiers"] = {
@@ -293,6 +395,12 @@ def main():
     }
     payload["longshot_summary"] = summarize(longshot_records)
     payload["daily"] = build_daily_summaries(records, existing_daily)
+    payload["market_summary"] = summarize(market_records)
+    payload["market_by_type"] = {
+        market: summarize({key: item for key, item in market_records.items() if item.get("bet_type") == market})
+        for market in RESULT_MARKETS.values()
+    }
+    payload["market_daily"] = build_daily_summaries(market_records)
     PERFORMANCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(payload["summary"], ensure_ascii=False))
 

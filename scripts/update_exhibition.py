@@ -415,8 +415,10 @@ def main():
                 longshots.append(longshot)
     races.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
     longshots.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
-    if targeted and OUTPUT.exists():
+    previous = {}
+    if OUTPUT.exists():
         previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
+    if targeted and previous:
         if previous.get("race_date") == race_date:
             race_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in races}
             longshot_keys = {(str(item["venue_id"]).zfill(2), int(item["race"])) for item in longshots}
@@ -430,11 +432,30 @@ def main():
             )
         races.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
         longshots.sort(key=lambda item: (int(item["venue_id"]), int(item["race"])))
+    recommendation_map = {}
+    if previous.get("race_date") == race_date:
+        recommendation_map = {
+            f"{str(item.get('venue_id')).zfill(2)}-{int(item.get('race') or 0)}": item
+            for item in previous.get("recommendations", [])
+            if item.get("venue_id") and item.get("race")
+        }
+    for race_item in races:
+        value = race_item.get("value") or {}
+        if race_item.get("status") == "FINAL" and value.get("status") == "UP":
+            key = f"{str(race_item['venue_id']).zfill(2)}-{int(race_item['race'])}"
+            recommendation_map[key] = {
+                "venue": race_item.get("venue"), "venue_id": str(race_item["venue_id"]).zfill(2),
+                "race": int(race_item["race"]), "status": "FINAL", "value": value,
+                "recorded_at": race_item.get("fetched_at") or now.isoformat(timespec="seconds"),
+            }
+    recommendations = sorted(
+        recommendation_map.values(), key=lambda item: (int(item["venue_id"]), int(item["race"]))
+    )
     output = {
         "race_date": race_date,
         "updated_at": now.strftime("%Y-%m-%d %H:%M JST"),
         "update_mode": "selected_race" if targeted else "all_races",
-        "races": races, "longshots": longshots,
+        "races": races, "longshots": longshots, "recommendations": recommendations,
     }
     OUTPUT.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({

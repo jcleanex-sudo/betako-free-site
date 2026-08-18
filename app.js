@@ -836,6 +836,15 @@ function applyPerformancePayload(payload) {
   document.querySelector("#learningNet").textContent = `${Number(summary.net_profit_yen || 0).toLocaleString("ja-JP")}円`;
   document.querySelector("#learningRisk").textContent = `${summary.profit_factor ?? "--"} / ${Number(summary.max_drawdown_yen || 0).toLocaleString("ja-JP")}円`;
   document.querySelector("#learningCi").textContent = summary.hit_rate_ci95 ? `${summary.hit_rate_ci95[0]}%—${summary.hit_rate_ci95[1]}%` : "集計開始待ち";
+  const market = payload.market_summary || {};
+  document.querySelector("#marketSamples").textContent = `${Number(market.samples || 0)}件`;
+  document.querySelector("#marketPerformance").textContent = Number(market.samples || 0)
+    ? `${Number(market.hit_rate || 0).toFixed(1)}% / ${Number(market.net_profit_yen || 0).toLocaleString("ja-JP")}円`
+    : "集計開始待ち";
+  const marketLabels = { single: "単勝", exacta: "2連単", quinella: "2連複", trio: "3連複", trifecta: "3連単" };
+  document.querySelector("#marketByType").textContent = Object.entries(marketLabels)
+    .map(([key, label]) => `${label}${Number(payload.market_by_type?.[key]?.samples || 0)}件`)
+    .join("｜");
   const renderTier = (name, tier) => {
     const ci = tier.hit_rate_ci95 ? `${tier.hit_rate_ci95[0]}%—${tier.hit_rate_ci95[1]}%` : "--";
     document.querySelector(`#${name}Samples`).textContent = `${tier.samples || 0}件`;
