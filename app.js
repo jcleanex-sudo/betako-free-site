@@ -319,6 +319,23 @@ function buildNoteDraft(payload, paid = false) {
 }
 
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+const liveDataBase = "https://raw.githubusercontent.com/jcleanex-sudo/betako-free-site/main/data";
+
+async function probeLiveExhibitionVersion() {
+  const response = await fetch(`${liveDataBase}/exhibition.json?probe=${Date.now()}`, {
+    cache: "no-store",
+    headers: { Range: "bytes=0-1023" },
+  });
+  if (!response.ok && response.status !== 206) throw new Error(`probe ${response.status}`);
+  const prefix = await response.text();
+  return prefix.match(/"updated_at"\s*:\s*"([^"]+)"/)?.[1] || null;
+}
+
+async function fetchLiveExhibition() {
+  const response = await fetch(`${liveDataBase}/exhibition.json?ts=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`live exhibition ${response.status}`);
+  return response.json();
+}
 
 async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt, previousUpdatedAt }) {
   const api = window.betakoRuntime?.on_demand_api;
@@ -340,14 +357,22 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
     });
     if (!response.ok) throw new Error(`refresh ${response.status}`);
 
-    for (let attempt = 0; attempt < 24; attempt += 1) {
-      await delay(10000);
-      const exhibitionResponse = await fetch(`data/exhibition.json?ts=${Date.now()}`, { cache: "no-store" });
-      if (!exhibitionResponse.ok) continue;
-      const payload = await exhibitionResponse.json();
+    for (let attempt = 0; attempt < 36; attempt += 1) {
+      if (attempt > 0) await delay(5000);
+      if (attempt === 3) {
+        badge.textContent = "展示更新・公式取得中";
+        detail.textContent = "公式の展示・進入・ST・5券種オッズを取得しています。";
+      } else if (attempt === 9) {
+        badge.textContent = "展示更新・反映中";
+        detail.textContent = "取得した予想を公開データへ反映しています。";
+      }
+      const liveVersion = await probeLiveExhibitionVersion().catch(() => null);
+      if (!liveVersion || liveVersion === previousUpdatedAt) continue;
+      const payload = await fetchLiveExhibition().catch(() => null);
+      if (!payload) continue;
       if (payload.race_date !== raceDate) continue;
       const refreshed = payload.races?.find((item) => item.venue_id === venueId && String(item.race) === String(race));
-      if (refreshed && (refreshed.fetched_at !== previousFetchedAt || payload.updated_at !== previousUpdatedAt)) {
+      if (refreshed?.fetched_at && refreshed.fetched_at !== previousFetchedAt) {
         window.betakoExhibition = payload;
         renderLongshots(window.betakoPredictions?.longshots || []);
         document.querySelector("#predictionForm").requestSubmit();
@@ -355,7 +380,7 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
       }
     }
     badge.textContent = "展示前・更新待ち";
-    detail.textContent = "更新処理は受付済みです。少し待ってから、もう一度このレースを選んでください。";
+    detail.textContent = "更新処理は受付済みです。公式側が混雑しています。少し待ってから、もう一度このレースを選んでください。";
   } catch {
     badge.textContent = "展示前";
     detail.textContent = "更新を開始できませんでした。朝の予想を表示し、購入は見送り対象にします。";
