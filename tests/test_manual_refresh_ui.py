@@ -16,6 +16,9 @@ class ManualRefreshUiTest(unittest.TestCase):
         self.assertIn("Promise.allSettled", script)
         self.assertIn('refreshAllData({ manual: true })', script)
         self.assertIn('window.addEventListener("offline"', script)
+        self.assertIn("const venueId = String(match?.venue_id || officialVenue?.venue_id", script)
+        self.assertIn("venueId,", script)
+        self.assertNotIn("venueId: String(venueIndex)", script)
 
 
 if __name__ == "__main__":

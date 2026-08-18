@@ -21,7 +21,7 @@ function populateActiveVenues(payload) {
           : 0;
         return {
           venue,
-          venue_id: String(venues.indexOf(venue) + 1).padStart(2, "0"),
+          venue_id: String(venueRaces[0]?.venue_id || venues.indexOf(venue) + 1).padStart(2, "0"),
           fetched_races: fetchedRaces,
           reference_rate: referenceRate,
           complete: fetchedRaces === 12,
@@ -468,13 +468,15 @@ function renderFixedPortfolio(portfolio, finalReady) {
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const venue = venueSelect.value;
-  const venueIndex = venues.indexOf(venue) + 1;
-  document.querySelector("#venueCode").textContent = String(venueIndex).padStart(2, "0");
   const predictionDate = window.betakoPredictions?.race_date;
   const dateMatches = !predictionDate || predictionDate === dateInput.value;
+  const predictionRows = window.betakoPredictions?.all_races || window.betakoPredictions?.rankings || [];
   const match = dateMatches
-    ? (window.betakoPredictions?.all_races || window.betakoPredictions?.rankings || []).find((item) => item.venue === venue && String(item.race) === raceSelect.value)
+    ? predictionRows.find((item) => item.venue === venue && String(item.race) === raceSelect.value)
     : null;
+  const officialVenue = window.betakoPredictions?.official_venues?.find((item) => item.venue === venue);
+  const venueId = String(match?.venue_id || officialVenue?.venue_id || venues.indexOf(venue) + 1).padStart(2, "0");
+  document.querySelector("#venueCode").textContent = venueId;
   const finalMode = document.querySelector("#predictionType").value === "展示後AI最終予想";
   const exhibitionDateMatches = window.betakoExhibition?.race_date === dateInput.value;
   const finalData = exhibitionDateMatches
@@ -585,7 +587,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   document.querySelector("#selectionResult").hidden = false;
   if (finalMode && !finalReady && match) {
     void refreshSelectedRace({
-      venueId: String(venueIndex).padStart(2, "0"),
+      venueId,
       race: Number(raceSelect.value),
       raceDate: dateInput.value,
       previousFetchedAt: finalData?.fetched_at,
