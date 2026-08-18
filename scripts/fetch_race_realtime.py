@@ -4,6 +4,7 @@
 import os
 import re
 import urllib.parse
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 
 import requests
@@ -388,14 +389,33 @@ def fetch_all_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
     sources = {}
     errors = {}
     deadline = None
-    for path in ("/oddstf", "/odds2tf", "/odds3f", "/odds3t"):
+    paths = ("/oddstf", "/odds2tf", "/odds3f", "/odds3t")
+    for path in paths:
         sources[path] = f"{BASE_URL}{path}?jcd={stadium_id}&hd={race_date_compact}&rno={race_number}"
+
+    def fetch_market_page(path):
         try:
             soup = BeautifulSoup(_fetch_html(path, params), "lxml")
-            soups[path] = soup
-            deadline = deadline or _parse_deadline(soup, race_number)
+            return path, soup, None
         except Exception as exc:
-            errors[path] = str(exc)
+            return path, None, str(exc)
+
+    # A user-triggered refresh targets exactly one race. Fetch its four official
+    # odds pages concurrently; keep full-venue sweeps sequential per race to
+    # avoid multiplying load against the official site.
+    targeted = bool(os.environ.get("TARGET_VENUE_ID") and os.environ.get("TARGET_RACE"))
+    if targeted:
+        with ThreadPoolExecutor(max_workers=len(paths)) as executor:
+            fetched_pages = list(executor.map(fetch_market_page, paths))
+    else:
+        fetched_pages = [fetch_market_page(path) for path in paths]
+
+    for path, soup, error in fetched_pages:
+        if error:
+            errors[path] = error
+            continue
+        soups[path] = soup
+        deadline = deadline or _parse_deadline(soup, race_number)
     markets = {}
     counts = {}
     for name, (path, parser, expected) in market_specs.items():
