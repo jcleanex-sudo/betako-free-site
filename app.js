@@ -28,10 +28,18 @@ function populateActiveVenues(payload) {
         };
       });
   const current = venueSelect.value;
-  venueSelect.replaceChildren(...official.map((item) => new Option(
-    `${item.venue_id} ${item.venue}${item.complete === false ? `（${item.fetched_races}/12R）` : ""}`,
-    item.venue,
-  )));
+  const activeByVenue = new Map(official.map((item) => [item.venue, item]));
+  const venueOptions = venues.map((venue, index) => {
+    const active = activeByVenue.get(venue);
+    const venueId = String(active?.venue_id || index + 1).padStart(2, "0");
+    const label = active
+      ? `${venueId} ${venue}${active.complete === false ? `（${active.fetched_races}/12R）` : ""}`
+      : `${venueId} ${venue}（本日非開催）`;
+    const option = new Option(label, venue);
+    option.disabled = !active;
+    return option;
+  });
+  venueSelect.replaceChildren(...venueOptions);
   const available = payload.status === "OK" && official.length > 0 && official.every((item) => item.complete !== false);
   venueSelect.disabled = !available;
   document.querySelector("#predictionForm button[type='submit']").disabled = !available;

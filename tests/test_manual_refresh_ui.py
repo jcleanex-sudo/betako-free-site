@@ -19,6 +19,9 @@ class ManualRefreshUiTest(unittest.TestCase):
         self.assertIn("const venueId = String(match?.venue_id || officialVenue?.venue_id", script)
         self.assertIn("venueId,", script)
         self.assertNotIn("venueId: String(venueIndex)", script)
+        self.assertIn("const venueOptions = venues.map", script)
+        self.assertIn("（本日非開催）", script)
+        self.assertIn("option.disabled = !active", script)
 
 
 if __name__ == "__main__":
