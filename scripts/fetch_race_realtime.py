@@ -16,6 +16,9 @@ from urllib3.util.retry import Retry
 
 
 BASE_URL = "https://www.boatrace.jp/owpc/pc/race"
+MINIMUM_PUBLISHABLE_MARKET_COUNTS = {
+    "single": 1, "exacta": 2, "quinella": 3, "trio": 2, "trifecta": 6,
+}
 JST = timezone(timedelta(hours=9))
 REQUEST_TIMEOUT = int(os.environ.get(
     "BOATRACE_REALTIME_TIMEOUT",
@@ -373,6 +376,7 @@ def fetch_all_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
     soups = {}
     sources = {}
     errors = {}
+    warnings = {}
     deadline = None
     paths = ("/oddstf", "/odds2tf", "/odds3f", "/odds3t")
     for path in paths:
@@ -416,8 +420,13 @@ def fetch_all_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
         else:
             markets[name] = parser(soup)
         counts[name] = len(markets[name])
-        if counts[name] != expected:
-            errors[name] = f"expected {expected}, got {counts[name]}"
+        minimum = MINIMUM_PUBLISHABLE_MARKET_COUNTS[name]
+        if counts[name] < minimum:
+            errors[name] = f"required at least {minimum}, got {counts[name]}"
+        elif counts[name] != expected:
+            # The official table may show "-" for an unquoted combination.
+            # It cannot be purchased, so exclude it and rank the quoted tickets.
+            warnings[name] = f"official quoted {counts[name]} of {expected}"
     complete = not errors and bool(deadline)
     return {
         "status": "OK" if complete else "DATA BLOCKED",
@@ -430,6 +439,7 @@ def fetch_all_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
         "source_url": sources["/odds3t"],
         "source_urls": sources,
         "errors": errors,
+        "warnings": warnings,
     }
 
 

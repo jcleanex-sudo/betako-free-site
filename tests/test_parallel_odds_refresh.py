@@ -7,6 +7,16 @@ from scripts import fetch_race_realtime
 
 
 class ParallelOddsRefreshTest(unittest.TestCase):
+    def test_unquoted_combination_does_not_block_fixed_13(self):
+        minimums = fetch_race_realtime.MINIMUM_PUBLISHABLE_MARKET_COUNTS
+        self.assertLessEqual(minimums["trifecta"], 120)
+        self.assertLessEqual(minimums["trio"], 20)
+        self.assertLessEqual(minimums["exacta"], 30)
+        self.assertLessEqual(minimums["quinella"], 14)
+        self.assertEqual(minimums, {
+            "single": 1, "exacta": 2, "quinella": 3, "trio": 2, "trifecta": 6,
+        })
+
     def _measure_concurrency(self, targeted):
         lock = threading.Lock()
         active = 0
