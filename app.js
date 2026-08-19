@@ -399,6 +399,16 @@ async function fetchOfficialExhibitionPreview(api, venueId, race, raceDate) {
   return parseOfficialExhibitionHtml(await response.text());
 }
 
+async function requestRaceRefresh(api, venueId, race, raceDate) {
+  const response = await fetch(`${api.replace(/\/$/, "")}/refresh`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ venue_id: venueId, race, race_date: raceDate }),
+  });
+  if (!response.ok) throw new Error(`refresh ${response.status}`);
+  return response.json().catch(() => ({ status: "requested" }));
+}
+
 async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt, previousUpdatedAt }) {
   const api = window.betakoRuntime?.on_demand_api;
   const badge = document.querySelector("#exhibitionBadge");
@@ -413,20 +423,19 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
 
   try {
     const previewPromise = fetchOfficialExhibitionPreview(api, venueId, race, raceDate).catch(() => []);
-    const response = await fetch(`${api.replace(/\/$/, "")}/refresh`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ venue_id: venueId, race, race_date: raceDate }),
-    });
-    if (!response.ok) throw new Error(`refresh ${response.status}`);
+    await requestRaceRefresh(api, venueId, race, raceDate);
     const previewRows = await previewPromise;
+    let previewComplete = false;
+    let recalculationRequested = false;
     if (previewRows.length) {
       renderExhibitionTimes({ exhibition: previewRows }, true);
-      const completePreview = previewRows.length === 6 && previewRows.every((item) => item.time != null);
-      badge.textContent = completePreview ? "展示取得済・予想計算中" : "展示公開待ち・予想計算中";
-      detail.textContent = completePreview
+      previewComplete = previewRows.length === 6 && previewRows.every((item) => item.time != null);
+      badge.textContent = previewComplete ? "展示取得済・予想計算中" : "展示公開待ち・自動確認中";
+      detail.textContent = previewComplete
         ? "展示タイム・進入・STを公式から直接取得しました。固定13点を計算しています。"
-        : "公式ページを直接確認しました。未公開項目を待ちながら固定13点を計算しています。";
+        : "公式の展示欄が埋まるまで、このレースだけを5秒間隔で自動確認します。";
+      // The first refresh already has complete official data in this case.
+      recalculationRequested = previewComplete;
     }
 
     for (let attempt = 0; attempt < 36; attempt += 1) {
@@ -438,13 +447,28 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
         badge.textContent = "展示更新・反映中";
         detail.textContent = "取得した予想を公開データへ反映しています。";
       }
-      const liveVersion = await probeLiveExhibitionVersion().catch(() => null);
+      const [liveVersion, latestPreview] = await Promise.all([
+        probeLiveExhibitionVersion().catch(() => null),
+        previewComplete ? Promise.resolve([]) : fetchOfficialExhibitionPreview(api, venueId, race, raceDate).catch(() => []),
+      ]);
+      if (!previewComplete && latestPreview.length) {
+        renderExhibitionTimes({ exhibition: latestPreview }, true);
+        previewComplete = latestPreview.length === 6 && latestPreview.every((item) => item.time != null);
+        if (previewComplete) {
+          badge.textContent = "展示取得済・予想再計算中";
+          detail.textContent = "公式展示を確認しました。最新値で固定13点を再計算しています。";
+        }
+      }
+      if (previewComplete && !recalculationRequested) {
+        const refreshResult = await requestRaceRefresh(api, venueId, race, raceDate).catch(() => null);
+        recalculationRequested = refreshResult?.status === "requested";
+      }
       if (!liveVersion || liveVersion === previousUpdatedAt) continue;
       const payload = await fetchLiveExhibition().catch(() => null);
       if (!payload) continue;
       if (payload.race_date !== raceDate) continue;
       const refreshed = payload.races?.find((item) => item.venue_id === venueId && String(item.race) === String(race));
-      if (refreshed?.fetched_at && refreshed.fetched_at !== previousFetchedAt) {
+      if (refreshed?.status === "FINAL" && refreshed?.fetched_at && refreshed.fetched_at !== previousFetchedAt) {
         window.betakoExhibition = payload;
         renderLongshots(window.betakoPredictions?.longshots || []);
         document.querySelector("#predictionForm").requestSubmit();

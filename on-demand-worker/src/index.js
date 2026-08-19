@@ -101,7 +101,7 @@ export default {
       console.error(JSON.stringify({ event: "dispatch_failed", status: response.status, venueId, race }));
       return json({ error: "refresh dispatch failed" }, 502, origin);
     }
-    ctx.waitUntil(cache.put(lockKey, new Response("1", { headers: { "cache-control": "max-age=120" } })));
+    ctx.waitUntil(cache.put(lockKey, new Response("1", { headers: { "cache-control": "max-age=20" } })));
     console.log(JSON.stringify({ event: "refresh_dispatched", venueId, race }));
     return json({ ok: true, status: "requested", venue_id: venueId, race }, 202, origin);
   },
