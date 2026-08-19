@@ -24,6 +24,8 @@ class ManualRefreshUiTest(unittest.TestCase):
         self.assertIn("option.disabled = !active", script)
         self.assertIn("fetchOfficialExhibitionPreview", script)
         self.assertIn("展示取得済・予想計算中", script)
+        self.assertIn('`${liveDataBase}/${relative}`', script)
+        self.assertIn("for (const source of sources)", script)
 
     def test_morning_update_does_not_dispatch_full_exhibition_sweep(self):
         workflow = (ROOT / ".github" / "workflows" / "update-predictions.yml").read_text(encoding="utf-8")

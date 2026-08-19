@@ -976,9 +976,21 @@ const refreshDataButton = document.querySelector("#refreshDataButton");
 const refreshDataStatus = document.querySelector("#refreshDataStatus");
 
 async function fetchFreshJson(path) {
-  const response = await fetch(`${path}?ts=${Date.now()}`, { cache: "no-store" });
-  if (!response.ok) throw new Error(`${path} HTTP ${response.status}`);
-  return response.json();
+  const relative = String(path).replace(/^data\//, "");
+  const sources = String(path).startsWith("data/")
+    ? [`${liveDataBase}/${relative}`, path]
+    : [path];
+  let lastError = null;
+  for (const source of sources) {
+    try {
+      const response = await fetch(`${source}?ts=${Date.now()}`, { cache: "no-store" });
+      if (!response.ok) throw new Error(`${source} HTTP ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error(`${path}: unavailable`);
 }
 
 function applyPerformancePayload(payload) {
