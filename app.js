@@ -441,11 +441,11 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
   detail.textContent = "選択したレースの展示データだけを取得しています（通常1〜3分）。";
 
   try {
-    const previewPromise = fetchOfficialExhibitionPreview(api, venueId, race, raceDate).catch(() => []);
-    await requestRaceRefresh(api, venueId, race, raceDate);
-    const previewRows = await previewPromise;
+    const previewRows = await fetchOfficialExhibitionPreview(api, venueId, race, raceDate).catch(() => []);
     let previewComplete = false;
     let recalculationRequested = false;
+    let lastRecalculationRequestAt = 0;
+    let observedUpdatedAt = previousUpdatedAt;
     if (previewRows.length) {
       if (!isCurrentRaceSelection({ venueId, race, raceDate })) return;
       renderExhibitionTimes({ exhibition: previewRows }, true);
@@ -454,12 +454,11 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
       detail.textContent = previewComplete
         ? "展示タイム・進入・STを公式から直接取得しました。固定13点を計算しています。"
         : "公式の展示欄が埋まるまで、このレースだけを5秒間隔で自動確認します。";
-      // The first refresh already has complete official data in this case.
-      recalculationRequested = previewComplete;
     }
 
-    for (let attempt = 0; attempt < 36; attempt += 1) {
-      if (attempt > 0) await delay(5000);
+    let attempt = 0;
+    while (isCurrentRaceSelection({ venueId, race, raceDate })) {
+      if (attempt > 0) await delay(attempt < 36 ? 5000 : 15000);
       if (!isCurrentRaceSelection({ venueId, race, raceDate })) return;
       if (attempt === 3) {
         badge.textContent = "展示更新・公式取得中";
@@ -467,6 +466,9 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
       } else if (attempt === 9) {
         badge.textContent = "展示更新・反映中";
         detail.textContent = "取得した予想を公開データへ反映しています。";
+      } else if (attempt === 36) {
+        badge.textContent = "公式展示・継続監視中";
+        detail.textContent = "公式データが揃うまで、このレースだけを自動確認し続けています。";
       }
       const [liveVersion, latestPreview] = await Promise.all([
         probeLiveExhibitionVersion().catch(() => null),
@@ -480,14 +482,24 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
           detail.textContent = "公式展示を確認しました。最新値で固定13点を再計算しています。";
         }
       }
-      if (previewComplete && !recalculationRequested) {
+      const recalculationExpired = Date.now() - lastRecalculationRequestAt >= 120000;
+      if (previewComplete && (!recalculationRequested || recalculationExpired)) {
         const refreshResult = await requestRaceRefresh(api, venueId, race, raceDate).catch(() => null);
-        recalculationRequested = refreshResult?.status === "requested";
+        if (["requested", "already_requested"].includes(refreshResult?.status)) {
+          recalculationRequested = true;
+          lastRecalculationRequestAt = Date.now();
+        }
       }
-      if (!liveVersion || liveVersion === previousUpdatedAt) continue;
+      if (!liveVersion || liveVersion === observedUpdatedAt) {
+        attempt += 1;
+        continue;
+      }
       const payload = await fetchLiveExhibition().catch(() => null);
-      if (!payload) continue;
-      if (payload.race_date !== raceDate) continue;
+      if (!payload || payload.race_date !== raceDate) {
+        attempt += 1;
+        continue;
+      }
+      observedUpdatedAt = payload.updated_at || liveVersion;
       const refreshed = payload.races?.find((item) => item.venue_id === venueId && String(item.race) === String(race));
       if (refreshed?.status === "FINAL" && refreshed?.fetched_at && refreshed.fetched_at !== previousFetchedAt) {
         window.betakoExhibition = payload;
@@ -495,9 +507,8 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
         document.querySelector("#predictionForm").requestSubmit();
         return;
       }
+      attempt += 1;
     }
-    badge.textContent = "展示前・更新待ち";
-    detail.textContent = "更新処理は受付済みです。公式側が混雑しています。少し待ってから、もう一度このレースを選んでください。";
   } catch {
     if (isCurrentRaceSelection({ venueId, race, raceDate })) {
       badge.textContent = "展示前";
