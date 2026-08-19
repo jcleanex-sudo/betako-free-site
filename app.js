@@ -579,6 +579,7 @@ function renderFixedPortfolio(portfolio, finalReady) {
     return;
   }
   const definitions = [
+    ["trifecta", "3連単", 6],
     ["trio", "3連複", 2], ["exacta", "2連単", 2], ["quinella", "2連複", 3],
   ];
   const heading = document.createElement("div");
@@ -629,6 +630,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   renderExhibitionTimes(finalData, finalMode);
   renderMarketComparison(finalData, finalReady);
   renderFixedPortfolio(finalData?.value?.portfolio, finalReady);
+  document.querySelector(".ticketPlan").hidden = finalReady;
   const exhibitionBadge = document.querySelector("#exhibitionBadge");
   exhibitionBadge.hidden = !finalMode || finalReady;
   exhibitionBadge.textContent = "展示前";

@@ -6,6 +6,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ManualRefreshUiTest(unittest.TestCase):
+    def test_manual_prediction_defaults_to_complete_fixed_13_view(self):
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        app = (ROOT / "app.js").read_text(encoding="utf-8")
+        self.assertIn('value="展示後AI最終予想" selected>おすすめ（固定13点）', html)
+        self.assertIn('["trifecta", "3連単", 6]', app)
+        self.assertIn('document.querySelector(".ticketPlan").hidden = finalReady', app)
+
     def test_refresh_button_and_retry_flow_are_shipped(self):
         html = (ROOT / "index.html").read_text(encoding="utf-8")
         script = (ROOT / "app.js").read_text(encoding="utf-8")
