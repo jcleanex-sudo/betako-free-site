@@ -4,6 +4,7 @@ const raceSelect = document.querySelector("#race");
 const dateInput = document.querySelector("#raceDate");
 const pendingRefreshes = new Set();
 const PUBLIC_THRESHOLDS = Object.freeze({ score: 75, agreement: 75, dataRate: 100 });
+const FIXED_PORTFOLIO_COUNTS = Object.freeze({ trifecta: 6, trio: 2, exacta: 2, quinella: 3 });
 let latestManualPrediction = null;
 
 const jstToday = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
@@ -595,6 +596,18 @@ function renderFixedPortfolio(portfolio, finalReady) {
   panel.replaceChildren(heading, groups);
 }
 
+function hasCompleteFixedPortfolio(finalData) {
+  const portfolio = finalData?.value?.portfolio;
+  const completeMarkets = Object.entries(FIXED_PORTFOLIO_COUNTS).every(([market, expected]) => {
+    const tickets = portfolio?.[market];
+    if (!Array.isArray(tickets) || tickets.length !== expected) return false;
+    const picks = tickets.map((ticket) => String(ticket?.pick || ""));
+    return picks.every(Boolean) && new Set(picks).size === expected;
+  });
+  const main = finalData?.ticket_plan?.main;
+  return completeMarkets && Array.isArray(main) && main.length === FIXED_PORTFOLIO_COUNTS.trifecta;
+}
+
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const venue = venueSelect.value;
@@ -612,7 +625,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const finalData = exhibitionDateMatches
     ? window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value)
     : null;
-  const finalReady = finalMode && finalData?.status === "FINAL";
+  const finalReady = finalMode && finalData?.status === "FINAL" && hasCompleteFixedPortfolio(finalData);
   renderExhibitionTimes(finalData, finalMode);
   renderMarketComparison(finalData, finalReady);
   renderFixedPortfolio(finalData?.value?.portfolio, finalReady);
@@ -700,7 +713,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     mainLabel: document.querySelector("#mainLabel").textContent,
     main: betPlan.main || [],
     cover: betPlan.cover || [],
-    portfolio: value?.portfolio || null,
+    portfolio: finalReady ? value?.portfolio || null : null,
     detail: document.querySelector("#predictionDetail").textContent,
     invalidConditions: document.querySelector("#invalidConditions").textContent,
     finalReady,

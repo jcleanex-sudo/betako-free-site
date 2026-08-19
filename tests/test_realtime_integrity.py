@@ -3,10 +3,21 @@ import unittest
 from bs4 import BeautifulSoup
 
 from scripts.fetch_race_realtime import _parse_exhibition_table, safe_float
-from scripts.update_exhibition import final_prediction
+from scripts.update_exhibition import final_prediction, has_complete_portfolio
 
 
 class RealtimeIntegrityTest(unittest.TestCase):
+    def test_fixed_portfolio_requires_all_13_unique_tickets(self):
+        complete = {
+            "trifecta": [{"pick": f"1-2-{boat}"} for boat in range(1, 7)],
+            "trio": [{"pick": "1-2-3"}, {"pick": "1-2-4"}],
+            "exacta": [{"pick": "1-2"}, {"pick": "1-3"}],
+            "quinella": [{"pick": "1-2"}, {"pick": "1-3"}, {"pick": "1-4"}],
+        }
+        self.assertTrue(has_complete_portfolio(complete))
+        complete["quinella"].pop()
+        self.assertFalse(has_complete_portfolio(complete))
+
     def test_safe_float_accepts_official_units(self):
         self.assertEqual(safe_float("0cm"), 0.0)
         self.assertEqual(safe_float("3m"), 3.0)

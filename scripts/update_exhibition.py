@@ -32,6 +32,20 @@ MARKET_RULES = {
 PORTFOLIO_COUNTS = {"trifecta": 6, "trio": 2, "exacta": 2, "quinella": 3}
 
 
+def has_complete_portfolio(portfolio):
+    """Require all 13 unique tickets before publishing the fixed portfolio."""
+    if not isinstance(portfolio, dict):
+        return False
+    for market, expected in PORTFOLIO_COUNTS.items():
+        tickets = portfolio.get(market)
+        if not isinstance(tickets, list) or len(tickets) != expected:
+            return False
+        picks = [str(ticket.get("pick") or "") for ticket in tickets if isinstance(ticket, dict)]
+        if len(picks) != expected or any(not pick for pick in picks) or len(set(picks)) != expected:
+            return False
+    return True
+
+
 def ordered_trifecta_probability(contenders, pick):
     """Conservative Plackett-Luce approximation for one exact trifecta."""
     weights = {str(item["boat"]): max(0.1, float(item["relative_win_probability"])) for item in contenders}
@@ -129,6 +143,13 @@ def compare_markets(contenders, realtime):
             reverse=True,
         )
         portfolio[market] = market_rows[:count]
+    if not has_complete_portfolio(portfolio):
+        return {
+            "status": "DATA BLOCKED", "message": "固定13点のオッズが全件揃っていないため予想停止",
+            "ranking": [], "portfolio": {}, "portfolio_points": 0, "data_rate": 0,
+            "deadline": deadline, "remaining_minutes": minutes,
+            "source_urls": payload.get("source_urls", {}),
+        }
     status = "UP" if qualified and minutes >= 5 else "WATCH"
     message = "期待値・的中確率の両基準を通過" if status == "UP" else "期待値基準未満のため見送り"
     if minutes < 5:
@@ -364,12 +385,15 @@ def final_prediction(prediction, realtime):
     plan = ticket_plan(adjusted_contenders, final_pick, realtime)
     value = compare_markets(adjusted_contenders, realtime)
     portfolio_trifecta = (value.get("portfolio") or {}).get("trifecta") or []
-    if len(portfolio_trifecta) == PORTFOLIO_COUNTS["trifecta"]:
+    portfolio_complete = has_complete_portfolio(value.get("portfolio"))
+    if portfolio_complete:
         plan = {"main": portfolio_trifecta, "cover": [], "ranked_by_edge": True}
     value_pick = value.get("pick") or (plan["main"][0]["pick"] if plan["main"] else final_pick)
     return {
         "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
-        "status": "FINAL", "message": "展示後再計算済み", "morning_pick": prediction["pick"],
+        "status": "FINAL" if portfolio_complete else "WAIT",
+        "message": "展示後再計算済み" if portfolio_complete else "固定13点が全件揃うまで取得継続",
+        "morning_pick": prediction["pick"],
         "final_pick": final_pick, "final_score": round(final_score, 1), "reasons": reasons,
         "ticket_plan": plan, "best_value_pick": value_pick,
         "market_comparison": value.get("ranking", []),
