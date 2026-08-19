@@ -24,6 +24,9 @@ class ManualRefreshUiTest(unittest.TestCase):
         self.assertIn("option.disabled = !active", script)
         self.assertIn("fetchOfficialExhibitionPreview", script)
         self.assertIn("展示取得済・予想計算中", script)
+        self.assertIn("function isCompleteExhibition", script)
+        self.assertIn("function isCurrentRaceSelection", script)
+        self.assertIn("payload.race_date === jstDate", script)
         self.assertIn('`${liveDataBase}/${relative}`', script)
         self.assertIn("for (const source of sources)", script)
 

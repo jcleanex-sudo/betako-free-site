@@ -3,12 +3,15 @@ const venueSelect = document.querySelector("#venue");
 const raceSelect = document.querySelector("#race");
 const dateInput = document.querySelector("#raceDate");
 const pendingRefreshes = new Set();
+const PUBLIC_THRESHOLDS = Object.freeze({ score: 75, agreement: 75, dataRate: 100 });
 let latestManualPrediction = null;
+
+const jstToday = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
 
 venueSelect.replaceChildren(new Option("公式開催場を確認中", ""));
 venueSelect.disabled = true;
 for (let race = 1; race <= 12; race += 1) raceSelect.add(new Option(`${race}R`, String(race)));
-dateInput.value = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
+dateInput.value = jstToday();
 
 function populateActiveVenues(payload) {
   const official = Array.isArray(payload.official_venues) && payload.official_venues.length
@@ -40,7 +43,8 @@ function populateActiveVenues(payload) {
     return option;
   });
   venueSelect.replaceChildren(...venueOptions);
-  const available = payload.status === "OK" && official.length > 0 && official.every((item) => item.complete !== false);
+  const currentDate = payload.race_date === jstToday();
+  const available = currentDate && payload.status === "OK" && official.length > 0 && official.every((item) => item.complete !== false);
   venueSelect.disabled = !available;
   document.querySelector("#predictionForm button[type='submit']").disabled = !available;
   const preferred = official.some((item) => item.venue === current)
@@ -85,7 +89,9 @@ function buildAxisEvidence(match) {
     evidence.push(`B2確認：級別補正 -1.4点を適用済み。${courseText}と基礎成績を合わせた結果です`);
   }
 
-  const strict = Number(match.score) >= 75 && Number(match.agreement) >= 75 && Number(match.data_rate) >= 95;
+  const strict = Number(match.score) >= PUBLIC_THRESHOLDS.score
+    && Number(match.agreement) >= PUBLIC_THRESHOLDS.agreement
+    && Number(match.data_rate) >= PUBLIC_THRESHOLDS.dataRate;
   evidence.push(strict
     ? `採用判定：指数 ${Number(match.score).toFixed(1)}・因子一致 ${Number(match.agreement).toFixed(0)}%で厳格基準を通過`
     : `見送り判定：指数 ${Number(match.score).toFixed(1)}・因子一致 ${Number(match.agreement).toFixed(0)}%。買い目は比較用で本線採用ではありません`);
@@ -131,14 +137,6 @@ function renderFormation(target, tickets) {
 
 function ticketText(ticket) {
   return typeof ticket === "string" ? ticket : ticket?.pick || "--";
-}
-
-function formationPointCount(first, second, third) {
-  let points = 0;
-  first.forEach((a) => second.forEach((b) => third.forEach((c) => {
-    if (a !== b && a !== c && b !== c) points += 1;
-  })));
-  return points;
 }
 
 function compressTicketsToFormations(tickets = []) {
@@ -409,6 +407,27 @@ async function requestRaceRefresh(api, venueId, race, raceDate) {
   return response.json().catch(() => ({ status: "requested" }));
 }
 
+function isCompleteExhibition(rows) {
+  return Array.isArray(rows)
+    && rows.length === 6
+    && new Set(rows.map((item) => Number(item.boat))).size === 6
+    && rows.every((item) => (
+      item.time != null
+      && Number(item.course) >= 1
+      && Number(item.course) <= 6
+      && item.st != null
+      && item.st !== ""
+    ));
+}
+
+function isCurrentRaceSelection({ venueId, race, raceDate }) {
+  const selectedVenueId = String(venues.indexOf(venueSelect.value) + 1).padStart(2, "0");
+  return dateInput.value === raceDate
+    && selectedVenueId === String(venueId).padStart(2, "0")
+    && raceSelect.value === String(race)
+    && document.querySelector("#predictionType").value === "展示後AI最終予想";
+}
+
 async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt, previousUpdatedAt }) {
   const api = window.betakoRuntime?.on_demand_api;
   const badge = document.querySelector("#exhibitionBadge");
@@ -428,9 +447,10 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
     let previewComplete = false;
     let recalculationRequested = false;
     if (previewRows.length) {
+      if (!isCurrentRaceSelection({ venueId, race, raceDate })) return;
       renderExhibitionTimes({ exhibition: previewRows }, true);
-      previewComplete = previewRows.length === 6 && previewRows.every((item) => item.time != null);
-      badge.textContent = previewComplete ? "展示取得済・予想計算中" : "展示公開待ち・自動確認中";
+      previewComplete = isCompleteExhibition(previewRows);
+      badge.textContent = previewComplete ? "展示取得済・予想計算中" : "展示一部取得・進入/ST待ち";
       detail.textContent = previewComplete
         ? "展示タイム・進入・STを公式から直接取得しました。固定13点を計算しています。"
         : "公式の展示欄が埋まるまで、このレースだけを5秒間隔で自動確認します。";
@@ -440,6 +460,7 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
 
     for (let attempt = 0; attempt < 36; attempt += 1) {
       if (attempt > 0) await delay(5000);
+      if (!isCurrentRaceSelection({ venueId, race, raceDate })) return;
       if (attempt === 3) {
         badge.textContent = "展示更新・公式取得中";
         detail.textContent = "公式の展示・進入・ST・5券種オッズを取得しています。";
@@ -453,7 +474,7 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
       ]);
       if (!previewComplete && latestPreview.length) {
         renderExhibitionTimes({ exhibition: latestPreview }, true);
-        previewComplete = latestPreview.length === 6 && latestPreview.every((item) => item.time != null);
+        previewComplete = isCompleteExhibition(latestPreview);
         if (previewComplete) {
           badge.textContent = "展示取得済・予想再計算中";
           detail.textContent = "公式展示を確認しました。最新値で固定13点を再計算しています。";
@@ -478,8 +499,10 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
     badge.textContent = "展示前・更新待ち";
     detail.textContent = "更新処理は受付済みです。公式側が混雑しています。少し待ってから、もう一度このレースを選んでください。";
   } catch {
-    badge.textContent = "展示前";
-    detail.textContent = "更新を開始できませんでした。朝の予想を表示し、購入は見送り対象にします。";
+    if (isCurrentRaceSelection({ venueId, race, raceDate })) {
+      badge.textContent = "展示前";
+      detail.textContent = "更新を開始できませんでした。朝の予想を表示し、購入は見送り対象にします。";
+    }
   } finally {
     pendingRefreshes.delete(key);
   }
@@ -593,11 +616,11 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const cutoffReached = liveRemaining !== null && liveRemaining < 5;
   const valueStatus = cutoffReached ? "WATCH" : (value?.status || "DATA BLOCKED");
   const valueMessage = cutoffReached ? "締切5分前を過ぎたため新規判定を停止" : value?.message;
-  const referenceBlocked = Boolean(match) && Number(match.data_rate) < 100;
+  const referenceBlocked = Boolean(match) && Number(match.data_rate) < PUBLIC_THRESHOLDS.dataRate;
   const morningSkip = !match
     || match.label !== "厳格候補"
-    || Number(match.score) < 75
-    || Number(match.agreement) < 75
+    || Number(match.score) < PUBLIC_THRESHOLDS.score
+    || Number(match.agreement) < PUBLIC_THRESHOLDS.agreement
     || referenceBlocked;
   const skipTarget = referenceBlocked || (finalMode ? !finalReady || valueStatus !== "UP" : morningSkip);
   const decisionBadge = document.querySelector("#decisionBadge");
@@ -789,7 +812,7 @@ function renderRankings(payload) {
     0,
   )));
   const referenceRate = Number(payload.reference_rate ?? (referenceExpected ? referenceFetched / referenceExpected * 100 : 0));
-  const completeRaceCount = (payload.all_races || []).filter((item) => Number(item.data_rate) >= 100).length;
+  const completeRaceCount = (payload.all_races || []).filter((item) => Number(item.data_rate) >= PUBLIC_THRESHOLDS.dataRate).length;
   const jstParts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Tokyo",
     year: "numeric",
@@ -802,14 +825,14 @@ function renderRankings(payload) {
   const updateHour = Number(jstParts.hour || 0);
   const waitingForMorningUpdate = payload.race_date !== jstDate && updateHour < 9;
   const stalePrediction = payload.race_date !== jstDate && updateHour >= 9;
-  const coverageReady = payload.status === "OK" && collectionRate >= 100 && !stalePrediction;
+  const coverageReady = payload.status === "OK" && collectionRate >= 100 && payload.race_date === jstDate;
   if (!coverageReady) {
     rankings = [];
     longshots = [];
   } else {
-    rankings = rankings.filter((item) => Number(item.data_rate) >= 100);
+    rankings = rankings.filter((item) => Number(item.data_rate) >= PUBLIC_THRESHOLDS.dataRate);
     longshots = longshots.filter((item) => (payload.all_races || []).some(
-      (race) => race.venue === item.venue && Number(race.race) === Number(item.race) && Number(race.data_rate) >= 100,
+      (race) => race.venue === item.venue && Number(race.race) === Number(item.race) && Number(race.data_rate) >= PUBLIC_THRESHOLDS.dataRate,
     ));
   }
   window.betakoPredictions = { ...payload, rankings, longshots };
@@ -1055,8 +1078,14 @@ function applyPerformancePayload(payload) {
 }
 
 function applyModelCalibration(payload) {
+  window.betakoModelCalibration = payload;
   document.querySelector("#historicalSamples").textContent = `${Number(payload.samples || 0).toLocaleString("ja-JP")}件`;
   document.querySelector("#calibrationStatus").textContent = `${payload.status || "COLLECTING"}｜${payload.reason || "検証中"}`;
+  const validation = payload.baseline_validation || {};
+  document.querySelector("#heroModelVersion").textContent = payload.logic_transition || "現行モデル";
+  document.querySelector("#heroAccuracy").textContent = Number(validation.top1_accuracy || 0).toFixed(1);
+  document.querySelector("#heroValidationSamples").textContent = `検証 ${Number(validation.samples || 0).toLocaleString("ja-JP")}レース`;
+  document.querySelector("#heroTrainingSamples").textContent = Number(payload.samples || 0).toLocaleString("ja-JP");
 }
 
 function applyExhibitionPayload(payload) {

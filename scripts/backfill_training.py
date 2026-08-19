@@ -13,21 +13,18 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
-from generate_predictions import (
-    CLASS_BONUS,
-    COURSE_PRIOR,
-    DEFAULT_MODEL_WEIGHTS,
-    JST,
-    MAX_WORKERS,
-    ROOT,
-    STADIUMS,
-    discover_venues,
-    fetch_race,
-    load_model_weights,
-    make_prediction,
-    number,
-    session,
-)
+try:
+    from .generate_predictions import (
+        CLASS_BONUS, COURSE_PRIOR, JST, MAX_WORKERS, ROOT,
+        STADIUMS, discover_venues, fetch_race, load_model_weights, make_prediction,
+        number, session,
+    )
+except ImportError:  # Direct script execution in GitHub Actions.
+    from generate_predictions import (
+        CLASS_BONUS, COURSE_PRIOR, JST, MAX_WORKERS, ROOT,
+        STADIUMS, discover_venues, fetch_race, load_model_weights, make_prediction,
+        number, session,
+    )
 
 TRAINING_DIR = ROOT / "data" / "training"
 DATASET = TRAINING_DIR / "races.json"

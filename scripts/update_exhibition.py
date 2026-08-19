@@ -7,7 +7,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from fetch_race_realtime import empty_realtime, fetch_exhibition
+try:
+    from .fetch_race_realtime import empty_realtime, fetch_exhibition
+except ImportError:  # Direct script execution in GitHub Actions.
+    from fetch_race_realtime import empty_realtime, fetch_exhibition
 
 JST = timezone(timedelta(hours=9))
 ROOT = Path(__file__).resolve().parents[1]
@@ -476,7 +479,7 @@ def main():
     )
     output = {
         "race_date": race_date,
-        "updated_at": now.strftime("%Y-%m-%d %H:%M JST"),
+        "updated_at": now.strftime("%Y-%m-%d %H:%M:%S JST"),
         "update_mode": "morning_skeleton" if initialize_only else "selected_race" if targeted else "all_races",
         "races": races, "longshots": longshots, "recommendations": recommendations,
     }

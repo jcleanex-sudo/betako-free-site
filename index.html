@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="全国24場を複数モデルで分析するボートレースAI BETAKO">
+  <meta name="description" content="全国24場を複数因子で分析するボートレースAI BETAKO">
   <title>BETAKO | データで選ぶボートレースAI</title>
   <link rel="stylesheet" href="style.css?v=20260819-1">
 </head>
@@ -19,14 +19,14 @@
     <div class="heroCopy">
       <p class="eyebrow"><span></span> DATA DRIVEN BOATRACE</p>
       <h1>全レースを追わない。<br><em>期待できる一戦</em>を選ぶ。</h1>
-      <p class="lead">全国24場のデータを複数モデルで分析。期待度の高いレースだけを選び、根拠が弱いレースは迷わず見送ります。</p>
+      <p class="lead">全国24場のデータを複数因子で分析。期待度の高いレースだけを選び、根拠が弱いレースは迷わず見送ります。</p>
       <div class="heroActions"><a class="primaryButton" href="#predict">開催場を選んで予想 <b>→</b></a><a class="secondaryButton" href="#ranking">今日の期待度を見る</a><a class="secondaryButton" href="https://minamo-koroko.workspace-210050.chatgpt.site/">水面コロ子へ ⇒</a></div>
       <div class="proof"><span>全国24場</span><span>展示後再評価</span><span>期待度ランキング</span><span>X自動投稿</span></div>
     </div>
     <aside class="modelPanel">
-      <div class="panelTop"><span>BETAKO MODEL V3</span><span class="live">5-MARKET EV</span></div>
-      <div class="scoreBlock"><div><small>時系列検証・1着軸精度</small><strong>59.7<sup>%</sup></strong></div><span>検証 206レース</span></div>
-      <div class="miniStats"><div><small>学習データ</small><strong>1,030</strong></div><div><small>分析因子</small><strong>7</strong></div><div><small>対象開催場</small><strong>24</strong></div><div><small>モデル</small><strong>現行モデル・検証中</strong></div></div>
+      <div class="panelTop"><span>BETAKO MODEL</span><span class="live">5-MARKET EV</span></div>
+      <div class="scoreBlock"><div><small>時系列検証・1着軸精度</small><strong><span id="heroAccuracy">--</span><sup>%</sup></strong></div><span id="heroValidationSamples">検証データ読込中</span></div>
+      <div class="miniStats"><div><small>学習データ</small><strong id="heroTrainingSamples">--</strong></div><div><small>分析因子</small><strong>7</strong></div><div><small>対象開催場</small><strong>24</strong></div><div><small>モデル</small><strong id="heroModelVersion">読込中</strong></div></div>
       <p class="disclaimer">参考学習モデルの過去値です。現在の公開予想ロジックは別途前向き検証中で、将来の的中や利益を保証しません。</p>
     </aside>
   </section>
@@ -86,7 +86,7 @@
 
   <section class="logicSection" id="logic">
     <div class="sectionHead"><div><p class="eyebrow">PREDICTION LOGIC</p><h2>単一ロジックに頼らない</h2></div><p>能力・展示・公式オッズを複合評価し、5券種から期待値の高い候補だけを選びます。</p></div>
-    <div class="logicFlow"><article><b>01</b><h3>基礎能力</h3><p>級別、全国・当地成績、近況を評価</p></article><article><b>02</b><h3>水面適性</h3><p>コース別成績、風・波・潮位を補正</p></article><article><b>03</b><h3>機力評価</h3><p>モーター、ボート、ST傾向を比較</p></article><article><b>04</b><h3>展示後再計算</h3><p>展示タイム、進入変化、直前気配を反映</p></article><article><b>05</b><h3>5券種期待値</h3><p>単勝・2連単・2連複・3連複・3連単をnet edge順に比較</p></article></div>
+    <div class="logicFlow"><article><b>01</b><h3>基礎能力</h3><p>級別、全国・当地成績を評価</p></article><article><b>02</b><h3>水面適性</h3><p>枠番コース、風・波を補正</p></article><article><b>03</b><h3>機力評価</h3><p>モーター、ボート、ST傾向を比較</p></article><article><b>04</b><h3>展示後再計算</h3><p>展示タイム、進入変化、直前気配を反映</p></article><article><b>05</b><h3>5券種期待値</h3><p>単勝・2連単・2連複・3連複・3連単をnet edge順に比較</p></article></div>
   </section>
 
   <section class="operations" id="operations">
@@ -96,6 +96,6 @@
 
   <footer><a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO</span></a><p>勝つことより先に、大きく負けないこと。</p><small>AI予想は検証中の分析情報です。舟券購入は自己責任で行ってください。</small></footer>
 </main>
-<script src="app.js?v=20260819-7"></script>
+<script src="app.js?v=20260819-8"></script>
 </body>
 </html>

@@ -43,10 +43,21 @@ export default {
             "accept": "text/html,application/xhtml+xml",
             "accept-language": "ja",
           },
+          signal: AbortSignal.timeout(15000),
         });
         if (!official.ok || !official.body) {
           console.error(JSON.stringify({ event: "official_preview_failed", status: official.status, venueId, race }));
           return json({ error: "official preview failed" }, 502, origin);
+        }
+        const finalOfficialUrl = new URL(official.url);
+        const expectedDate = raceDate.replaceAll("-", "");
+        if (
+          finalOfficialUrl.searchParams.get("jcd") !== venueId
+          || finalOfficialUrl.searchParams.get("hd") !== expectedDate
+          || finalOfficialUrl.searchParams.get("rno") !== String(race)
+        ) {
+          console.error(JSON.stringify({ event: "official_preview_mismatch", venueId, race, responseUrl: official.url }));
+          return json({ error: "official preview mismatch" }, 502, origin);
         }
         console.log(JSON.stringify({ event: "official_preview_ok", venueId, race }));
         return new Response(official.body, {
@@ -68,6 +79,8 @@ export default {
       return json({ error: "not found" }, 404, origin === env.ALLOWED_ORIGIN ? origin : "null");
     }
     if (origin !== env.ALLOWED_ORIGIN) return json({ error: "origin blocked" }, 403, "null");
+    const contentLength = Number(request.headers.get("content-length") || 0);
+    if (contentLength > 2048) return json({ error: "request too large" }, 413, origin);
 
     let body;
     try {
@@ -96,6 +109,7 @@ export default {
         "content-type": "application/json",
       },
       body: JSON.stringify({ ref: "main", inputs: { venue_id: venueId, race: String(race) } }),
+      signal: AbortSignal.timeout(10000),
     });
     if (!response.ok) {
       console.error(JSON.stringify({ event: "dispatch_failed", status: response.status, venueId, race }));

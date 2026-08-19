@@ -5,13 +5,14 @@ import math
 import os
 import re
 import threading
+import warnings
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
 
 JST = timezone(timedelta(hours=9))
 BASE = "https://www.boatrace.jp/owpc/pc/race"
@@ -29,6 +30,7 @@ MAX_WORKERS = max(1, min(4, int(os.environ.get("BOATRACE_MAX_WORKERS", "3"))))
 PUBLIC_SCORE_MIN = 75.0
 PUBLIC_AGREEMENT_MIN = 75.0
 PUBLIC_DATA_RATE_MIN = 100.0
+warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 _THREAD_LOCAL = threading.local()
 ROOT = Path(__file__).resolve().parents[1]
 MODEL_CONFIG = ROOT / "data" / "model_calibration.json"

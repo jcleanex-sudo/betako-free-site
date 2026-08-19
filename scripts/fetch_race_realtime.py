@@ -3,12 +3,14 @@
 
 import os
 import re
+import threading
 import urllib.parse
+import warnings
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -20,6 +22,7 @@ REQUEST_TIMEOUT = int(os.environ.get(
     os.environ.get("BOATRACE_REQUEST_TIMEOUT", "20"),
 ))
 REQUEST_RETRIES = int(os.environ.get("BOATRACE_REALTIME_RETRIES", "0"))
+warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 
 HEADERS = {
     "User-Agent": (
@@ -65,16 +68,24 @@ WEATHER_MAP = {
     "4": "雪",
 }
 
-_SESSION = requests.Session()
-_SESSION.headers.update(HEADERS)
-_SESSION.mount("https://", HTTPAdapter(max_retries=Retry(
-    total=REQUEST_RETRIES,
-    connect=REQUEST_RETRIES,
-    read=REQUEST_RETRIES,
-    backoff_factor=0.3,
-    status_forcelist=(429, 500, 502, 503, 504),
-    allowed_methods=("GET",),
-)))
+_THREAD_LOCAL = threading.local()
+
+
+def _session():
+    """Return one requests session per worker thread."""
+    if not hasattr(_THREAD_LOCAL, "session"):
+        client = requests.Session()
+        client.headers.update(HEADERS)
+        client.mount("https://", HTTPAdapter(max_retries=Retry(
+            total=REQUEST_RETRIES,
+            connect=REQUEST_RETRIES,
+            read=REQUEST_RETRIES,
+            backoff_factor=0.3,
+            status_forcelist=(429, 500, 502, 503, 504),
+            allowed_methods=("GET",),
+        )))
+        _THREAD_LOCAL.session = client
+    return _THREAD_LOCAL.session
 
 
 def normalize_race_date(race_date):
@@ -100,10 +111,9 @@ def display_race_date(race_date):
 
 def safe_float(value, default=None):
     try:
-        text = str(value).strip().replace(",", "")
-        text = text.replace("m", "").replace("cm", "").replace("kg", "")
-        text = text.replace("F", "").replace("L", "")
-        return float(text) if text else default
+        text = str(value).strip().replace(",", "").upper()
+        match = re.search(r"-?(?:\d+(?:\.\d*)?|\.\d+)", text)
+        return float(match.group(0)) if match else default
     except Exception:
         return default
 
@@ -127,7 +137,7 @@ def safe_int(value, default=None):
 
 def _fetch_html(path, params):
     url = f"{BASE_URL}{path}"
-    response = _SESSION.get(url, params=params, timeout=REQUEST_TIMEOUT)
+    response = _session().get(url, params=params, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
     expected_date = params.get("hd")
     if expected_date:
@@ -347,31 +357,6 @@ def _parse_deadline(soup, race_number):
     return None
 
 
-def fetch_trifecta_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
-    stadium_id = str(stadium_id).zfill(2)
-    race_number = int(race_number)
-    race_date_compact = normalize_race_date(race_date)
-    params = {"jcd": stadium_id, "hd": race_date_compact, "rno": race_number}
-    source_url = f"{BASE_URL}/odds3t?jcd={stadium_id}&hd={race_date_compact}&rno={race_number}"
-    try:
-        soup = BeautifulSoup(_fetch_html("/odds3t", params), "lxml")
-        odds = _parse_trifecta_odds(soup)
-        return {
-            "status": "OK" if len(odds) == 120 else "DATA BLOCKED",
-            "odds": odds,
-            "deadline": _parse_deadline(soup, race_number),
-            "fetched_at": datetime.now(JST).isoformat(timespec="seconds"),
-            "source_url": source_url,
-            "error": None,
-        }
-    except Exception as exc:
-        return {
-            "status": "DATA BLOCKED", "odds": {}, "deadline": None,
-            "fetched_at": datetime.now(JST).isoformat(timespec="seconds"),
-            "source_url": source_url, "error": str(exc),
-        }
-
-
 def fetch_all_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
     """Fetch all five requested markets only after exhibition is available."""
     stadium_id = str(stadium_id).zfill(2)
@@ -446,6 +431,8 @@ def fetch_all_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
         "source_urls": sources,
         "errors": errors,
     }
+
+
 def evaluate_exhibition(realtime):
     exhibition = realtime.get("exhibition") or []
     valid_times = [item for item in exhibition if item.get("time") is not None]
