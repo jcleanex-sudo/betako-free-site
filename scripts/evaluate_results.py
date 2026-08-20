@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -29,6 +31,7 @@ VENUE_MIN_SAMPLES = 5
 VENUE_MIN_HIT_RATE = 30.0
 VENUE_MIN_NET_PROFIT = 0
 VENUE_MIN_PROFIT_FACTOR = 1.2
+RESULT_WORKERS = max(1, min(4, int(os.environ.get("BOATRACE_RESULT_WORKERS", "4"))))
 
 
 def build_main_tickets(prediction: dict) -> list[str]:
@@ -286,15 +289,31 @@ def build_today_venue_performance(date: str, history: dict, previous: dict | Non
     valid_keys = {f"{date}-{item['venue_id']}-{item['race']}" for item in predictions}
     records = {key: value for key, value in records.items() if key in valid_keys}
 
+    pending = []
     for prediction in predictions:
         key = f"{date}-{prediction['venue_id']}-{prediction['race']}"
         if key in records:
             continue
-        try:
-            result = fetch_result(date, prediction["venue_id"], prediction["race"])
-        except requests.RequestException as exc:
-            print(f"{key}: {exc}")
-            continue
+        pending.append((key, prediction))
+
+    # The official result pages are independent. A small, fixed worker pool keeps
+    # the hourly job below GitHub Actions' timeout without hammering the source.
+    fetched = {}
+    if pending:
+        with ThreadPoolExecutor(max_workers=min(RESULT_WORKERS, len(pending))) as executor:
+            futures = {
+                executor.submit(fetch_result, date, prediction["venue_id"], prediction["race"]): (key, prediction)
+                for key, prediction in pending
+            }
+            for future in as_completed(futures):
+                key, prediction = futures[future]
+                try:
+                    fetched[key] = (prediction, future.result())
+                except requests.RequestException as exc:
+                    print(f"{key}: {exc}")
+
+    for key, prediction in pending:
+        result = fetched.get(key, (None, None))[1]
         if not result:
             continue
         actual, payout = result
