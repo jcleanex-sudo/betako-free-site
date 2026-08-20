@@ -392,7 +392,10 @@ def fetch_all_odds(stadium_id: str, race_number: int, race_date: str) -> dict:
     # A user-triggered refresh targets exactly one race. Fetch its four official
     # odds pages concurrently; keep full-venue sweeps sequential per race to
     # avoid multiplying load against the official site.
-    targeted = bool(os.environ.get("TARGET_VENUE_ID") and os.environ.get("TARGET_RACE"))
+    targeted = bool(
+        os.environ.get("TARGET_RACES")
+        or (os.environ.get("TARGET_VENUE_ID") and os.environ.get("TARGET_RACE"))
+    )
     if targeted:
         with ThreadPoolExecutor(max_workers=len(paths)) as executor:
             fetched_pages = list(executor.map(fetch_market_page, paths))

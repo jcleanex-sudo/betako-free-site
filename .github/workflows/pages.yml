@@ -3,6 +3,8 @@ name: Deploy BETAKO
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "data/**"
   workflow_dispatch:
 
 permissions:

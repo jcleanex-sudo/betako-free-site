@@ -32,6 +32,18 @@ MARKET_RULES = {
 PORTFOLIO_COUNTS = {"trifecta": 6, "trio": 2, "exacta": 2, "quinella": 3}
 
 
+def parse_target_pairs(value):
+    pairs = set()
+    for token in str(value or "").split(","):
+        parts = token.strip().split("-")
+        if len(parts) != 2 or not all(part.isdigit() for part in parts):
+            continue
+        venue_id, race = parts[0].zfill(2), int(parts[1])
+        if 1 <= int(venue_id) <= 24 and 1 <= race <= 12:
+            pairs.add((venue_id, race))
+    return pairs
+
+
 def has_complete_portfolio(portfolio):
     """Require all 13 unique tickets before publishing the fixed portfolio."""
     if not isinstance(portfolio, dict):
@@ -416,15 +428,21 @@ def main():
     target_venue = os.environ.get("TARGET_VENUE_ID", "").zfill(2)
     target_race_text = os.environ.get("TARGET_RACE", "")
     target_race = int(target_race_text) if target_race_text.isdigit() else None
-    targeted = bool(target_venue and target_race)
+    target_races_text = os.environ.get("TARGET_RACES", "")
+    target_pairs = parse_target_pairs(target_races_text)
+    if target_races_text and not target_pairs:
+        raise SystemExit("TARGET_RACES did not contain a valid venue-race pair")
+    if not target_pairs and target_venue and target_race:
+        target_pairs = {(target_venue, target_race)}
+    targeted = bool(target_pairs)
     initialize_only = os.environ.get("INITIALIZE_ONLY") == "1"
     if targeted:
         predictions = [
             item for item in predictions
-            if str(item["venue_id"]).zfill(2) == target_venue and int(item["race"]) == target_race
+            if (str(item["venue_id"]).zfill(2), int(item["race"])) in target_pairs
         ]
         if not predictions:
-            raise SystemExit(f"target race not found: {target_venue}-{target_race}")
+            raise SystemExit(f"target races not found: {sorted(target_pairs)}")
 
     def update_one(prediction):
         try:
@@ -504,7 +522,7 @@ def main():
     output = {
         "race_date": race_date,
         "updated_at": now.strftime("%Y-%m-%d %H:%M:%S JST"),
-        "update_mode": "morning_skeleton" if initialize_only else "selected_race" if targeted else "all_races",
+        "update_mode": "morning_skeleton" if initialize_only else "selected_races" if targeted else "all_races",
         "races": races, "longshots": longshots, "recommendations": recommendations,
     }
     OUTPUT.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
