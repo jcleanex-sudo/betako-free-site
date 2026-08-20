@@ -224,14 +224,13 @@ def evaluate_market_recommendations(date: str, exhibition: dict, records: dict):
 
 
 def evaluate_fixed_portfolios(date: str, exhibition: dict, records: dict):
-    """Evaluate the fixed 13-ticket strategy as one 1,300-yen race portfolio."""
+    """Evaluate every complete fixed 13-ticket prediction as one 1,300-yen portfolio."""
     candidates = exhibition.get("recommendations") or exhibition.get("races", [])
     for race_item in candidates:
         value = race_item.get("value") or {}
         portfolio = value.get("portfolio") or {}
         if (
             race_item.get("status") != "FINAL"
-            or value.get("status") != "UP"
             or int(value.get("data_rate") or 0) != 100
             or any(len(portfolio.get(market) or []) != count for market, count in PORTFOLIO_COUNTS.items())
         ):

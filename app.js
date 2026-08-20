@@ -977,29 +977,33 @@ function renderTodayVenuePerformance() {
   const container = document.querySelector("#venuePerformanceGrid");
   const thresholdNode = document.querySelector("#venueThresholds");
   if (!container || !thresholdNode) return;
-  const performance = window.betakoPerformance?.today_venue_performance;
+  const performance = window.betakoPerformance || {};
   const predictionDate = window.betakoPredictions?.race_date;
-  if (!performance || !predictionDate || performance.race_date !== predictionDate) {
-    thresholdNode.textContent = "本日分の結果照合待ち。未確定レースは母数に含めません。";
-    container.innerHTML = `<article class="venuePerformanceCard"><span>結果待ち</span><h3>まだ確定結果がありません</h3><p>結果が確定した会場から自動表示します。</p></article>`;
+  if (!predictionDate) {
+    thresholdNode.textContent = "本日分の固定13点を照合中。未確定レースは母数に含めません。";
+    container.innerHTML = `<article class="venuePerformanceCard"><span>結果待ち</span><h3>固定13点を確認中</h3><p>予想データの読み込み後に表示します。</p></article>`;
     return;
   }
-  const thresholds = performance.thresholds || {};
-  thresholdNode.textContent = `好調条件：${Number(thresholds.minimum_samples || 5)}件以上・的中率${Number(thresholds.minimum_hit_rate || 30)}%以上・純損益プラス・PF ${Number(thresholds.minimum_profit_factor || 1.2)}以上｜${performance.updated_at || "更新時刻不明"}`;
-  const venues = (performance.venues || []).filter((item) => Number(item.hits || 0) > 0);
-  if (!venues.length) {
-    container.innerHTML = `<article class="venuePerformanceCard"><span>WATCH</span><h3>的中会場はまだありません</h3><p>照合済みレースだけで判定しています。</p></article>`;
+  const dateKey = String(predictionDate).replaceAll("-", "");
+  const evaluated = Object.values(performance.portfolio_evaluated || {})
+    .filter((item) => String(item.key || "").startsWith(`${dateKey}-`) && item.strategy === "fixed13")
+    .sort((a, b) => Number(a.race || 0) - Number(b.race || 0));
+  const hits = evaluated.filter((item) => item.hit);
+  thresholdNode.textContent = `固定13点：${evaluated.length}R照合・${hits.length}R的中｜各レース13点×100円｜${performance.updated_at || "更新時刻不明"}`;
+  if (!hits.length) {
+    container.innerHTML = `<article class="venuePerformanceCard"><span>結果待ち</span><h3>固定13点の的中はまだありません</h3><p>${evaluated.length ? `${evaluated.length}R照合済み` : "公式結果が確定したレースから自動照合します。"}</p></article>`;
     return;
   }
-  container.innerHTML = venues.map((item) => {
-    const tone = item.status === "好調" ? "hot" : item.status === "サンプル不足" ? "sample" : "watch";
-    const pf = item.profit_factor === "∞" ? "∞" : Number(item.profit_factor || 0).toFixed(2);
-    return `<article class="venuePerformanceCard ${tone}">
-      <span>${escapeHtml(item.status || "WATCH")}</span>
-      <h3>${escapeHtml(item.venue)}</h3>
-      <strong>${Number(item.hits || 0)}的中 / ${Number(item.samples || 0)}R</strong>
-      <p>的中率 ${Number(item.hit_rate || 0).toFixed(1)}%｜純損益 ${Number(item.net_profit_yen || 0).toLocaleString("ja-JP")}円｜PF ${pf}</p>
-      <small>${Number(item.last_completed_race || 0)}Rまで結果確定</small>
+  const marketLabels = { single: "単勝", exacta: "2連単", quinella: "2連複", trio: "3連複", trifecta: "3連単" };
+  container.innerHTML = hits.map((item) => {
+    const winningTickets = (item.tickets || []).filter((ticket) => ticket.hit);
+    const winningText = winningTickets.map((ticket) => `${marketLabels[ticket.bet_type] || ticket.bet_type} ${ticket.predicted}`).join("｜");
+    return `<article class="venuePerformanceCard hot">
+      <span>固定13点 的中</span>
+      <h3>${escapeHtml(item.venue)} ${Number(item.race)}R</h3>
+      <strong>${escapeHtml(winningText || `${Number(item.hit_count || 1)}点的中`)}</strong>
+      <p>払戻 ${Number(item.payout_yen || 0).toLocaleString("ja-JP")}円｜投資1,300円｜収支 ${Number(item.profit_yen || 0) >= 0 ? "+" : ""}${Number(item.profit_yen || 0).toLocaleString("ja-JP")}円</p>
+      <small>公式結果照合済み</small>
     </article>`;
   }).join("");
 }
