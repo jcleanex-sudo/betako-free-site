@@ -99,6 +99,38 @@ def market_probability(contenders, market, pick):
     return None
 
 
+def build_fixed_portfolio(rows, contenders):
+    """Build the 13 tickets with hit probability first and EV as a tie-breaker.
+
+    Ordered markets may only use one of the model's top two win candidates as
+    the first boat. This prevents very large outsider odds from turning a
+    sub-1% sixth-course outcome into the apparent main axis.
+    """
+    top_heads = {
+        str(item["boat"])
+        for item in sorted(
+            contenders,
+            key=lambda item: float(item.get("relative_win_probability") or 0),
+            reverse=True,
+        )[:2]
+    }
+    portfolio = {}
+    for market, count in PORTFOLIO_COUNTS.items():
+        market_rows = [row for row in rows if row["bet_type"] == market]
+        if market in {"exacta", "trifecta"}:
+            axis_rows = [row for row in market_rows if str(row["pick"]).split("-")[0] in top_heads]
+            if len(axis_rows) >= count:
+                market_rows = axis_rows
+        market_rows.sort(
+            key=lambda row: (
+                row["qualifies"], row["model_probability"], row["net_edge"], row["expected_profit_yen"],
+            ),
+            reverse=True,
+        )
+        portfolio[market] = market_rows[:count]
+    return portfolio
+
+
 def remaining_minutes(odds_payload):
     deadline = odds_payload.get("deadline")
     if not deadline:
@@ -147,14 +179,7 @@ def compare_markets(contenders, realtime):
     best = (qualified or fallback or [None])[0]
     if not best:
         return {"status": "DATA BLOCKED", "message": "有効なオッズなし", "ranking": [], "portfolio": {}, "portfolio_points": 0, "data_rate": 100}
-    portfolio = {}
-    for market, count in PORTFOLIO_COUNTS.items():
-        market_rows = [row for row in rows if row["bet_type"] == market]
-        market_rows.sort(
-            key=lambda row: (row["qualifies"], row["expected_profit_yen"], row["net_edge"], row["model_probability"]),
-            reverse=True,
-        )
-        portfolio[market] = market_rows[:count]
+    portfolio = build_fixed_portfolio(rows, contenders)
     if not has_complete_portfolio(portfolio):
         return {
             "status": "DATA BLOCKED", "message": "固定13点のオッズが全件揃っていないため予想停止",
