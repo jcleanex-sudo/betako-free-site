@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20 22:18 JST",
+  "updated_at": "2026-08-21 08:03 JST",
   "evaluated": {
     "20260803-22-6": {
       "key": "20260803-22-6",
@@ -1173,6 +1173,75 @@
       "agreement": 75.0,
       "tier": "strict",
       "evaluation_version": "main6-v1"
+    },
+    "20260820-23-1": {
+      "key": "20260820-23-1",
+      "venue": "唐津",
+      "race": 1,
+      "predicted": "1-3-2",
+      "predicted_tickets": [
+        "1-3-2",
+        "1-2-3",
+        "1-3-4",
+        "1-2-4",
+        "1-4-3",
+        "1-4-2"
+      ],
+      "actual": "1-6-5",
+      "hit": false,
+      "payout_yen": 10730,
+      "stake_yen": 600,
+      "profit_yen": -600,
+      "score": 84.3,
+      "agreement": 100.0,
+      "tier": "strict",
+      "evaluation_version": "main6-v1"
+    },
+    "20260820-13-8": {
+      "key": "20260820-13-8",
+      "venue": "尼崎",
+      "race": 8,
+      "predicted": "1-4-5",
+      "predicted_tickets": [
+        "1-4-5",
+        "1-5-4",
+        "1-4-3",
+        "1-5-3",
+        "1-3-4",
+        "1-3-5"
+      ],
+      "actual": "1-4-2",
+      "hit": false,
+      "payout_yen": 1160,
+      "stake_yen": 600,
+      "profit_yen": -600,
+      "score": 83.9,
+      "agreement": 100.0,
+      "tier": "strict",
+      "evaluation_version": "main6-v1"
+    },
+    "20260820-04-2": {
+      "key": "20260820-04-2",
+      "venue": "平和島",
+      "race": 2,
+      "predicted": "1-4-6",
+      "predicted_tickets": [
+        "1-4-6",
+        "1-6-4",
+        "1-4-2",
+        "1-6-2",
+        "1-2-4",
+        "1-2-6"
+      ],
+      "actual": "2-1-5",
+      "hit": false,
+      "payout_yen": 20460,
+      "stake_yen": 600,
+      "profit_yen": -600,
+      "score": 83.8,
+      "agreement": 100.0,
+      "tier": "strict",
+      "evaluation_version": "main6-v1"
     }
   },
   "longshot_evaluated": {
@@ -1838,32 +1907,71 @@
       "payout_yen": 710,
       "stake_yen": 400,
       "profit_yen": -400
+    },
+    "20260820-04-2-longshot": {
+      "key": "20260820-04-2-longshot",
+      "venue": "平和島",
+      "race": 2,
+      "candidate_boat": 5,
+      "candidate_name": "佐藤 謙史朗",
+      "formation": "1-5-流し",
+      "actual": "2-1-5",
+      "hit": false,
+      "payout_yen": 20460,
+      "stake_yen": 400,
+      "profit_yen": -400
+    },
+    "20260820-13-8-longshot": {
+      "key": "20260820-13-8-longshot",
+      "venue": "尼崎",
+      "race": 8,
+      "candidate_boat": 4,
+      "candidate_name": "桑原 啓",
+      "formation": "1-4-流し",
+      "actual": "1-4-2",
+      "hit": true,
+      "payout_yen": 1160,
+      "stake_yen": 400,
+      "profit_yen": 760
+    },
+    "20260820-23-1-longshot": {
+      "key": "20260820-23-1-longshot",
+      "venue": "唐津",
+      "race": 1,
+      "candidate_boat": 4,
+      "candidate_name": "吉武 真也",
+      "formation": "1-4-流し",
+      "actual": "1-6-5",
+      "hit": false,
+      "payout_yen": 10730,
+      "stake_yen": 400,
+      "profit_yen": -400
     }
   },
   "summary": {
-    "samples": 51,
+    "samples": 54,
     "hits": 21,
-    "hit_rate": 41.2,
+    "hit_rate": 38.9,
     "hit_rate_ci95": [
-      28.8,
-      54.8
+      27.0,
+      52.2
     ],
-    "net_profit_yen": -9330,
-    "profit_factor": 0.49,
-    "max_drawdown_yen": 11160
+    "net_profit_yen": -11130,
+    "profit_factor": 0.44,
+    "max_drawdown_yen": 12960
   },
   "tiers": {
     "strict": {
-      "samples": 51,
+      "samples": 54,
       "hits": 21,
-      "hit_rate": 41.2,
+      "hit_rate": 38.9,
       "hit_rate_ci95": [
-        28.8,
-        54.8
+        27.0,
+        52.2
       ],
-      "net_profit_yen": -9330,
-      "profit_factor": 0.49,
-      "max_drawdown_yen": 11160
+      "net_profit_yen": -11130,
+      "profit_factor": 0.44,
+      "max_drawdown_yen": 12960
     },
     "experimental": {
       "samples": 0,
@@ -1876,16 +1984,16 @@
     }
   },
   "longshot_summary": {
-    "samples": 51,
-    "hits": 7,
-    "hit_rate": 13.7,
+    "samples": 54,
+    "hits": 8,
+    "hit_rate": 14.8,
     "hit_rate_ci95": [
-      6.8,
-      25.7
+      7.7,
+      26.6
     ],
-    "net_profit_yen": -10090,
-    "profit_factor": 0.43,
-    "max_drawdown_yen": 10090
+    "net_profit_yen": -10130,
+    "profit_factor": 0.45,
+    "max_drawdown_yen": 10490
   },
   "daily": {
     "20260803": {
@@ -2159,6 +2267,22 @@
       "net_profit_yen": -220,
       "profit_factor": 0.63,
       "max_drawdown_yen": 600
+    },
+    "20260820": {
+      "date": "2026-08-20",
+      "published": 3,
+      "evaluated": 3,
+      "pending": 0,
+      "samples": 3,
+      "hits": 0,
+      "hit_rate": 0.0,
+      "hit_rate_ci95": [
+        0,
+        56.1
+      ],
+      "net_profit_yen": -1800,
+      "profit_factor": 0.0,
+      "max_drawdown_yen": 1800
     }
   },
   "market_evaluated": {
