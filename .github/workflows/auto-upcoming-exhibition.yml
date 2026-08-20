@@ -2,7 +2,7 @@ name: Auto update upcoming BETAKO races
 
 on:
   schedule:
-    # 07:00–20:55 JST. GitHub schedules may start late, so scan a 6–20 minute window.
+    # 07:00–20:55 JST. Start early; only the nearest unfinished race per venue is refreshed.
     - cron: "*/5 22-23,0-11 * * *"
   workflow_dispatch:
 
@@ -21,7 +21,7 @@ jobs:
       BOATRACE_EXHIBITION_WORKERS: "4"
       AUTO_SCHEDULE_WORKERS: "4"
       AUTO_MIN_REMAINING_MINUTES: "6"
-      AUTO_LOOKAHEAD_MINUTES: "20"
+      AUTO_LOOKAHEAD_MINUTES: "35"
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6

@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PREDICTIONS = ROOT / "data" / "predictions.json"
 EXHIBITION = ROOT / "data" / "exhibition.json"
 MIN_REMAINING_MINUTES = int(os.environ.get("AUTO_MIN_REMAINING_MINUTES", "6"))
-LOOKAHEAD_MINUTES = int(os.environ.get("AUTO_LOOKAHEAD_MINUTES", "20"))
+LOOKAHEAD_MINUTES = int(os.environ.get("AUTO_LOOKAHEAD_MINUTES", "35"))
 SCHEDULE_WORKERS = max(1, min(4, int(os.environ.get("AUTO_SCHEDULE_WORKERS", "4"))))
 
 
@@ -38,6 +38,10 @@ def select_upcoming_targets(venue_ids, schedules, completed, now):
             remaining = (deadline_at - now).total_seconds() / 60
             if MIN_REMAINING_MINUTES <= remaining <= LOOKAHEAD_MINUTES:
                 targets.append((venue_id, race))
+                # One race per venue is enough. It gives the nearest unfinished
+                # race priority and prevents a wider early-start window from
+                # multiplying official requests.
+                break
     return sorted(targets, key=lambda item: (int(item[0]), item[1]))
 
 
