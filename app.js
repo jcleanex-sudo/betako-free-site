@@ -439,7 +439,7 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
   pendingRefreshes.add(key);
   badge.hidden = false;
   badge.textContent = "展示前・更新中";
-  detail.textContent = "選択したレースの展示データだけを取得しています（通常1〜3分）。";
+  detail.textContent = "選択したレースを最優先で取得しています（展示公開後は通常30〜90秒）。";
 
   try {
     const previewRows = await fetchOfficialExhibitionPreview(api, venueId, race, raceDate).catch(() => []);
@@ -454,12 +454,12 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
       badge.textContent = previewComplete ? "展示取得済・予想計算中" : "展示一部取得・進入/ST待ち";
       detail.textContent = previewComplete
         ? "展示タイム・進入・STを公式から直接取得しました。固定13点を計算しています。"
-        : "公式の展示欄が埋まるまで、このレースだけを5秒間隔で自動確認します。";
+        : "公式の展示欄が埋まるまで、このレースだけを自動確認します。";
     }
 
     let attempt = 0;
     while (isCurrentRaceSelection({ venueId, race, raceDate })) {
-      if (attempt > 0) await delay(attempt < 36 ? 5000 : 15000);
+      if (attempt > 0) await delay(recalculationRequested ? 2000 : attempt < 36 ? 5000 : 15000);
       if (!isCurrentRaceSelection({ venueId, race, raceDate })) return;
       if (attempt === 3) {
         badge.textContent = "展示更新・公式取得中";

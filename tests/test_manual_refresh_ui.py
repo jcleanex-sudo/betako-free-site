@@ -31,6 +31,8 @@ class ManualRefreshUiTest(unittest.TestCase):
         self.assertIn("option.disabled = !active", script)
         self.assertIn("fetchOfficialExhibitionPreview", script)
         self.assertIn("展示取得済・予想計算中", script)
+        self.assertIn("recalculationRequested ? 2000", script)
+        self.assertIn("展示公開後は通常30〜90秒", script)
         self.assertIn("function isCompleteExhibition", script)
         self.assertIn("function isCurrentRaceSelection", script)
         self.assertIn("payload.race_date === jstDate", script)
