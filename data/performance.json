@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-21 16:13 JST",
+  "updated_at": "2026-08-21 17:03 JST",
   "evaluated": {
     "20260803-22-6": {
       "key": "20260803-22-6",
@@ -2622,6 +2622,26 @@
       "expected_profit_yen": 63,
       "hit": false,
       "payout_yen": 270,
+      "stake_yen": 100,
+      "profit_yen": -100,
+      "evaluation_version": "five-market-ev-v1"
+    },
+    "20260821-02-12-trio": {
+      "key": "20260821-02-12-trio",
+      "venue_id": "02",
+      "venue": "戸田",
+      "race": 12,
+      "bet_type": "trio",
+      "bet_type_label": "3連複",
+      "predicted": "1-4-6",
+      "actual": "1-3-4",
+      "odds_at_prediction": 29.3,
+      "model_probability": 15.49,
+      "market_probability": 3.41,
+      "net_edge": 9.57,
+      "expected_profit_yen": 354,
+      "hit": false,
+      "payout_yen": 320,
       "stake_yen": 100,
       "profit_yen": -100,
       "evaluation_version": "five-market-ev-v1"
@@ -5913,18 +5933,124 @@
       "stake_yen": 1300,
       "profit_yen": -1030,
       "evaluation_version": "five-market-ev-v1"
+    },
+    "20260821-02-12-fixed13": {
+      "key": "20260821-02-12-fixed13",
+      "venue_id": "02",
+      "venue": "戸田",
+      "race": 12,
+      "strategy": "fixed13",
+      "tickets": [
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-3-4",
+          "actual": "1-4-3",
+          "hit": false,
+          "odds_at_prediction": 11.5
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-3-6",
+          "actual": "1-4-3",
+          "hit": false,
+          "odds_at_prediction": 20.7
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-4-3",
+          "actual": "1-4-3",
+          "hit": true,
+          "odds_at_prediction": 25.1
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-6-3",
+          "actual": "1-4-3",
+          "hit": false,
+          "odds_at_prediction": 66.9
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-4-6",
+          "actual": "1-4-3",
+          "hit": false,
+          "odds_at_prediction": 55.9
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-6-4",
+          "actual": "1-4-3",
+          "hit": false,
+          "odds_at_prediction": 100.0
+        },
+        {
+          "bet_type": "trio",
+          "predicted": "1-3-6",
+          "actual": "1-3-4",
+          "hit": false,
+          "odds_at_prediction": 11.7
+        },
+        {
+          "bet_type": "trio",
+          "predicted": "1-4-6",
+          "actual": "1-3-4",
+          "hit": false,
+          "odds_at_prediction": 29.3
+        },
+        {
+          "bet_type": "exacta",
+          "predicted": "1-6",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": 29.6
+        },
+        {
+          "bet_type": "exacta",
+          "predicted": "1-3",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": 3.6
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-3",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": 2.5
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-4",
+          "actual": "1-4",
+          "hit": true,
+          "odds_at_prediction": 5.4
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-6",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": 14.7
+        }
+      ],
+      "hit": true,
+      "hit_count": 2,
+      "payout_yen": 2320,
+      "stake_yen": 1300,
+      "profit_yen": 1020,
+      "evaluation_version": "five-market-ev-v1"
     }
   },
   "market_summary": {
-    "samples": 17,
+    "samples": 18,
     "hits": 6,
-    "hit_rate": 35.3,
+    "hit_rate": 33.3,
     "hit_rate_ci95": [
-      17.3,
-      58.7
+      16.3,
+      56.3
     ],
-    "net_profit_yen": 1030,
-    "profit_factor": 1.94,
+    "net_profit_yen": 930,
+    "profit_factor": 1.77,
     "max_drawdown_yen": 390
   },
   "market_by_type": {
@@ -5962,16 +6088,16 @@
       "max_drawdown_yen": 0
     },
     "trio": {
-      "samples": 10,
+      "samples": 11,
       "hits": 1,
-      "hit_rate": 10.0,
+      "hit_rate": 9.1,
       "hit_rate_ci95": [
-        1.8,
-        40.4
+        1.6,
+        37.7
       ],
-      "net_profit_yen": 280,
-      "profit_factor": 1.31,
-      "max_drawdown_yen": 800
+      "net_profit_yen": 180,
+      "profit_factor": 1.18,
+      "max_drawdown_yen": 900
     },
     "trifecta": {
       "samples": 0,
@@ -6002,32 +6128,32 @@
     },
     "20260821": {
       "date": "2026-08-21",
-      "published": 12,
-      "evaluated": 12,
+      "published": 13,
+      "evaluated": 13,
       "pending": 0,
-      "samples": 12,
+      "samples": 13,
       "hits": 3,
-      "hit_rate": 25.0,
+      "hit_rate": 23.1,
       "hit_rate_ci95": [
-        8.9,
-        53.2
+        8.2,
+        50.3
       ],
-      "net_profit_yen": -20,
-      "profit_factor": 0.98,
+      "net_profit_yen": -120,
+      "profit_factor": 0.88,
       "max_drawdown_yen": 390
     }
   },
   "portfolio_summary": {
-    "samples": 31,
-    "hits": 14,
-    "hit_rate": 45.2,
+    "samples": 32,
+    "hits": 15,
+    "hit_rate": 46.9,
     "hit_rate_ci95": [
-      29.2,
-      62.2
+      30.9,
+      63.6
     ],
-    "net_profit_yen": -21080,
-    "profit_factor": 0.24,
-    "max_drawdown_yen": 21080
+    "net_profit_yen": -20060,
+    "profit_factor": 0.28,
+    "max_drawdown_yen": 20060
   },
   "portfolio_daily": {
     "20260819": {
@@ -6064,24 +6190,24 @@
     },
     "20260821": {
       "date": "2026-08-21",
-      "published": 12,
-      "evaluated": 12,
+      "published": 13,
+      "evaluated": 13,
       "pending": 0,
-      "samples": 12,
-      "hits": 8,
-      "hit_rate": 66.7,
+      "samples": 13,
+      "hits": 9,
+      "hit_rate": 69.2,
       "hit_rate_ci95": [
-        39.1,
-        86.2
+        42.4,
+        87.3
       ],
-      "net_profit_yen": -7550,
-      "profit_factor": 0.19,
+      "net_profit_yen": -6530,
+      "profit_factor": 0.3,
       "max_drawdown_yen": 8300
     }
   },
   "today_venue_performance": {
     "race_date": "2026-08-21",
-    "updated_at": "2026-08-21 16:13 JST",
+    "updated_at": "2026-08-21 17:03 JST",
     "basis": "当日朝に保存した全レース予想のうち公式結果確定済みレースのみ",
     "thresholds": {
       "minimum_samples": 5,
@@ -6211,6 +6337,17 @@
         "stake_yen": 600,
         "profit_yen": 1290
       },
+      "20260821-02-12": {
+        "key": "20260821-02-12",
+        "venue_id": "02",
+        "venue": "戸田",
+        "race": 12,
+        "hit": true,
+        "actual": "1-4-3",
+        "payout_yen": 1740,
+        "stake_yen": 600,
+        "profit_yen": 1140
+      },
       "20260821-03-1": {
         "key": "20260821-03-1",
         "venue_id": "03",
@@ -6332,6 +6469,17 @@
         "stake_yen": 600,
         "profit_yen": -600
       },
+      "20260821-03-12": {
+        "key": "20260821-03-12",
+        "venue_id": "03",
+        "venue": "江戸川",
+        "race": 12,
+        "hit": false,
+        "actual": "2-1-4",
+        "payout_yen": 4510,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
       "20260821-04-1": {
         "key": "20260821-04-1",
         "venue_id": "04",
@@ -6417,6 +6565,28 @@
         "hit": false,
         "actual": "4-3-5",
         "payout_yen": 4470,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260821-04-9": {
+        "key": "20260821-04-9",
+        "venue_id": "04",
+        "venue": "平和島",
+        "race": 9,
+        "hit": false,
+        "actual": "3-2-5",
+        "payout_yen": 5560,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260821-04-10": {
+        "key": "20260821-04-10",
+        "venue_id": "04",
+        "venue": "平和島",
+        "race": 10,
+        "hit": false,
+        "actual": "1-4-6",
+        "payout_yen": 2250,
         "stake_yen": 600,
         "profit_yen": -600
       },
@@ -6508,6 +6678,28 @@
         "stake_yen": 600,
         "profit_yen": 30
       },
+      "20260821-06-10": {
+        "key": "20260821-06-10",
+        "venue_id": "06",
+        "venue": "浜名湖",
+        "race": 10,
+        "hit": true,
+        "actual": "1-2-3",
+        "payout_yen": 510,
+        "stake_yen": 600,
+        "profit_yen": -90
+      },
+      "20260821-06-11": {
+        "key": "20260821-06-11",
+        "venue_id": "06",
+        "venue": "浜名湖",
+        "race": 11,
+        "hit": true,
+        "actual": "1-5-3",
+        "payout_yen": 2360,
+        "stake_yen": 600,
+        "profit_yen": 1760
+      },
       "20260821-07-2": {
         "key": "20260821-07-2",
         "venue_id": "07",
@@ -6518,6 +6710,28 @@
         "payout_yen": 610,
         "stake_yen": 600,
         "profit_yen": 10
+      },
+      "20260821-07-3": {
+        "key": "20260821-07-3",
+        "venue_id": "07",
+        "venue": "蒲郡",
+        "race": 3,
+        "hit": true,
+        "actual": "1-2-6",
+        "payout_yen": 840,
+        "stake_yen": 600,
+        "profit_yen": 240
+      },
+      "20260821-07-4": {
+        "key": "20260821-07-4",
+        "venue_id": "07",
+        "venue": "蒲郡",
+        "race": 4,
+        "hit": true,
+        "actual": "1-2-3",
+        "payout_yen": 500,
+        "stake_yen": 600,
+        "profit_yen": -100
       },
       "20260821-13-1": {
         "key": "20260821-13-1",
@@ -6629,6 +6843,17 @@
         "stake_yen": 600,
         "profit_yen": -600
       },
+      "20260821-13-12": {
+        "key": "20260821-13-12",
+        "venue_id": "13",
+        "venue": "尼崎",
+        "race": 12,
+        "hit": true,
+        "actual": "1-2-5",
+        "payout_yen": 2020,
+        "stake_yen": 600,
+        "profit_yen": 1420
+      },
       "20260821-15-1": {
         "key": "20260821-15-1",
         "venue_id": "15",
@@ -6648,6 +6873,28 @@
         "hit": false,
         "actual": "4-6-2",
         "payout_yen": 33730,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260821-15-3": {
+        "key": "20260821-15-3",
+        "venue_id": "15",
+        "venue": "丸亀",
+        "race": 3,
+        "hit": false,
+        "actual": "3-2-6",
+        "payout_yen": 4020,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260821-15-4": {
+        "key": "20260821-15-4",
+        "venue_id": "15",
+        "venue": "丸亀",
+        "race": 4,
+        "hit": false,
+        "actual": "4-3-1",
+        "payout_yen": 5270,
         "stake_yen": 600,
         "profit_yen": -600
       },
@@ -6761,6 +7008,28 @@
         "stake_yen": 600,
         "profit_yen": -600
       },
+      "20260821-16-11": {
+        "key": "20260821-16-11",
+        "venue_id": "16",
+        "venue": "児島",
+        "race": 11,
+        "hit": true,
+        "actual": "1-2-3",
+        "payout_yen": 540,
+        "stake_yen": 600,
+        "profit_yen": -60
+      },
+      "20260821-16-12": {
+        "key": "20260821-16-12",
+        "venue_id": "16",
+        "venue": "児島",
+        "race": 12,
+        "hit": true,
+        "actual": "1-4-2",
+        "payout_yen": 1040,
+        "stake_yen": 600,
+        "profit_yen": 440
+      },
       "20260821-19-1": {
         "key": "20260821-19-1",
         "venue_id": "19",
@@ -6780,6 +7049,28 @@
         "hit": false,
         "actual": "2-4-5",
         "payout_yen": 10300,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260821-19-3": {
+        "key": "20260821-19-3",
+        "venue_id": "19",
+        "venue": "下関",
+        "race": 3,
+        "hit": false,
+        "actual": "4-2-5",
+        "payout_yen": 6440,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260821-19-4": {
+        "key": "20260821-19-4",
+        "venue_id": "19",
+        "venue": "下関",
+        "race": 4,
+        "hit": false,
+        "actual": "1-4-6",
+        "payout_yen": 7270,
         "stake_yen": 600,
         "profit_yen": -600
       },
@@ -7029,33 +7320,78 @@
     "venues": [
       {
         "venue": "浜名湖",
-        "samples": 8,
-        "hits": 4,
-        "hit_rate": 50.0,
+        "samples": 10,
+        "hits": 6,
+        "hit_rate": 60.0,
         "hit_rate_ci95": [
-          21.5,
-          78.5
+          31.3,
+          83.2
         ],
-        "net_profit_yen": 0,
-        "profit_factor": 1.0,
+        "net_profit_yen": 1670,
+        "profit_factor": 1.66,
         "max_drawdown_yen": 1850,
-        "status": "WATCH",
-        "last_completed_race": 9
+        "status": "好調",
+        "last_completed_race": 11
       },
       {
         "venue": "尼崎",
-        "samples": 10,
-        "hits": 3,
-        "hit_rate": 30.0,
+        "samples": 11,
+        "hits": 4,
+        "hit_rate": 36.4,
         "hit_rate_ci95": [
-          10.8,
-          60.3
+          15.2,
+          64.6
         ],
-        "net_profit_yen": -2880,
-        "profit_factor": 0.32,
-        "max_drawdown_yen": 3140,
+        "net_profit_yen": -1460,
+        "profit_factor": 0.65,
+        "max_drawdown_yen": 2400,
         "status": "WATCH",
-        "last_completed_race": 11
+        "last_completed_race": 12
+      },
+      {
+        "venue": "蒲郡",
+        "samples": 3,
+        "hits": 3,
+        "hit_rate": 100.0,
+        "hit_rate_ci95": [
+          43.9,
+          100
+        ],
+        "net_profit_yen": 150,
+        "profit_factor": 2.5,
+        "max_drawdown_yen": 100,
+        "status": "サンプル不足",
+        "last_completed_race": 4
+      },
+      {
+        "venue": "児島",
+        "samples": 12,
+        "hits": 3,
+        "hit_rate": 25.0,
+        "hit_rate_ci95": [
+          8.9,
+          53.2
+        ],
+        "net_profit_yen": -3120,
+        "profit_factor": 0.43,
+        "max_drawdown_yen": 3220,
+        "status": "WATCH",
+        "last_completed_race": 12
+      },
+      {
+        "venue": "戸田",
+        "samples": 12,
+        "hits": 3,
+        "hit_rate": 25.0,
+        "hit_rate_ci95": [
+          8.9,
+          53.2
+        ],
+        "net_profit_yen": -2350,
+        "profit_factor": 0.56,
+        "max_drawdown_yen": 4200,
+        "status": "WATCH",
+        "last_completed_race": 12
       },
       {
         "venue": "唐津",
@@ -7073,34 +7409,19 @@
         "last_completed_race": 12
       },
       {
-        "venue": "戸田",
-        "samples": 11,
-        "hits": 2,
-        "hit_rate": 18.2,
-        "hit_rate_ci95": [
-          5.1,
-          47.7
-        ],
-        "net_profit_yen": -3490,
-        "profit_factor": 0.35,
-        "max_drawdown_yen": 4200,
-        "status": "WATCH",
-        "last_completed_race": 11
-      },
-      {
         "venue": "江戸川",
-        "samples": 11,
+        "samples": 12,
         "hits": 2,
-        "hit_rate": 18.2,
+        "hit_rate": 16.7,
         "hit_rate_ci95": [
-          5.1,
-          47.7
+          4.7,
+          44.8
         ],
-        "net_profit_yen": -1510,
-        "profit_factor": 0.72,
-        "max_drawdown_yen": 3000,
+        "net_profit_yen": -2110,
+        "profit_factor": 0.65,
+        "max_drawdown_yen": 3600,
         "status": "WATCH",
-        "last_completed_race": 11
+        "last_completed_race": 12
       },
       {
         "venue": "芦屋",
@@ -7118,79 +7439,49 @@
         "last_completed_race": 12
       },
       {
-        "venue": "蒲郡",
-        "samples": 1,
-        "hits": 1,
-        "hit_rate": 100.0,
-        "hit_rate_ci95": [
-          20.7,
-          100
-        ],
-        "net_profit_yen": 10,
-        "profit_factor": "∞",
-        "max_drawdown_yen": 0,
-        "status": "サンプル不足",
-        "last_completed_race": 2
-      },
-      {
         "venue": "下関",
-        "samples": 2,
+        "samples": 4,
         "hits": 1,
-        "hit_rate": 50.0,
+        "hit_rate": 25.0,
         "hit_rate_ci95": [
-          9.5,
-          90.5
+          4.6,
+          69.9
         ],
-        "net_profit_yen": -280,
-        "profit_factor": 0.53,
-        "max_drawdown_yen": 600,
+        "net_profit_yen": -1480,
+        "profit_factor": 0.18,
+        "max_drawdown_yen": 1800,
         "status": "サンプル不足",
-        "last_completed_race": 2
+        "last_completed_race": 4
       },
       {
-        "venue": "児島",
+        "venue": "平和島",
         "samples": 10,
-        "hits": 1,
-        "hit_rate": 10.0,
+        "hits": 0,
+        "hit_rate": 0.0,
         "hit_rate_ci95": [
-          1.8,
-          40.4
+          0,
+          27.8
         ],
-        "net_profit_yen": -3500,
-        "profit_factor": 0.35,
-        "max_drawdown_yen": 3600,
+        "net_profit_yen": -6000,
+        "profit_factor": 0.0,
+        "max_drawdown_yen": 6000,
         "status": "WATCH",
         "last_completed_race": 10
       },
       {
-        "venue": "平和島",
-        "samples": 8,
-        "hits": 0,
-        "hit_rate": 0.0,
-        "hit_rate_ci95": [
-          0,
-          32.4
-        ],
-        "net_profit_yen": -4800,
-        "profit_factor": 0.0,
-        "max_drawdown_yen": 4800,
-        "status": "WATCH",
-        "last_completed_race": 8
-      },
-      {
         "venue": "丸亀",
-        "samples": 2,
+        "samples": 4,
         "hits": 0,
         "hit_rate": 0.0,
         "hit_rate_ci95": [
           0,
-          65.8
+          49.0
         ],
-        "net_profit_yen": -1200,
+        "net_profit_yen": -2400,
         "profit_factor": 0.0,
-        "max_drawdown_yen": 1200,
+        "max_drawdown_yen": 2400,
         "status": "サンプル不足",
-        "last_completed_race": 2
+        "last_completed_race": 4
       }
     ]
   }
