@@ -1,6 +1,6 @@
 {
   "race_date": "2026-08-22",
-  "updated_at": "2026-08-22 14:46:39 JST",
+  "updated_at": "2026-08-22 15:14:37 JST",
   "update_mode": "selected_races",
   "races": [
     {
@@ -1838,175 +1838,387 @@
       "venue": "戸田",
       "venue_id": "02",
       "race": 10,
-      "status": "WAIT",
-      "message": "6艇の展示タイム・進入・STが揃うまで朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "2-1-3",
+      "final_pick": "1-2-3",
+      "final_score": 50.0,
+      "reasons": [
+        "展示最速は1号艇 6.79",
+        "風速4m・波高2cm・天候曇り",
+        "朝の能力評価に展示順位・ST展示順位・実際の進入コースを加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "2-1-3",
-            "odds": null,
-            "model_probability": 13.87,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 14.7,
+            "model_probability": 6.72,
+            "market_probability": 6.8,
+            "net_edge": -3.08,
+            "expected_profit_yen": -1,
+            "qualifies": false
           },
           {
-            "pick": "2-3-1",
-            "odds": null,
-            "model_probability": 7.68,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "2-1-5",
-            "odds": null,
-            "model_probability": 4.32,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "2-3-5",
-            "odds": null,
-            "model_probability": 1.03,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "2-5-1",
-            "odds": null,
-            "model_probability": 1.94,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "2-5-3",
-            "odds": null,
-            "model_probability": 0.84,
-            "market_probability": null,
-            "net_edge": null
-          }
-        ],
-        "cover": [
-          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "1-2-3",
-            "odds": null,
-            "model_probability": 13.2,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 11.9,
+            "model_probability": 6.72,
+            "market_probability": 8.4,
+            "net_edge": -4.68,
+            "expected_profit_yen": -20,
+            "qualifies": false
           },
           {
-            "pick": "3-2-1",
-            "odds": null,
-            "model_probability": 5.55,
-            "market_probability": null,
-            "net_edge": null
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-3-2",
+            "odds": 11.8,
+            "model_probability": 4.76,
+            "market_probability": 8.47,
+            "net_edge": -6.72,
+            "expected_profit_yen": -44,
+            "qualifies": false
           },
           {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "2-3-1",
+            "odds": 12.7,
+            "model_probability": 4.75,
+            "market_probability": 7.87,
+            "net_edge": -6.13,
+            "expected_profit_yen": -40,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "2-1-5",
+            "odds": 54.6,
+            "model_probability": 3.01,
+            "market_probability": 1.83,
+            "net_edge": -1.82,
+            "expected_profit_yen": 64,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "1-2-5",
-            "odds": null,
-            "model_probability": 4.12,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "3-2-5",
-            "odds": null,
-            "model_probability": 0.74,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "2-1-4",
-            "odds": null,
-            "model_probability": 4.05,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "2-3-4",
-            "odds": null,
-            "model_probability": 0.97,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 51.4,
+            "model_probability": 3.01,
+            "market_probability": 1.95,
+            "net_edge": -1.93,
+            "expected_profit_yen": 55,
+            "qualifies": false
           }
         ],
-        "ranked_by_edge": false
+        "cover": [],
+        "ranked_by_edge": true
       },
-      "best_value_pick": "2-1-3",
-      "value": {
-        "status": "DATA BLOCKED",
-        "odds": null,
-        "model_probability": 13.87,
-        "market_probability": null,
-        "net_edge": null,
-        "deadline": null,
-        "remaining_minutes": null,
-        "message": "3連単オッズ未公開のため期待値判定なし",
-        "source_url": null
-      },
+      "best_value_pick": "2",
+      "market_comparison": [
+        {
+          "bet_type": "single",
+          "bet_type_label": "単勝",
+          "pick": "2",
+          "odds": 7.7,
+          "model_probability": 31.72,
+          "market_probability": 12.99,
+          "net_edge": 16.73,
+          "expected_profit_yen": 144,
+          "qualifies": true
+        },
+        {
+          "bet_type": "quinella",
+          "bet_type_label": "2連複",
+          "pick": "1-2",
+          "odds": 5.6,
+          "model_probability": 29.53,
+          "market_probability": 17.86,
+          "net_edge": 9.68,
+          "expected_profit_yen": 65,
+          "qualifies": true
+        }
+      ],
+      "weather": "曇り",
+      "wind_speed": 4.0,
+      "wave_height": 2.0,
+      "start_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "exhibition": [
         {
           "boat": 1,
-          "course": null,
-          "time": null,
+          "course": 1,
+          "time": 6.79,
           "tilt": 0.0,
           "weight": 53.3,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".06",
+          "time_rank": 1,
+          "st_rank": 4
         },
         {
           "boat": 2,
-          "course": null,
-          "time": null,
+          "course": 2,
+          "time": 6.84,
           "tilt": -0.5,
           "weight": 52.0,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".01",
+          "time_rank": 4,
+          "st_rank": 2
         },
         {
           "boat": 3,
-          "course": null,
-          "time": null,
+          "course": 3,
+          "time": 6.81,
           "tilt": 0.0,
           "weight": 51.5,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".08",
+          "time_rank": 2,
+          "st_rank": 5
         },
         {
           "boat": 4,
-          "course": null,
-          "time": null,
+          "course": 4,
+          "time": 6.84,
           "tilt": 0.0,
           "weight": 54.2,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".02",
+          "time_rank": 5,
+          "st_rank": 3
         },
         {
           "boat": 5,
-          "course": null,
-          "time": null,
+          "course": 5,
+          "time": 6.9,
           "tilt": 0.0,
           "weight": 54.1,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": "F.01",
+          "time_rank": 6,
+          "st_rank": 1
         },
         {
           "boat": 6,
-          "course": null,
-          "time": null,
+          "course": 6,
+          "time": 6.82,
           "tilt": -0.5,
           "weight": 52.0,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "st": ".08",
+          "time_rank": 3,
+          "st_rank": 6
         }
       ],
-      "fetched_at": "2026-08-22T14:46:49+09:00",
+      "value": {
+        "bet_type": "single",
+        "bet_type_label": "単勝",
+        "pick": "2",
+        "odds": 7.7,
+        "model_probability": 31.72,
+        "market_probability": 12.99,
+        "net_edge": 16.73,
+        "expected_profit_yen": 144,
+        "qualifies": true,
+        "status": "UP",
+        "deadline": "15:21",
+        "remaining_minutes": 6.0,
+        "message": "期待値・的中確率の両基準を通過",
+        "ranking": [
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "2",
+            "odds": 7.7,
+            "model_probability": 31.72,
+            "market_probability": 12.99,
+            "net_edge": 16.73,
+            "expected_profit_yen": 144,
+            "qualifies": true
+          },
+          {
+            "bet_type": "quinella",
+            "bet_type_label": "2連複",
+            "pick": "1-2",
+            "odds": 5.6,
+            "model_probability": 29.53,
+            "market_probability": 17.86,
+            "net_edge": 9.68,
+            "expected_profit_yen": 65,
+            "qualifies": true
+          }
+        ],
+        "portfolio": {
+          "trifecta": [
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "2-1-3",
+              "odds": 14.7,
+              "model_probability": 6.72,
+              "market_probability": 6.8,
+              "net_edge": -3.08,
+              "expected_profit_yen": -1,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-2-3",
+              "odds": 11.9,
+              "model_probability": 6.72,
+              "market_probability": 8.4,
+              "net_edge": -4.68,
+              "expected_profit_yen": -20,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-3-2",
+              "odds": 11.8,
+              "model_probability": 4.76,
+              "market_probability": 8.47,
+              "net_edge": -6.72,
+              "expected_profit_yen": -44,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "2-3-1",
+              "odds": 12.7,
+              "model_probability": 4.75,
+              "market_probability": 7.87,
+              "net_edge": -6.13,
+              "expected_profit_yen": -40,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "2-1-5",
+              "odds": 54.6,
+              "model_probability": 3.01,
+              "market_probability": 1.83,
+              "net_edge": -1.82,
+              "expected_profit_yen": 64,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-2-5",
+              "odds": 51.4,
+              "model_probability": 3.01,
+              "market_probability": 1.95,
+              "net_edge": -1.93,
+              "expected_profit_yen": 55,
+              "qualifies": false
+            }
+          ],
+          "trio": [
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-2-3",
+              "odds": 2.1,
+              "model_probability": 30.73,
+              "market_probability": 47.62,
+              "net_edge": -19.39,
+              "expected_profit_yen": -35,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-2-5",
+              "odds": 19.6,
+              "model_probability": 12.31,
+              "market_probability": 5.1,
+              "net_edge": 4.71,
+              "expected_profit_yen": 141,
+              "qualifies": false
+            }
+          ],
+          "exacta": [
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "1-2",
+              "odds": 12.0,
+              "model_probability": 14.77,
+              "market_probability": 8.33,
+              "net_edge": 3.94,
+              "expected_profit_yen": 77,
+              "qualifies": false
+            },
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "2-1",
+              "odds": 13.7,
+              "model_probability": 14.76,
+              "market_probability": 7.3,
+              "net_edge": 4.96,
+              "expected_profit_yen": 102,
+              "qualifies": false
+            }
+          ],
+          "quinella": [
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-2",
+              "odds": 5.6,
+              "model_probability": 29.53,
+              "market_probability": 17.86,
+              "net_edge": 9.68,
+              "expected_profit_yen": 65,
+              "qualifies": true
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-3",
+              "odds": 3.3,
+              "model_probability": 14.07,
+              "market_probability": 30.3,
+              "net_edge": -18.23,
+              "expected_profit_yen": -54,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "2-3",
+              "odds": 2.4,
+              "model_probability": 14.04,
+              "market_probability": 41.67,
+              "net_edge": -29.63,
+              "expected_profit_yen": -66,
+              "qualifies": false
+            }
+          ]
+        },
+        "portfolio_points": 13,
+        "data_rate": 100,
+        "source_urls": {
+          "/oddstf": "https://www.boatrace.jp/owpc/pc/race/oddstf?jcd=02&hd=20260822&rno=10",
+          "/odds2tf": "https://www.boatrace.jp/owpc/pc/race/odds2tf?jcd=02&hd=20260822&rno=10",
+          "/odds3f": "https://www.boatrace.jp/owpc/pc/race/odds3f?jcd=02&hd=20260822&rno=10",
+          "/odds3t": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=02&hd=20260822&rno=10"
+        }
+      },
+      "fetched_at": "2026-08-22T15:14:58+09:00",
       "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=02&hd=20260822&rno=10"
     },
     {
@@ -4618,176 +4830,476 @@
       "venue": "江戸川",
       "venue_id": "03",
       "race": 10,
-      "status": "WAIT",
-      "message": "6艇の展示タイム・進入・STが揃うまで朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-2-4",
+      "final_pick": "1-3-5",
+      "final_score": 75.2,
+      "reasons": [
+        "展示最速は3号艇 6.61",
+        "風速3m・波高5cm・天候雨",
+        "朝の能力評価に展示順位・ST展示順位・実際の進入コースを加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
-            "pick": "1-2-4",
-            "odds": null,
-            "model_probability": 18.35,
-            "market_probability": null,
-            "net_edge": null
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-3-5",
+            "odds": 28.3,
+            "model_probability": 4.29,
+            "market_probability": 3.53,
+            "net_edge": -2.24,
+            "expected_profit_yen": 21,
+            "qualifies": false
           },
           {
-            "pick": "1-4-2",
-            "odds": null,
-            "model_probability": 16.16,
-            "market_probability": null,
-            "net_edge": null
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-5-3",
+            "odds": 48.0,
+            "model_probability": 4.21,
+            "market_probability": 2.08,
+            "net_edge": -0.87,
+            "expected_profit_yen": 102,
+            "qualifies": false
           },
           {
-            "pick": "1-2-3",
-            "odds": null,
-            "model_probability": 10.59,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-4-3",
-            "odds": null,
-            "model_probability": 7.46,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-3-2",
-            "odds": null,
-            "model_probability": 7.76,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "1-3-4",
-            "odds": null,
-            "model_probability": 6.21,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 13.0,
+            "model_probability": 3.97,
+            "market_probability": 7.69,
+            "net_edge": -6.72,
+            "expected_profit_yen": -48,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-4-3",
+            "odds": 11.7,
+            "model_probability": 3.82,
+            "market_probability": 8.55,
+            "net_edge": -7.73,
+            "expected_profit_yen": -55,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-5-4",
+            "odds": 33.6,
+            "model_probability": 3.68,
+            "market_probability": 2.98,
+            "net_edge": -2.3,
+            "expected_profit_yen": 24,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-3-2",
+            "odds": 13.1,
+            "model_probability": 3.62,
+            "market_probability": 7.63,
+            "net_edge": -7.01,
+            "expected_profit_yen": -53,
+            "qualifies": false
           }
         ],
-        "cover": [
-          {
-            "pick": "2-1-4",
-            "odds": null,
-            "model_probability": 3.16,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "4-1-2",
-            "odds": null,
-            "model_probability": 2.74,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "2-1-3",
-            "odds": null,
-            "model_probability": 1.82,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "4-1-3",
-            "odds": null,
-            "model_probability": 1.27,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-2-6",
-            "odds": null,
-            "model_probability": 3.18,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-4-6",
-            "odds": null,
-            "model_probability": 2.24,
-            "market_probability": null,
-            "net_edge": null
-          }
-        ],
-        "ranked_by_edge": false
+        "cover": [],
+        "ranked_by_edge": true
       },
-      "best_value_pick": "1-2-4",
-      "value": {
-        "status": "DATA BLOCKED",
-        "odds": null,
-        "model_probability": 18.35,
-        "market_probability": null,
-        "net_edge": null,
-        "deadline": null,
-        "remaining_minutes": null,
-        "message": "3連単オッズ未公開のため期待値判定なし",
-        "source_url": null
-      },
+      "best_value_pick": "1-5",
+      "market_comparison": [
+        {
+          "bet_type": "quinella",
+          "bet_type_label": "2連複",
+          "pick": "1-5",
+          "odds": 13.0,
+          "model_probability": 19.56,
+          "market_probability": 7.69,
+          "net_edge": 9.87,
+          "expected_profit_yen": 154,
+          "qualifies": false
+        },
+        {
+          "bet_type": "quinella",
+          "bet_type_label": "2連複",
+          "pick": "1-6",
+          "odds": 52.2,
+          "model_probability": 11.69,
+          "market_probability": 1.92,
+          "net_edge": 7.78,
+          "expected_profit_yen": 510,
+          "qualifies": false
+        },
+        {
+          "bet_type": "single",
+          "bet_type_label": "単勝",
+          "pick": "4",
+          "odds": 42.0,
+          "model_probability": 8.24,
+          "market_probability": 2.38,
+          "net_edge": 3.86,
+          "expected_profit_yen": 246,
+          "qualifies": false
+        },
+        {
+          "bet_type": "exacta",
+          "bet_type_label": "2連単",
+          "pick": "1-6",
+          "odds": 46.6,
+          "model_probability": 8.25,
+          "market_probability": 2.15,
+          "net_edge": 3.6,
+          "expected_profit_yen": 284,
+          "qualifies": false
+        },
+        {
+          "bet_type": "trio",
+          "bet_type_label": "3連複",
+          "pick": "1-3-6",
+          "odds": 55.0,
+          "model_probability": 7.74,
+          "market_probability": 1.82,
+          "net_edge": 3.42,
+          "expected_profit_yen": 326,
+          "qualifies": false
+        },
+        {
+          "bet_type": "trio",
+          "bet_type_label": "3連複",
+          "pick": "1-3-5",
+          "odds": 12.9,
+          "model_probability": 13.57,
+          "market_probability": 7.75,
+          "net_edge": 3.32,
+          "expected_profit_yen": 75,
+          "qualifies": false
+        }
+      ],
+      "weather": "雨",
+      "wind_speed": 3.0,
+      "wave_height": 5.0,
+      "start_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "exhibition": [
         {
           "boat": 1,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 1,
+          "time": 6.65,
+          "tilt": 0.5,
+          "weight": 52.0,
+          "st": ".18",
+          "time_rank": 4,
+          "st_rank": 4
         },
         {
           "boat": 2,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 2,
+          "time": 6.7,
+          "tilt": 0.0,
+          "weight": 52.9,
+          "st": ".10",
+          "time_rank": 6,
+          "st_rank": 3
         },
         {
           "boat": 3,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 3,
+          "time": 6.61,
+          "tilt": 0.0,
+          "weight": 52.4,
+          "st": ".18",
+          "time_rank": 1,
+          "st_rank": 5
         },
         {
           "boat": 4,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 4,
+          "time": 6.68,
+          "tilt": 0.0,
+          "weight": 52.8,
+          "st": ".04",
+          "time_rank": 5,
+          "st_rank": 2
         },
         {
           "boat": 5,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 5,
+          "time": 6.61,
+          "tilt": 1.0,
+          "weight": 52.3,
+          "st": ".01",
+          "time_rank": 2,
+          "st_rank": 1
         },
         {
           "boat": 6,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 6,
+          "time": 6.63,
+          "tilt": 0.5,
+          "weight": 52.0,
+          "st": ".18",
+          "time_rank": 3,
+          "st_rank": 6
         }
       ],
-      "fetched_at": null,
-      "source_url": null
+      "value": {
+        "bet_type": "quinella",
+        "bet_type_label": "2連複",
+        "pick": "1-5",
+        "odds": 13.0,
+        "model_probability": 19.56,
+        "market_probability": 7.69,
+        "net_edge": 9.87,
+        "expected_profit_yen": 154,
+        "qualifies": false,
+        "status": "WATCH",
+        "deadline": "15:22",
+        "remaining_minutes": 7.0,
+        "message": "期待値基準未満のため見送り",
+        "ranking": [
+          {
+            "bet_type": "quinella",
+            "bet_type_label": "2連複",
+            "pick": "1-5",
+            "odds": 13.0,
+            "model_probability": 19.56,
+            "market_probability": 7.69,
+            "net_edge": 9.87,
+            "expected_profit_yen": 154,
+            "qualifies": false
+          },
+          {
+            "bet_type": "quinella",
+            "bet_type_label": "2連複",
+            "pick": "1-6",
+            "odds": 52.2,
+            "model_probability": 11.69,
+            "market_probability": 1.92,
+            "net_edge": 7.78,
+            "expected_profit_yen": 510,
+            "qualifies": false
+          },
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "4",
+            "odds": 42.0,
+            "model_probability": 8.24,
+            "market_probability": 2.38,
+            "net_edge": 3.86,
+            "expected_profit_yen": 246,
+            "qualifies": false
+          },
+          {
+            "bet_type": "exacta",
+            "bet_type_label": "2連単",
+            "pick": "1-6",
+            "odds": 46.6,
+            "model_probability": 8.25,
+            "market_probability": 2.15,
+            "net_edge": 3.6,
+            "expected_profit_yen": 284,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trio",
+            "bet_type_label": "3連複",
+            "pick": "1-3-6",
+            "odds": 55.0,
+            "model_probability": 7.74,
+            "market_probability": 1.82,
+            "net_edge": 3.42,
+            "expected_profit_yen": 326,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trio",
+            "bet_type_label": "3連複",
+            "pick": "1-3-5",
+            "odds": 12.9,
+            "model_probability": 13.57,
+            "market_probability": 7.75,
+            "net_edge": 3.32,
+            "expected_profit_yen": 75,
+            "qualifies": false
+          }
+        ],
+        "portfolio": {
+          "trifecta": [
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-3-5",
+              "odds": 28.3,
+              "model_probability": 4.29,
+              "market_probability": 3.53,
+              "net_edge": -2.24,
+              "expected_profit_yen": 21,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-5-3",
+              "odds": 48.0,
+              "model_probability": 4.21,
+              "market_probability": 2.08,
+              "net_edge": -0.87,
+              "expected_profit_yen": 102,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-3-4",
+              "odds": 13.0,
+              "model_probability": 3.97,
+              "market_probability": 7.69,
+              "net_edge": -6.72,
+              "expected_profit_yen": -48,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-4-3",
+              "odds": 11.7,
+              "model_probability": 3.82,
+              "market_probability": 8.55,
+              "net_edge": -7.73,
+              "expected_profit_yen": -55,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-5-4",
+              "odds": 33.6,
+              "model_probability": 3.68,
+              "market_probability": 2.98,
+              "net_edge": -2.3,
+              "expected_profit_yen": 24,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-3-2",
+              "odds": 13.1,
+              "model_probability": 3.62,
+              "market_probability": 7.63,
+              "net_edge": -7.01,
+              "expected_profit_yen": -53,
+              "qualifies": false
+            }
+          ],
+          "trio": [
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-3-5",
+              "odds": 12.9,
+              "model_probability": 13.57,
+              "market_probability": 7.75,
+              "net_edge": 3.32,
+              "expected_profit_yen": 75,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-3-4",
+              "odds": 4.4,
+              "model_probability": 12.42,
+              "market_probability": 22.73,
+              "net_edge": -12.81,
+              "expected_profit_yen": -45,
+              "qualifies": false
+            }
+          ],
+          "exacta": [
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "1-3",
+              "odds": 5.8,
+              "model_probability": 14.48,
+              "market_probability": 17.24,
+              "net_edge": -5.26,
+              "expected_profit_yen": -16,
+              "qualifies": false
+            },
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "1-5",
+              "odds": 10.5,
+              "model_probability": 13.65,
+              "market_probability": 9.52,
+              "net_edge": 1.62,
+              "expected_profit_yen": 43,
+              "qualifies": false
+            }
+          ],
+          "quinella": [
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-3",
+              "odds": 5.8,
+              "model_probability": 20.79,
+              "market_probability": 17.24,
+              "net_edge": 1.55,
+              "expected_profit_yen": 21,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-5",
+              "odds": 13.0,
+              "model_probability": 19.56,
+              "market_probability": 7.69,
+              "net_edge": 9.87,
+              "expected_profit_yen": 154,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-4",
+              "odds": 3.1,
+              "model_probability": 18.07,
+              "market_probability": 32.26,
+              "net_edge": -16.19,
+              "expected_profit_yen": -44,
+              "qualifies": false
+            }
+          ]
+        },
+        "portfolio_points": 13,
+        "data_rate": 100,
+        "source_urls": {
+          "/oddstf": "https://www.boatrace.jp/owpc/pc/race/oddstf?jcd=03&hd=20260822&rno=10",
+          "/odds2tf": "https://www.boatrace.jp/owpc/pc/race/odds2tf?jcd=03&hd=20260822&rno=10",
+          "/odds3f": "https://www.boatrace.jp/owpc/pc/race/odds3f?jcd=03&hd=20260822&rno=10",
+          "/odds3t": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=03&hd=20260822&rno=10"
+        }
+      },
+      "fetched_at": "2026-08-22T15:14:57+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=03&hd=20260822&rno=10"
     },
     {
       "venue": "江戸川",
@@ -7450,176 +7962,366 @@
       "venue": "平和島",
       "venue_id": "04",
       "race": 8,
-      "status": "WAIT",
-      "message": "6艇の展示タイム・進入・STが揃うまで朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-4-2",
+      "final_pick": "1-4-2",
+      "final_score": 54.7,
+      "reasons": [
+        "展示最速は3号艇 6.69",
+        "風速1m・波高3cm・天候雨",
+        "朝の能力評価に展示順位・ST展示順位・実際の進入コースを加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "1-4-2",
-            "odds": null,
-            "model_probability": 14.81,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 25.5,
+            "model_probability": 5.5,
+            "market_probability": 3.92,
+            "net_edge": -1.42,
+            "expected_profit_yen": 40,
+            "qualifies": false
           },
           {
-            "pick": "1-2-4",
-            "odds": null,
-            "model_probability": 7.94,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "1-4-3",
-            "odds": null,
-            "model_probability": 8.14,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 15.3,
+            "model_probability": 5.46,
+            "market_probability": 6.54,
+            "net_edge": -4.07,
+            "expected_profit_yen": -16,
+            "qualifies": false
           },
           {
-            "pick": "1-2-3",
-            "odds": null,
-            "model_probability": 1.54,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-3-4",
-            "odds": null,
-            "model_probability": 3.92,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-3-2",
-            "odds": null,
-            "model_probability": 1.38,
-            "market_probability": null,
-            "net_edge": null
-          }
-        ],
-        "cover": [
-          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "4-1-2",
-            "odds": null,
-            "model_probability": 9.0,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 16.4,
+            "model_probability": 4.28,
+            "market_probability": 6.1,
+            "net_edge": -4.82,
+            "expected_profit_yen": -30,
+            "qualifies": false
           },
           {
-            "pick": "2-1-4",
-            "odds": null,
-            "model_probability": 3.94,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "4-1-3",
-            "odds": null,
-            "model_probability": 4.95,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 10.6,
+            "model_probability": 4.25,
+            "market_probability": 9.43,
+            "net_edge": -8.18,
+            "expected_profit_yen": -55,
+            "qualifies": false
           },
           {
-            "pick": "2-1-3",
-            "odds": null,
-            "model_probability": 0.76,
-            "market_probability": null,
-            "net_edge": null
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-2-4",
+            "odds": 51.8,
+            "model_probability": 3.92,
+            "market_probability": 1.93,
+            "net_edge": -1.01,
+            "expected_profit_yen": 103,
+            "qualifies": false
           },
           {
-            "pick": "1-4-5",
-            "odds": null,
-            "model_probability": 4.23,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-2-5",
-            "odds": null,
-            "model_probability": 0.8,
-            "market_probability": null,
-            "net_edge": null
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-3-4",
+            "odds": 25.9,
+            "model_probability": 3.89,
+            "market_probability": 3.86,
+            "net_edge": -2.97,
+            "expected_profit_yen": 1,
+            "qualifies": false
           }
         ],
-        "ranked_by_edge": false
+        "cover": [],
+        "ranked_by_edge": true
       },
-      "best_value_pick": "1-4-2",
-      "value": {
-        "status": "DATA BLOCKED",
-        "odds": null,
-        "model_probability": 14.81,
-        "market_probability": null,
-        "net_edge": null,
-        "deadline": null,
-        "remaining_minutes": null,
-        "message": "3連単オッズ未公開のため期待値判定なし",
-        "source_url": null
-      },
+      "best_value_pick": "1",
+      "market_comparison": [
+        {
+          "bet_type": "single",
+          "bet_type_label": "単勝",
+          "pick": "1",
+          "odds": 5.8,
+          "model_probability": 41.29,
+          "market_probability": 17.24,
+          "net_edge": 22.05,
+          "expected_profit_yen": 139,
+          "qualifies": true
+        }
+      ],
+      "weather": "雨",
+      "wind_speed": 1.0,
+      "wave_height": 3.0,
+      "start_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "exhibition": [
         {
           "boat": 1,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 1,
+          "time": 6.79,
+          "tilt": 0.0,
+          "weight": 52.3,
+          "st": ".20",
+          "time_rank": 3,
+          "st_rank": 6
         },
         {
           "boat": 2,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 2,
+          "time": 6.79,
+          "tilt": -0.5,
+          "weight": 52.0,
+          "st": ".11",
+          "time_rank": 4,
+          "st_rank": 4
         },
         {
           "boat": 3,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 3,
+          "time": 6.69,
+          "tilt": 0.0,
+          "weight": 52.0,
+          "st": ".18",
+          "time_rank": 1,
+          "st_rank": 5
         },
         {
           "boat": 4,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 4,
+          "time": 6.71,
+          "tilt": 0.0,
+          "weight": 51.5,
+          "st": ".02",
+          "time_rank": 2,
+          "st_rank": 3
         },
         {
           "boat": 5,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 5,
+          "time": 6.82,
+          "tilt": 0.0,
+          "weight": 51.0,
+          "st": ".01",
+          "time_rank": 5,
+          "st_rank": 2
         },
         {
           "boat": 6,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 6,
+          "time": 6.82,
+          "tilt": 0.0,
+          "weight": 54.9,
+          "st": "F.01",
+          "time_rank": 6,
+          "st_rank": 1
         }
       ],
-      "fetched_at": null,
-      "source_url": null
+      "value": {
+        "bet_type": "single",
+        "bet_type_label": "単勝",
+        "pick": "1",
+        "odds": 5.8,
+        "model_probability": 41.29,
+        "market_probability": 17.24,
+        "net_edge": 22.05,
+        "expected_profit_yen": 139,
+        "qualifies": true,
+        "status": "UP",
+        "deadline": "15:31",
+        "remaining_minutes": 16.0,
+        "message": "期待値・的中確率の両基準を通過",
+        "ranking": [
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "1",
+            "odds": 5.8,
+            "model_probability": 41.29,
+            "market_probability": 17.24,
+            "net_edge": 22.05,
+            "expected_profit_yen": 139,
+            "qualifies": true
+          }
+        ],
+        "portfolio": {
+          "trifecta": [
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-4-2",
+              "odds": 25.5,
+              "model_probability": 5.5,
+              "market_probability": 3.92,
+              "net_edge": -1.42,
+              "expected_profit_yen": 40,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-4-3",
+              "odds": 15.3,
+              "model_probability": 5.46,
+              "market_probability": 6.54,
+              "net_edge": -4.07,
+              "expected_profit_yen": -16,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "4-1-2",
+              "odds": 16.4,
+              "model_probability": 4.28,
+              "market_probability": 6.1,
+              "net_edge": -4.82,
+              "expected_profit_yen": -30,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "4-1-3",
+              "odds": 10.6,
+              "model_probability": 4.25,
+              "market_probability": 9.43,
+              "net_edge": -8.18,
+              "expected_profit_yen": -55,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-2-4",
+              "odds": 51.8,
+              "model_probability": 3.92,
+              "market_probability": 1.93,
+              "net_edge": -1.01,
+              "expected_profit_yen": 103,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-3-4",
+              "odds": 25.9,
+              "model_probability": 3.89,
+              "market_probability": 3.86,
+              "net_edge": -2.97,
+              "expected_profit_yen": 1,
+              "qualifies": false
+            }
+          ],
+          "trio": [
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-2-4",
+              "odds": 5.1,
+              "model_probability": 20.45,
+              "market_probability": 19.61,
+              "net_edge": -1.66,
+              "expected_profit_yen": 4,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-3-4",
+              "odds": 3.1,
+              "model_probability": 20.3,
+              "market_probability": 32.26,
+              "net_edge": -14.46,
+              "expected_profit_yen": -37,
+              "qualifies": false
+            }
+          ],
+          "exacta": [
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "1-4",
+              "odds": 6.1,
+              "model_probability": 17.3,
+              "market_probability": 16.39,
+              "net_edge": -1.59,
+              "expected_profit_yen": 6,
+              "qualifies": false
+            },
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "4-1",
+              "odds": 3.6,
+              "model_probability": 13.47,
+              "market_probability": 27.78,
+              "net_edge": -16.81,
+              "expected_profit_yen": -52,
+              "qualifies": false
+            }
+          ],
+          "quinella": [
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-4",
+              "odds": 2.7,
+              "model_probability": 30.77,
+              "market_probability": 37.04,
+              "net_edge": -8.26,
+              "expected_profit_yen": -17,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-2",
+              "odds": 18.3,
+              "model_probability": 12.64,
+              "market_probability": 5.46,
+              "net_edge": 5.18,
+              "expected_profit_yen": 131,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-3",
+              "odds": 10.6,
+              "model_probability": 12.56,
+              "market_probability": 9.43,
+              "net_edge": 1.12,
+              "expected_profit_yen": 33,
+              "qualifies": false
+            }
+          ]
+        },
+        "portfolio_points": 13,
+        "data_rate": 100,
+        "source_urls": {
+          "/oddstf": "https://www.boatrace.jp/owpc/pc/race/oddstf?jcd=04&hd=20260822&rno=8",
+          "/odds2tf": "https://www.boatrace.jp/owpc/pc/race/odds2tf?jcd=04&hd=20260822&rno=8",
+          "/odds3f": "https://www.boatrace.jp/owpc/pc/race/odds3f?jcd=04&hd=20260822&rno=8",
+          "/odds3t": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=04&hd=20260822&rno=8"
+        }
+      },
+      "fetched_at": "2026-08-22T15:14:57+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=04&hd=20260822&rno=8"
     },
     {
       "venue": "平和島",
@@ -10136,8 +10838,8 @@
           "boat": 1,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 52.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -10146,8 +10848,8 @@
           "boat": 2,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.5,
+          "weight": 52.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -10156,8 +10858,8 @@
           "boat": 3,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 55.7,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -10166,8 +10868,8 @@
           "boat": 4,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.5,
+          "weight": 52.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -10176,8 +10878,8 @@
           "boat": 5,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 54.3,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -10186,15 +10888,15 @@
           "boat": 6,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 56.9,
           "st": null,
           "time_rank": null,
           "st_rank": null
         }
       ],
-      "fetched_at": null,
-      "source_url": null
+      "fetched_at": "2026-08-22T15:14:46+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=06&hd=20260822&rno=9"
     },
     {
       "venue": "浜名湖",
@@ -11011,8 +11713,8 @@
           "boat": 1,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 51.5,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -11021,8 +11723,8 @@
           "boat": 2,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": -0.5,
+          "weight": 55.6,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -11031,8 +11733,8 @@
           "boat": 3,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 51.5,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -11041,8 +11743,8 @@
           "boat": 4,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": -0.5,
+          "weight": 52.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -11051,8 +11753,8 @@
           "boat": 5,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 52.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -11061,15 +11763,15 @@
           "boat": 6,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 52.4,
           "st": null,
           "time_rank": null,
           "st_rank": null
         }
       ],
-      "fetched_at": null,
-      "source_url": null
+      "fetched_at": "2026-08-22T15:14:55+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=07&hd=20260822&rno=2"
     },
     {
       "venue": "蒲郡",
@@ -15965,176 +16667,476 @@
       "venue": "常滑",
       "venue_id": "08",
       "race": 11,
-      "status": "WAIT",
-      "message": "6艇の展示タイム・進入・STが揃うまで朝予想を維持",
+      "status": "FINAL",
+      "message": "展示後再計算済み",
       "morning_pick": "1-2-5",
+      "final_pick": "1-2-5",
+      "final_score": 59.5,
+      "reasons": [
+        "展示最速は2号艇 6.72",
+        "風速3m・波高1cm・天候晴",
+        "朝の能力評価に展示順位・ST展示順位・実際の進入コースを加えて再計算"
+      ],
       "ticket_plan": {
         "main": [
           {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "1-2-5",
-            "odds": null,
-            "model_probability": 9.15,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 8.9,
+            "model_probability": 5.01,
+            "market_probability": 11.24,
+            "net_edge": -9.23,
+            "expected_profit_yen": -55,
+            "qualifies": false
           },
           {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "1-5-2",
-            "odds": null,
-            "model_probability": 7.12,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 31.0,
+            "model_probability": 4.45,
+            "market_probability": 3.23,
+            "net_edge": -1.78,
+            "expected_profit_yen": 38,
+            "qualifies": false
           },
           {
-            "pick": "1-2-4",
-            "odds": null,
-            "model_probability": 8.18,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-5-4",
-            "odds": null,
-            "model_probability": 3.53,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-4-2",
-            "odds": null,
-            "model_probability": 6.18,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "1-4-5",
-            "odds": null,
-            "model_probability": 3.43,
-            "market_probability": null,
-            "net_edge": null
-          }
-        ],
-        "cover": [
-          {
-            "pick": "2-1-5",
-            "odds": null,
-            "model_probability": 3.65,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "5-1-2",
-            "odds": null,
-            "model_probability": 2.66,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "2-1-4",
-            "odds": null,
-            "model_probability": 3.26,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
-            "pick": "5-1-4",
-            "odds": null,
-            "model_probability": 1.32,
-            "market_probability": null,
-            "net_edge": null
-          },
-          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
             "pick": "1-2-6",
-            "odds": null,
-            "model_probability": 4.88,
-            "market_probability": null,
-            "net_edge": null
+            "odds": 22.0,
+            "model_probability": 3.8,
+            "market_probability": 4.55,
+            "net_edge": -3.74,
+            "expected_profit_yen": -16,
+            "qualifies": false
           },
           {
-            "pick": "1-5-6",
-            "odds": null,
-            "model_probability": 2.11,
-            "market_probability": null,
-            "net_edge": null
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-2-3",
+            "odds": 19.0,
+            "model_probability": 3.24,
+            "market_probability": 5.26,
+            "net_edge": -5.02,
+            "expected_profit_yen": -38,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "1-6-2",
+            "odds": 60.2,
+            "model_probability": 3.15,
+            "market_probability": 1.66,
+            "net_edge": -1.51,
+            "expected_profit_yen": 90,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trifecta",
+            "bet_type_label": "3連単",
+            "pick": "2-1-5",
+            "odds": 30.2,
+            "model_probability": 3.13,
+            "market_probability": 3.31,
+            "net_edge": -3.18,
+            "expected_profit_yen": -6,
+            "qualifies": false
           }
         ],
-        "ranked_by_edge": false
+        "cover": [],
+        "ranked_by_edge": true
       },
-      "best_value_pick": "1-2-5",
-      "value": {
-        "status": "DATA BLOCKED",
-        "odds": null,
-        "model_probability": 9.15,
-        "market_probability": null,
-        "net_edge": null,
-        "deadline": null,
-        "remaining_minutes": null,
-        "message": "3連単オッズ未公開のため期待値判定なし",
-        "source_url": null
-      },
+      "best_value_pick": "2",
+      "market_comparison": [
+        {
+          "bet_type": "single",
+          "bet_type_label": "単勝",
+          "pick": "2",
+          "odds": 30.7,
+          "model_probability": 16.42,
+          "market_probability": 3.26,
+          "net_edge": 11.16,
+          "expected_profit_yen": 404,
+          "qualifies": false
+        },
+        {
+          "bet_type": "exacta",
+          "bet_type_label": "2連単",
+          "pick": "1-5",
+          "odds": 21.3,
+          "model_probability": 10.9,
+          "market_probability": 4.69,
+          "net_edge": 3.71,
+          "expected_profit_yen": 132,
+          "qualifies": false
+        },
+        {
+          "bet_type": "quinella",
+          "bet_type_label": "2連複",
+          "pick": "1-5",
+          "odds": 8.4,
+          "model_probability": 17.36,
+          "market_probability": 11.9,
+          "net_edge": 3.46,
+          "expected_profit_yen": 46,
+          "qualifies": false
+        },
+        {
+          "bet_type": "single",
+          "bet_type_label": "単勝",
+          "pick": "3",
+          "odds": 30.7,
+          "model_probability": 7.71,
+          "market_probability": 3.26,
+          "net_edge": 2.45,
+          "expected_profit_yen": 137,
+          "qualifies": false
+        },
+        {
+          "bet_type": "trio",
+          "bet_type_label": "3連複",
+          "pick": "1-5-6",
+          "odds": 23.7,
+          "model_probability": 8.95,
+          "market_probability": 4.22,
+          "net_edge": 2.23,
+          "expected_profit_yen": 112,
+          "qualifies": false
+        },
+        {
+          "bet_type": "quinella",
+          "bet_type_label": "2連複",
+          "pick": "1-3",
+          "odds": 14.6,
+          "model_probability": 11.06,
+          "market_probability": 6.85,
+          "net_edge": 2.21,
+          "expected_profit_yen": 61,
+          "qualifies": false
+        }
+      ],
+      "weather": "晴",
+      "wind_speed": 3.0,
+      "wave_height": 1.0,
+      "start_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "exhibition": [
         {
           "boat": 1,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 1,
+          "time": 6.79,
+          "tilt": 0.0,
+          "weight": 53.8,
+          "st": ".06",
+          "time_rank": 5,
+          "st_rank": 3
         },
         {
           "boat": 2,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 2,
+          "time": 6.72,
+          "tilt": 0.0,
+          "weight": 52.2,
+          "st": ".16",
+          "time_rank": 1,
+          "st_rank": 5
         },
         {
           "boat": 3,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 3,
+          "time": 6.72,
+          "tilt": 0.0,
+          "weight": 53.1,
+          "st": ".30",
+          "time_rank": 2,
+          "st_rank": 6
         },
         {
           "boat": 4,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 4,
+          "time": 6.81,
+          "tilt": -0.5,
+          "weight": 50.0,
+          "st": ".10",
+          "time_rank": 6,
+          "st_rank": 4
         },
         {
           "boat": 5,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 5,
+          "time": 6.76,
+          "tilt": 0.0,
+          "weight": 52.0,
+          "st": ".05",
+          "time_rank": 3,
+          "st_rank": 2
         },
         {
           "boat": 6,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 6,
+          "time": 6.78,
+          "tilt": 0.0,
+          "weight": 52.0,
+          "st": ".03",
+          "time_rank": 4,
+          "st_rank": 1
         }
       ],
-      "fetched_at": null,
-      "source_url": null
+      "value": {
+        "bet_type": "single",
+        "bet_type_label": "単勝",
+        "pick": "2",
+        "odds": 30.7,
+        "model_probability": 16.42,
+        "market_probability": 3.26,
+        "net_edge": 11.16,
+        "expected_profit_yen": 404,
+        "qualifies": false,
+        "status": "WATCH",
+        "deadline": "15:30",
+        "remaining_minutes": 14.8,
+        "message": "期待値基準未満のため見送り",
+        "ranking": [
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "2",
+            "odds": 30.7,
+            "model_probability": 16.42,
+            "market_probability": 3.26,
+            "net_edge": 11.16,
+            "expected_profit_yen": 404,
+            "qualifies": false
+          },
+          {
+            "bet_type": "exacta",
+            "bet_type_label": "2連単",
+            "pick": "1-5",
+            "odds": 21.3,
+            "model_probability": 10.9,
+            "market_probability": 4.69,
+            "net_edge": 3.71,
+            "expected_profit_yen": 132,
+            "qualifies": false
+          },
+          {
+            "bet_type": "quinella",
+            "bet_type_label": "2連複",
+            "pick": "1-5",
+            "odds": 8.4,
+            "model_probability": 17.36,
+            "market_probability": 11.9,
+            "net_edge": 3.46,
+            "expected_profit_yen": 46,
+            "qualifies": false
+          },
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "3",
+            "odds": 30.7,
+            "model_probability": 7.71,
+            "market_probability": 3.26,
+            "net_edge": 2.45,
+            "expected_profit_yen": 137,
+            "qualifies": false
+          },
+          {
+            "bet_type": "trio",
+            "bet_type_label": "3連複",
+            "pick": "1-5-6",
+            "odds": 23.7,
+            "model_probability": 8.95,
+            "market_probability": 4.22,
+            "net_edge": 2.23,
+            "expected_profit_yen": 112,
+            "qualifies": false
+          },
+          {
+            "bet_type": "quinella",
+            "bet_type_label": "2連複",
+            "pick": "1-3",
+            "odds": 14.6,
+            "model_probability": 11.06,
+            "market_probability": 6.85,
+            "net_edge": 2.21,
+            "expected_profit_yen": 61,
+            "qualifies": false
+          }
+        ],
+        "portfolio": {
+          "trifecta": [
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-2-5",
+              "odds": 8.9,
+              "model_probability": 5.01,
+              "market_probability": 11.24,
+              "net_edge": -9.23,
+              "expected_profit_yen": -55,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-5-2",
+              "odds": 31.0,
+              "model_probability": 4.45,
+              "market_probability": 3.23,
+              "net_edge": -1.78,
+              "expected_profit_yen": 38,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-2-6",
+              "odds": 22.0,
+              "model_probability": 3.8,
+              "market_probability": 4.55,
+              "net_edge": -3.74,
+              "expected_profit_yen": -16,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-2-3",
+              "odds": 19.0,
+              "model_probability": 3.24,
+              "market_probability": 5.26,
+              "net_edge": -5.02,
+              "expected_profit_yen": -38,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-6-2",
+              "odds": 60.2,
+              "model_probability": 3.15,
+              "market_probability": 1.66,
+              "net_edge": -1.51,
+              "expected_profit_yen": 90,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "2-1-5",
+              "odds": 30.2,
+              "model_probability": 3.13,
+              "market_probability": 3.31,
+              "net_edge": -3.18,
+              "expected_profit_yen": -6,
+              "qualifies": false
+            }
+          ],
+          "trio": [
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-2-5",
+              "odds": 4.7,
+              "model_probability": 18.25,
+              "market_probability": 21.28,
+              "net_edge": -5.53,
+              "expected_profit_yen": -14,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-2-6",
+              "odds": 9.0,
+              "model_probability": 13.33,
+              "market_probability": 11.11,
+              "net_edge": -0.28,
+              "expected_profit_yen": 20,
+              "qualifies": false
+            }
+          ],
+          "exacta": [
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "1-2",
+              "odds": 2.7,
+              "model_probability": 15.05,
+              "market_probability": 37.04,
+              "net_edge": -24.49,
+              "expected_profit_yen": -59,
+              "qualifies": false
+            },
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "1-5",
+              "odds": 21.3,
+              "model_probability": 10.9,
+              "market_probability": 4.69,
+              "net_edge": 3.71,
+              "expected_profit_yen": 132,
+              "qualifies": false
+            }
+          ],
+          "quinella": [
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-2",
+              "odds": 3.5,
+              "model_probability": 24.44,
+              "market_probability": 28.57,
+              "net_edge": -6.13,
+              "expected_profit_yen": -14,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-5",
+              "odds": 8.4,
+              "model_probability": 17.36,
+              "market_probability": 11.9,
+              "net_edge": 3.46,
+              "expected_profit_yen": 46,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-6",
+              "odds": 9.4,
+              "model_probability": 13.04,
+              "market_probability": 10.64,
+              "net_edge": 0.4,
+              "expected_profit_yen": 23,
+              "qualifies": false
+            }
+          ]
+        },
+        "portfolio_points": 13,
+        "data_rate": 100,
+        "source_urls": {
+          "/oddstf": "https://www.boatrace.jp/owpc/pc/race/oddstf?jcd=08&hd=20260822&rno=11",
+          "/odds2tf": "https://www.boatrace.jp/owpc/pc/race/odds2tf?jcd=08&hd=20260822&rno=11",
+          "/odds3f": "https://www.boatrace.jp/owpc/pc/race/odds3f?jcd=08&hd=20260822&rno=11",
+          "/odds3t": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=08&hd=20260822&rno=11"
+        }
+      },
+      "fetched_at": "2026-08-22T15:15:13+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=08&hd=20260822&rno=11"
     },
     {
       "venue": "常滑",
@@ -19493,8 +20495,8 @@
           "boat": 1,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 46.5,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -19503,8 +20505,8 @@
           "boat": 2,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 47.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -19513,8 +20515,8 @@
           "boat": 3,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": -0.5,
+          "weight": 45.5,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -19523,8 +20525,8 @@
           "boat": 4,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 47.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -19533,8 +20535,8 @@
           "boat": 5,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": -0.5,
+          "weight": 47.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -19543,15 +20545,15 @@
           "boat": 6,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 47.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
         }
       ],
-      "fetched_at": null,
-      "source_url": null
+      "fetched_at": "2026-08-22T15:15:07+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=16&hd=20260822&rno=10"
     },
     {
       "venue": "児島",
@@ -20016,33 +21018,33 @@
       "exhibition": [
         {
           "boat": 1,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 1,
+          "time": 6.8,
+          "tilt": -0.5,
+          "weight": 56.2,
+          "st": ".18",
+          "time_rank": 2,
+          "st_rank": 5
         },
         {
           "boat": 2,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 2,
+          "time": 6.78,
+          "tilt": 0.0,
+          "weight": 55.4,
+          "st": ".16",
+          "time_rank": 1,
+          "st_rank": 4
         },
         {
           "boat": 3,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 3,
+          "time": 6.89,
+          "tilt": 0.0,
+          "weight": 52.7,
+          "st": ".13",
+          "time_rank": 5,
+          "st_rank": 2
         },
         {
           "boat": 4,
@@ -20056,27 +21058,27 @@
         },
         {
           "boat": 5,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 5,
+          "time": 6.85,
+          "tilt": 0.0,
+          "weight": 51.0,
+          "st": ".11",
+          "time_rank": 3,
+          "st_rank": 1
         },
         {
           "boat": 6,
-          "course": null,
-          "time": null,
-          "tilt": null,
-          "weight": null,
-          "st": null,
-          "time_rank": null,
-          "st_rank": null
+          "course": 4,
+          "time": 6.86,
+          "tilt": -0.5,
+          "weight": 52.0,
+          "st": ".14",
+          "time_rank": 4,
+          "st_rank": 3
         }
       ],
-      "fetched_at": null,
-      "source_url": null
+      "fetched_at": "2026-08-22T15:15:07+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=19&hd=20260822&rno=1"
     },
     {
       "venue": "下関",
@@ -22293,8 +23295,8 @@
           "boat": 1,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": -0.5,
+          "weight": 52.5,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -22303,8 +23305,8 @@
           "boat": 2,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 55.4,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -22313,8 +23315,8 @@
           "boat": 3,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 58.9,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -22323,8 +23325,8 @@
           "boat": 4,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 53.3,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -22333,8 +23335,8 @@
           "boat": 5,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.5,
+          "weight": 51.5,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -22343,15 +23345,15 @@
           "boat": 6,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": -0.5,
+          "weight": 51.5,
           "st": null,
           "time_rank": null,
           "st_rank": null
         }
       ],
-      "fetched_at": null,
-      "source_url": null
+      "fetched_at": "2026-08-22T15:15:06+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=20&hd=20260822&rno=2"
     },
     {
       "venue": "若松",
@@ -28744,8 +29746,8 @@
           "boat": 1,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 56.3,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -28754,8 +29756,8 @@
           "boat": 2,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 52.2,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -28764,8 +29766,8 @@
           "boat": 3,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 52.3,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -28774,8 +29776,8 @@
           "boat": 4,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 52.6,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -28784,8 +29786,8 @@
           "boat": 5,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 52.0,
           "st": null,
           "time_rank": null,
           "st_rank": null
@@ -28794,15 +29796,15 @@
           "boat": 6,
           "course": null,
           "time": null,
-          "tilt": null,
-          "weight": null,
+          "tilt": 0.0,
+          "weight": 52.6,
           "st": null,
           "time_rank": null,
           "st_rank": null
         }
       ],
-      "fetched_at": null,
-      "source_url": null
+      "fetched_at": "2026-08-22T15:15:17+09:00",
+      "source_url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?jcd=22&hd=20260822&rno=8"
     },
     {
       "venue": "福岡",
@@ -35001,15 +36003,15 @@
       "boat": 3,
       "name": "常住 蓮",
       "formation": "2-3-流し",
-      "time_rank": null,
-      "deadline": null,
-      "remaining_minutes": null,
-      "status": "WAIT",
-      "min_odds": null,
-      "model_probability": null,
-      "market_probability": null,
-      "net_edge": null,
-      "message": "候補艇の展示データ待ち"
+      "time_rank": 2,
+      "deadline": "15:21",
+      "remaining_minutes": 6.0,
+      "status": "WATCH",
+      "min_odds": 12.7,
+      "model_probability": 9.8,
+      "market_probability": 31.5,
+      "net_edge": -23.69,
+      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
       "venue": "戸田",
@@ -35205,15 +36207,15 @@
       "boat": 4,
       "name": "池田 雄一",
       "formation": "1-4-流し",
-      "time_rank": null,
-      "deadline": null,
-      "remaining_minutes": null,
-      "status": "WAIT",
-      "min_odds": null,
-      "model_probability": null,
-      "market_probability": null,
-      "net_edge": null,
-      "message": "候補艇の展示データ待ち"
+      "time_rank": 5,
+      "deadline": "15:22",
+      "remaining_minutes": 7.0,
+      "status": "WATCH",
+      "min_odds": 10.2,
+      "model_probability": 27.1,
+      "market_probability": 39.22,
+      "net_edge": -14.12,
+      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
       "venue": "江戸川",
@@ -35375,15 +36377,15 @@
       "boat": 5,
       "name": "畔柳 俊吾",
       "formation": "1-5-流し",
-      "time_rank": null,
-      "deadline": null,
-      "remaining_minutes": null,
-      "status": "WAIT",
-      "min_odds": null,
-      "model_probability": null,
-      "market_probability": null,
-      "net_edge": null,
-      "message": "候補艇の展示データ待ち"
+      "time_rank": 5,
+      "deadline": "15:31",
+      "remaining_minutes": 16.0,
+      "status": "WATCH",
+      "min_odds": 91.3,
+      "model_probability": 3.16,
+      "market_probability": 4.38,
+      "net_edge": -3.22,
+      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
       "venue": "平和島",
@@ -36038,15 +37040,15 @@
       "boat": 5,
       "name": "小原 聡将",
       "formation": "1-5-流し",
-      "time_rank": null,
-      "deadline": null,
-      "remaining_minutes": null,
-      "status": "WAIT",
-      "min_odds": null,
-      "model_probability": null,
-      "market_probability": null,
-      "net_edge": null,
-      "message": "候補艇の展示データ待ち"
+      "time_rank": 3,
+      "deadline": "15:30",
+      "remaining_minutes": 14.8,
+      "status": "WATCH",
+      "min_odds": 31.0,
+      "model_probability": 14.24,
+      "market_probability": 12.9,
+      "net_edge": -0.66,
+      "message": "展示2位以内・net edge 5%以上の両条件を満たさないため見送り"
     },
     {
       "venue": "常滑",
@@ -37708,6 +38710,213 @@
       "recorded_at": "2026-08-22T12:28:32+09:00"
     },
     {
+      "venue": "戸田",
+      "venue_id": "02",
+      "race": 10,
+      "status": "FINAL",
+      "value": {
+        "bet_type": "single",
+        "bet_type_label": "単勝",
+        "pick": "2",
+        "odds": 7.7,
+        "model_probability": 31.72,
+        "market_probability": 12.99,
+        "net_edge": 16.73,
+        "expected_profit_yen": 144,
+        "qualifies": true,
+        "status": "UP",
+        "deadline": "15:21",
+        "remaining_minutes": 6.0,
+        "message": "期待値・的中確率の両基準を通過",
+        "ranking": [
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "2",
+            "odds": 7.7,
+            "model_probability": 31.72,
+            "market_probability": 12.99,
+            "net_edge": 16.73,
+            "expected_profit_yen": 144,
+            "qualifies": true
+          },
+          {
+            "bet_type": "quinella",
+            "bet_type_label": "2連複",
+            "pick": "1-2",
+            "odds": 5.6,
+            "model_probability": 29.53,
+            "market_probability": 17.86,
+            "net_edge": 9.68,
+            "expected_profit_yen": 65,
+            "qualifies": true
+          }
+        ],
+        "portfolio": {
+          "trifecta": [
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "2-1-3",
+              "odds": 14.7,
+              "model_probability": 6.72,
+              "market_probability": 6.8,
+              "net_edge": -3.08,
+              "expected_profit_yen": -1,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-2-3",
+              "odds": 11.9,
+              "model_probability": 6.72,
+              "market_probability": 8.4,
+              "net_edge": -4.68,
+              "expected_profit_yen": -20,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-3-2",
+              "odds": 11.8,
+              "model_probability": 4.76,
+              "market_probability": 8.47,
+              "net_edge": -6.72,
+              "expected_profit_yen": -44,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "2-3-1",
+              "odds": 12.7,
+              "model_probability": 4.75,
+              "market_probability": 7.87,
+              "net_edge": -6.13,
+              "expected_profit_yen": -40,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "2-1-5",
+              "odds": 54.6,
+              "model_probability": 3.01,
+              "market_probability": 1.83,
+              "net_edge": -1.82,
+              "expected_profit_yen": 64,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-2-5",
+              "odds": 51.4,
+              "model_probability": 3.01,
+              "market_probability": 1.95,
+              "net_edge": -1.93,
+              "expected_profit_yen": 55,
+              "qualifies": false
+            }
+          ],
+          "trio": [
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-2-3",
+              "odds": 2.1,
+              "model_probability": 30.73,
+              "market_probability": 47.62,
+              "net_edge": -19.39,
+              "expected_profit_yen": -35,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-2-5",
+              "odds": 19.6,
+              "model_probability": 12.31,
+              "market_probability": 5.1,
+              "net_edge": 4.71,
+              "expected_profit_yen": 141,
+              "qualifies": false
+            }
+          ],
+          "exacta": [
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "1-2",
+              "odds": 12.0,
+              "model_probability": 14.77,
+              "market_probability": 8.33,
+              "net_edge": 3.94,
+              "expected_profit_yen": 77,
+              "qualifies": false
+            },
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "2-1",
+              "odds": 13.7,
+              "model_probability": 14.76,
+              "market_probability": 7.3,
+              "net_edge": 4.96,
+              "expected_profit_yen": 102,
+              "qualifies": false
+            }
+          ],
+          "quinella": [
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-2",
+              "odds": 5.6,
+              "model_probability": 29.53,
+              "market_probability": 17.86,
+              "net_edge": 9.68,
+              "expected_profit_yen": 65,
+              "qualifies": true
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-3",
+              "odds": 3.3,
+              "model_probability": 14.07,
+              "market_probability": 30.3,
+              "net_edge": -18.23,
+              "expected_profit_yen": -54,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "2-3",
+              "odds": 2.4,
+              "model_probability": 14.04,
+              "market_probability": 41.67,
+              "net_edge": -29.63,
+              "expected_profit_yen": -66,
+              "qualifies": false
+            }
+          ]
+        },
+        "portfolio_points": 13,
+        "data_rate": 100,
+        "source_urls": {
+          "/oddstf": "https://www.boatrace.jp/owpc/pc/race/oddstf?jcd=02&hd=20260822&rno=10",
+          "/odds2tf": "https://www.boatrace.jp/owpc/pc/race/odds2tf?jcd=02&hd=20260822&rno=10",
+          "/odds3f": "https://www.boatrace.jp/owpc/pc/race/odds3f?jcd=02&hd=20260822&rno=10",
+          "/odds3t": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=02&hd=20260822&rno=10"
+        }
+      },
+      "recorded_at": "2026-08-22T15:14:58+09:00"
+    },
+    {
       "venue": "江戸川",
       "venue_id": "03",
       "race": 7,
@@ -38893,6 +40102,202 @@
         }
       },
       "recorded_at": "2026-08-22T14:46:57+09:00"
+    },
+    {
+      "venue": "平和島",
+      "venue_id": "04",
+      "race": 8,
+      "status": "FINAL",
+      "value": {
+        "bet_type": "single",
+        "bet_type_label": "単勝",
+        "pick": "1",
+        "odds": 5.8,
+        "model_probability": 41.29,
+        "market_probability": 17.24,
+        "net_edge": 22.05,
+        "expected_profit_yen": 139,
+        "qualifies": true,
+        "status": "UP",
+        "deadline": "15:31",
+        "remaining_minutes": 16.0,
+        "message": "期待値・的中確率の両基準を通過",
+        "ranking": [
+          {
+            "bet_type": "single",
+            "bet_type_label": "単勝",
+            "pick": "1",
+            "odds": 5.8,
+            "model_probability": 41.29,
+            "market_probability": 17.24,
+            "net_edge": 22.05,
+            "expected_profit_yen": 139,
+            "qualifies": true
+          }
+        ],
+        "portfolio": {
+          "trifecta": [
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-4-2",
+              "odds": 25.5,
+              "model_probability": 5.5,
+              "market_probability": 3.92,
+              "net_edge": -1.42,
+              "expected_profit_yen": 40,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-4-3",
+              "odds": 15.3,
+              "model_probability": 5.46,
+              "market_probability": 6.54,
+              "net_edge": -4.07,
+              "expected_profit_yen": -16,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "4-1-2",
+              "odds": 16.4,
+              "model_probability": 4.28,
+              "market_probability": 6.1,
+              "net_edge": -4.82,
+              "expected_profit_yen": -30,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "4-1-3",
+              "odds": 10.6,
+              "model_probability": 4.25,
+              "market_probability": 9.43,
+              "net_edge": -8.18,
+              "expected_profit_yen": -55,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-2-4",
+              "odds": 51.8,
+              "model_probability": 3.92,
+              "market_probability": 1.93,
+              "net_edge": -1.01,
+              "expected_profit_yen": 103,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trifecta",
+              "bet_type_label": "3連単",
+              "pick": "1-3-4",
+              "odds": 25.9,
+              "model_probability": 3.89,
+              "market_probability": 3.86,
+              "net_edge": -2.97,
+              "expected_profit_yen": 1,
+              "qualifies": false
+            }
+          ],
+          "trio": [
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-2-4",
+              "odds": 5.1,
+              "model_probability": 20.45,
+              "market_probability": 19.61,
+              "net_edge": -1.66,
+              "expected_profit_yen": 4,
+              "qualifies": false
+            },
+            {
+              "bet_type": "trio",
+              "bet_type_label": "3連複",
+              "pick": "1-3-4",
+              "odds": 3.1,
+              "model_probability": 20.3,
+              "market_probability": 32.26,
+              "net_edge": -14.46,
+              "expected_profit_yen": -37,
+              "qualifies": false
+            }
+          ],
+          "exacta": [
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "1-4",
+              "odds": 6.1,
+              "model_probability": 17.3,
+              "market_probability": 16.39,
+              "net_edge": -1.59,
+              "expected_profit_yen": 6,
+              "qualifies": false
+            },
+            {
+              "bet_type": "exacta",
+              "bet_type_label": "2連単",
+              "pick": "4-1",
+              "odds": 3.6,
+              "model_probability": 13.47,
+              "market_probability": 27.78,
+              "net_edge": -16.81,
+              "expected_profit_yen": -52,
+              "qualifies": false
+            }
+          ],
+          "quinella": [
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-4",
+              "odds": 2.7,
+              "model_probability": 30.77,
+              "market_probability": 37.04,
+              "net_edge": -8.26,
+              "expected_profit_yen": -17,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-2",
+              "odds": 18.3,
+              "model_probability": 12.64,
+              "market_probability": 5.46,
+              "net_edge": 5.18,
+              "expected_profit_yen": 131,
+              "qualifies": false
+            },
+            {
+              "bet_type": "quinella",
+              "bet_type_label": "2連複",
+              "pick": "1-3",
+              "odds": 10.6,
+              "model_probability": 12.56,
+              "market_probability": 9.43,
+              "net_edge": 1.12,
+              "expected_profit_yen": 33,
+              "qualifies": false
+            }
+          ]
+        },
+        "portfolio_points": 13,
+        "data_rate": 100,
+        "source_urls": {
+          "/oddstf": "https://www.boatrace.jp/owpc/pc/race/oddstf?jcd=04&hd=20260822&rno=8",
+          "/odds2tf": "https://www.boatrace.jp/owpc/pc/race/odds2tf?jcd=04&hd=20260822&rno=8",
+          "/odds3f": "https://www.boatrace.jp/owpc/pc/race/odds3f?jcd=04&hd=20260822&rno=8",
+          "/odds3t": "https://www.boatrace.jp/owpc/pc/race/odds3t?jcd=04&hd=20260822&rno=8"
+        }
+      },
+      "recorded_at": "2026-08-22T15:14:57+09:00"
     },
     {
       "venue": "常滑",
