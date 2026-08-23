@@ -177,6 +177,9 @@ form button span { float: right; }
 .developmentPrediction p { margin: 6px 0 0; color: #dce8f3; font-size: 11px; line-height: 1.7; }
 .manualCopyActions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 .manualCopyButton { width: auto; margin-top: 0; padding: 10px 15px; font-size: 11px; }
+.manualVideoButton { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 10px 15px; border: 1px solid rgba(255,91,91,.55); border-radius: 8px; color: #fff; background: linear-gradient(135deg, #e54343, #a9152d); box-shadow: 0 5px 18px rgba(229,67,67,.18); font-size: 11px; font-weight: 900; text-decoration: none; }
+.manualVideoButton:hover { filter: brightness(1.12); }
+.manualVideoButton:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 .noteFreeButton { color: var(--cyan); border: 1px solid rgba(64,226,231,.4); background: rgba(64,226,231,.08); }
 .noteCopyButton { color: #17120a; background: linear-gradient(135deg, var(--gold), #fff0a8); }
 #manualCopyStatus { min-height: 1.3em; margin: 0; }

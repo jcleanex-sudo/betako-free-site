@@ -47,6 +47,16 @@ class ManualRefreshUiTest(unittest.TestCase):
         self.assertNotIn("gh workflow run update-exhibition.yml", workflow)
         self.assertIn('initialize_only = os.environ.get("INITIALIZE_ONLY") == "1"', updater)
 
+    def test_manual_prediction_has_venue_specific_official_video_link(self):
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn('id="openRaceVideo"', html)
+        self.assertIn('rel="noopener"', html)
+        self.assertIn("function updateRaceVideoLink", script)
+        self.assertIn("https://race.boatcast.jp/?jo=", script)
+        self.assertIn("updateRaceVideoLink(venueId, venue, raceSelect.value)", script)
+
 
 if __name__ == "__main__":
     unittest.main()

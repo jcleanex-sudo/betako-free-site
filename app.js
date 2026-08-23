@@ -9,6 +9,15 @@ let latestManualPrediction = null;
 
 const jstToday = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
 
+function updateRaceVideoLink(venueId, venue, race) {
+  const link = document.querySelector("#openRaceVideo");
+  const code = String(venueId || "").padStart(2, "0");
+  link.href = `https://race.boatcast.jp/?jo=${encodeURIComponent(code)}`;
+  link.textContent = `📺 ${race}R レース映像`;
+  link.setAttribute("aria-label", `${venue}${race}レースの公式ライブ・リプレイ映像を開く`);
+  link.title = "BOATCAST公式のライブ＆リプレイを別タブで開きます";
+}
+
 venueSelect.replaceChildren(new Option("公式開催場を確認中", ""));
 venueSelect.disabled = true;
 for (let race = 1; race <= 12; race += 1) raceSelect.add(new Option(`${race}R`, String(race)));
@@ -621,6 +630,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const officialVenue = window.betakoPredictions?.official_venues?.find((item) => item.venue === venue);
   const venueId = String(match?.venue_id || officialVenue?.venue_id || venues.indexOf(venue) + 1).padStart(2, "0");
   document.querySelector("#venueCode").textContent = venueId;
+  updateRaceVideoLink(venueId, venue, raceSelect.value);
   const finalMode = document.querySelector("#predictionType").value === "展示後AI最終予想";
   const exhibitionDateMatches = window.betakoExhibition?.race_date === dateInput.value;
   const finalData = exhibitionDateMatches
