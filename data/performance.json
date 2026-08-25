@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25 20:51 JST",
+  "updated_at": "2026-08-25 22:18 JST",
   "evaluated": {
     "20260803-22-6": {
       "key": "20260803-22-6",
@@ -18472,7 +18472,7 @@
   },
   "today_venue_performance": {
     "race_date": "2026-08-25",
-    "updated_at": "2026-08-25 20:51 JST",
+    "updated_at": "2026-08-25 22:18 JST",
     "basis": "当日朝に保存した全レース予想のうち公式結果確定済みレースのみ",
     "thresholds": {
       "minimum_samples": 5,
@@ -18599,6 +18599,17 @@
         "hit": false,
         "actual": "1-4-5",
         "payout_yen": 2410,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260825-01-12": {
+        "key": "20260825-01-12",
+        "venue_id": "01",
+        "venue": "桐生",
+        "race": 12,
+        "hit": false,
+        "actual": "1-3-4",
+        "payout_yen": 1170,
         "stake_yen": 600,
         "profit_yen": -600
       },
@@ -20194,21 +20205,6 @@
         "last_completed_race": 12
       },
       {
-        "venue": "桐生",
-        "samples": 11,
-        "hits": 3,
-        "hit_rate": 27.3,
-        "hit_rate_ci95": [
-          9.7,
-          56.6
-        ],
-        "net_profit_yen": -3170,
-        "profit_factor": 0.34,
-        "max_drawdown_yen": 3850,
-        "status": "WATCH",
-        "last_completed_race": 11
-      },
-      {
         "venue": "浜名湖",
         "samples": 11,
         "hits": 3,
@@ -20235,6 +20231,21 @@
         "net_profit_yen": -4050,
         "profit_factor": 0.27,
         "max_drawdown_yen": 4960,
+        "status": "WATCH",
+        "last_completed_race": 12
+      },
+      {
+        "venue": "桐生",
+        "samples": 12,
+        "hits": 3,
+        "hit_rate": 25.0,
+        "hit_rate_ci95": [
+          8.9,
+          53.2
+        ],
+        "net_profit_yen": -3770,
+        "profit_factor": 0.3,
+        "max_drawdown_yen": 4450,
         "status": "WATCH",
         "last_completed_race": 12
       },
