@@ -745,6 +745,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? window.betakoExhibition?.races?.find((item) => item.venue === venue && String(item.race) === raceSelect.value)
     : null;
   const finalReady = finalMode && finalData?.status === "FINAL" && hasCompleteFixedPortfolio(finalData);
+  const hitRatePriority = finalData?.hit_rate_priority || {};
   renderExhibitionTimes(finalData, finalMode);
   renderMarketComparison(finalData, finalReady);
   const selectedPortfolio = selectedFixedPortfolio(finalData);
@@ -797,7 +798,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   document.querySelector("#predictionDetail").textContent = referenceBlocked
     ? `参考データ取得率 ${Number(match.data_rate).toFixed(1)}%｜100%未満のため買い目を生成しません`
     : finalReady
-      ? `オッズ非反映・モデル確率順の固定13点｜1着候補 ${finalData.final_pick?.split("-")[0] || "--"}号艇｜展示・進入・ST反映済み｜オッズで買い目を変更しません`
+      ? `オッズ非反映・モデル確率順の固定13点｜1着候補 ${finalData.final_pick?.split("-")[0] || "--"}号艇｜展示・進入・ST反映済み｜的中率優先 ${hitRatePriority.qualified ? "候補" : "見送り"}（3連単トップ確率 ${Number(hitRatePriority.top_trifecta_probability || 0).toFixed(1)}%）`
     : match
       ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜必須データ ${Math.round(match.data_rate)}%${Number.isFinite(Number(match.detail_data_rate)) ? `｜詳細成績 ${Math.round(match.detail_data_rate)}%` : ""}`
     : dateMatches
@@ -1247,6 +1248,13 @@ function applyPerformancePayload(payload) {
   document.querySelector("#backtestComparison").textContent = Number(paired.pairs || 0)
     ? `${Number(paired.pairs)}組｜的中率差 +${Number(paired.hit_rate_difference_points || 0).toFixed(1)}pt｜損益差 +${Number(paired.net_profit_difference_yen || 0).toLocaleString("ja-JP")}円｜p=${Number(paired.mcnemar_exact_p || 0).toFixed(4)}`
     : "集計開始待ち";
+  const hitRatePriority = payload.hit_rate_priority_backtest || {};
+  const overallPriority = hitRatePriority.overall || {};
+  const holdoutPriority = hitRatePriority.holdout_30pct || {};
+  const priorityText = document.querySelector("#hitRatePriorityPerformance");
+  if (priorityText) priorityText.textContent = Number(overallPriority.samples || 0)
+    ? `過去 ${overallPriority.samples}件中${overallPriority.hits}件的中（${Number(overallPriority.hit_rate).toFixed(1)}%）｜後半検証 ${holdoutPriority.samples}件中${holdoutPriority.hits}件（${Number(holdoutPriority.hit_rate).toFixed(1)}%）`
+    : "検証データ収集中";
   const renderTier = (name, tier) => {
     const ci = tier.hit_rate_ci95 ? `${tier.hit_rate_ci95[0]}%—${tier.hit_rate_ci95[1]}%` : "--";
     document.querySelector(`#${name}Samples`).textContent = `${tier.samples || 0}件`;

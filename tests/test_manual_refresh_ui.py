@@ -80,6 +80,14 @@ class ManualRefreshUiTest(unittest.TestCase):
         self.assertIn("logic_variant_summary", script)
         self.assertIn("取得済み項目はすべて新v5で使用中", script)
 
+    def test_hit_rate_priority_filter_is_visible_but_not_auto_activated(self):
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "app.js").read_text(encoding="utf-8")
+        self.assertIn('id="hitRatePriorityPerformance"', html)
+        self.assertIn("現行予想は変更せず、検証候補として記録", html)
+        self.assertIn("hit_rate_priority_backtest", script)
+        self.assertIn("的中率優先 ${hitRatePriority.qualified ?", script)
+
 
 if __name__ == "__main__":
     unittest.main()

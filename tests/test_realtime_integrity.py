@@ -9,10 +9,22 @@ from scripts.update_exhibition import (
     build_probability_only_portfolio,
     final_prediction,
     has_complete_portfolio,
+    hit_rate_priority_gate,
 )
 
 
 class RealtimeIntegrityTest(unittest.TestCase):
+    def test_hit_rate_priority_gate_is_a_separate_shadow_filter(self):
+        contenders = [
+            {"boat": boat, "relative_win_probability": probability}
+            for boat, probability in enumerate((72, 10, 7, 5, 4, 2), 1)
+        ]
+        portfolio = build_probability_only_portfolio(contenders)
+        result = hit_rate_priority_gate(portfolio)
+        self.assertEqual(result["mode"], "shadow_validation")
+        self.assertEqual(result["status"], "CANDIDATE_BET")
+        self.assertGreaterEqual(result["top_trifecta_probability"], result["threshold"])
+
     def test_fixed_portfolio_requires_all_13_unique_tickets(self):
         complete = {
             "trifecta": [{"pick": f"1-2-{boat}"} for boat in range(1, 7)],

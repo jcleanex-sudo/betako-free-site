@@ -1,9 +1,29 @@
 import unittest
 
-from scripts.backfill_portfolio_variants import paired_comparison
+from scripts.backfill_portfolio_variants import hit_rate_priority_summary, paired_comparison
 
 
 class BackfillPortfolioVariantsTest(unittest.TestCase):
+    def test_hit_rate_priority_summary_keeps_training_and_holdout_separate(self):
+        records = {}
+        for race in range(10):
+            key = f"202609{race + 1:02d}-01-1-backtest-probability-only"
+            records[key] = {
+                "key": key,
+                "strategy": "probability_only",
+                "hit": race != 8,
+                "profit_yen": 100 if race != 8 else -100,
+                "tickets": [{
+                    "bet_type": "trifecta",
+                    "model_probability": 8 if race < 9 else 6,
+                }],
+            }
+        summary = hit_rate_priority_summary(records)
+        self.assertEqual(summary["status"], "CANDIDATE_ONLY")
+        self.assertEqual(summary["overall"]["samples"], 9)
+        self.assertEqual(summary["training_70pct"]["samples"], 7)
+        self.assertEqual(summary["holdout_30pct"]["samples"], 2)
+
     def test_paired_comparison_counts_only_same_races(self):
         records = {}
         outcomes = [(True, True), (True, False), (False, True), (False, False)]

@@ -29803,5 +29803,48 @@
   "portfolio_variant_daily": {
     "odds_aware": {},
     "probability_only": {}
+  },
+  "hit_rate_priority_backtest": {
+    "status": "CANDIDATE_ONLY",
+    "threshold": {
+      "top_trifecta_model_probability_min": 7.0
+    },
+    "overall": {
+      "samples": 34,
+      "hits": 25,
+      "hit_rate": 73.5,
+      "hit_rate_ci95": [
+        56.9,
+        85.4
+      ],
+      "net_profit_yen": -6550,
+      "profit_factor": 0.71,
+      "max_drawdown_yen": 14770
+    },
+    "training_70pct": {
+      "samples": 25,
+      "hits": 18,
+      "hit_rate": 72.0,
+      "hit_rate_ci95": [
+        52.4,
+        85.7
+      ],
+      "net_profit_yen": -3900,
+      "profit_factor": 0.76,
+      "max_drawdown_yen": 12120
+    },
+    "holdout_30pct": {
+      "samples": 9,
+      "hits": 7,
+      "hit_rate": 77.8,
+      "hit_rate_ci95": [
+        45.3,
+        93.7
+      ],
+      "net_profit_yen": -2650,
+      "profit_factor": 0.57,
+      "max_drawdown_yen": 4470
+    },
+    "activation_rule": "holdout母数30件以上かつ改善を再確認するまで実戦ロジックへ自動反映しない"
   }
 }

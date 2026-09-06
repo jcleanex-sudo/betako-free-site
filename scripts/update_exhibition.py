@@ -30,6 +30,7 @@ MARKET_RULES = {
     "trifecta": {"margin": 3.0, "min_edge": 5.0, "min_probability": 5.0},
 }
 PORTFOLIO_COUNTS = {"trifecta": 6, "trio": 2, "exacta": 2, "quinella": 3}
+HIT_RATE_PRIORITY_TRIFECTA_MIN = 7.0
 
 
 def parse_target_pairs(value):
@@ -56,6 +57,23 @@ def has_complete_portfolio(portfolio):
         if len(picks) != expected or any(not pick for pick in picks) or len(set(picks)) != expected:
             return False
     return True
+
+
+def hit_rate_priority_gate(portfolio):
+    """Shadow filter selected on historical training and checked on a later holdout."""
+    trifecta = portfolio.get("trifecta") or [] if isinstance(portfolio, dict) else []
+    top_probability = max(
+        (float(ticket.get("model_probability") or 0) for ticket in trifecta if isinstance(ticket, dict)),
+        default=0.0,
+    )
+    qualified = has_complete_portfolio(portfolio) and top_probability >= HIT_RATE_PRIORITY_TRIFECTA_MIN
+    return {
+        "status": "CANDIDATE_BET" if qualified else "SKIP",
+        "qualified": qualified,
+        "top_trifecta_probability": round(top_probability, 2),
+        "threshold": HIT_RATE_PRIORITY_TRIFECTA_MIN,
+        "mode": "shadow_validation",
+    }
 
 
 def ordered_trifecta_probability(contenders, pick):
@@ -482,6 +500,7 @@ def final_prediction(prediction, realtime):
     odds_aware_portfolio = value.get("portfolio") or {}
     portfolio_trifecta = probability_only_portfolio.get("trifecta") or []
     portfolio_complete = has_complete_portfolio(probability_only_portfolio)
+    hit_rate_priority = hit_rate_priority_gate(probability_only_portfolio)
     if portfolio_complete:
         plan = {"main": portfolio_trifecta, "cover": [], "ranked_by_probability": True}
     value_pick = plan["main"][0]["pick"] if plan["main"] else final_pick
@@ -511,6 +530,7 @@ def final_prediction(prediction, realtime):
         },
         "odds_aware_portfolio": odds_aware_portfolio,
         "selection_basis": "model_probability_only",
+        "hit_rate_priority": hit_rate_priority,
         "market_comparison": value.get("ranking", []),
         "weather": realtime.get("weather"), "wind_speed": wind, "wave_height": wave,
         "start_order": start_order,

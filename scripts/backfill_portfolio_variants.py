@@ -26,6 +26,35 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 HISTORY = ROOT / "data" / "history"
 BACKTEST = ROOT / "data" / "backtests" / "portfolio_variant_replay.json"
+HIT_RATE_PRIORITY_TRIFECTA_MIN = 7.0
+
+
+def hit_rate_priority_summary(records: dict) -> dict:
+    probability_only = sorted(
+        (item for item in records.values() if item.get("strategy") == "probability_only"),
+        key=lambda item: item.get("key", ""),
+    )
+
+    def qualified(item):
+        probabilities = [
+            float(ticket.get("model_probability") or 0)
+            for ticket in item.get("tickets", [])
+            if ticket.get("bet_type") == "trifecta"
+        ]
+        return probabilities and max(probabilities) >= HIT_RATE_PRIORITY_TRIFECTA_MIN
+
+    split = int(len(probability_only) * 0.7)
+    training = {item["key"]: item for item in probability_only[:split] if qualified(item)}
+    holdout = {item["key"]: item for item in probability_only[split:] if qualified(item)}
+    combined = {**training, **holdout}
+    return {
+        "status": "CANDIDATE_ONLY",
+        "threshold": {"top_trifecta_model_probability_min": HIT_RATE_PRIORITY_TRIFECTA_MIN},
+        "overall": summarize(combined),
+        "training_70pct": summarize(training),
+        "holdout_30pct": summarize(holdout),
+        "activation_rule": "holdout母数30件以上かつ改善を再確認するまで実戦ロジックへ自動反映しない",
+    }
 
 
 def git_text(*args: str) -> str:
@@ -221,12 +250,14 @@ def main() -> None:
         "probability_only_source": "同じ展示スナップショットをオッズなしで再予想",
     }
     performance["portfolio_variant_backtest_comparison"] = paired_comparison(records)
+    performance["hit_rate_priority_backtest"] = hit_rate_priority_summary(records)
     BACKTEST.parent.mkdir(parents=True, exist_ok=True)
     BACKTEST.write_text(json.dumps({
         "evaluation_version": "fixed13-retrospective-ab-v1",
         "coverage": performance["portfolio_variant_backtest_coverage"],
         "summary": performance["portfolio_variant_backtest_summary"],
         "comparison": performance["portfolio_variant_backtest_comparison"],
+        "hit_rate_priority": performance["hit_rate_priority_backtest"],
         "evaluated": records,
     }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     PERFORMANCE.write_text(json.dumps(performance, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
