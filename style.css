@@ -183,6 +183,15 @@ form button span { float: right; }
 .racerDetailPanel th { color: var(--cyan); background: rgba(64,226,231,.06); }
 .racerDetailPanel tbody tr:first-child td { color: #fff; font-weight: 700; }
 .racerDetailPanel > small { display: block; margin-top: 7px; color: #91a5b8; line-height: 1.55; }
+.logicAbPanel { margin-top: 11px; padding: 11px; border: 1px solid rgba(64,226,231,.25); border-radius: 8px; background: rgba(64,226,231,.045); }
+.logicAbPanel > div:first-child { display: flex; justify-content: space-between; gap: 10px; color: #fff; font-size: 11px; }
+.logicAbPanel > div:first-child b { color: var(--cyan); }
+.dataCoverage { display: grid; grid-template-columns: 105px 1fr; gap: 7px 10px; align-items: center; margin-top: 10px; font-size: 10px; }
+.dataCoverage i { height: 7px; overflow: hidden; border-radius: 10px; background: rgba(255,255,255,.1); }
+.dataCoverage em { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,var(--cyan),#4d88ff); }
+.logicAbPanel > small { display: block; margin-top: 8px; color: #a9bac9; line-height: 1.55; }
+.logicAbPanel button { margin-top: 9px; padding: 8px 12px; border: 1px solid var(--cyan); border-radius: 7px; color: var(--cyan); background: transparent; font-weight: 700; cursor: pointer; }
+.logicAbSummary { padding: 48px max(18px,calc((100% - 1180px)/2)); }
 .manualCopyActions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 .manualCopyButton { width: auto; margin-top: 0; padding: 10px 15px; font-size: 11px; }
 .manualVideoButton { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 10px 15px; border: 1px solid rgba(255,91,91,.55); border-radius: 8px; color: #fff; background: linear-gradient(135deg, #e54343, #a9152d); box-shadow: 0 5px 18px rgba(229,67,67,.18); font-size: 11px; font-weight: 900; text-decoration: none; }

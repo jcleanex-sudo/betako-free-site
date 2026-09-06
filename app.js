@@ -6,6 +6,7 @@ const pendingRefreshes = new Set();
 const PUBLIC_THRESHOLDS = Object.freeze({ score: 75, agreement: 75, dataRate: 100 });
 const FIXED_PORTFOLIO_COUNTS = Object.freeze({ trifecta: 6, trio: 2, exacta: 2, quinella: 3 });
 let latestManualPrediction = null;
+let latestImprovementRequest = null;
 
 const jstToday = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
 
@@ -244,6 +245,40 @@ function renderRacerDetails(contenders = [], finalReady = false) {
   document.querySelector("#optionalDataStatus").textContent = finalReady
     ? "勝負駆け・選手別コース成績・場独自の一周/まわり足/直線は、公式確認値がある項目だけ反映します。未取得値は推測しません。"
     : "展示前評価。勝負駆け・選手別コース成績は公式確認値がある場合だけ反映し、未取得値は推測しません。";
+}
+
+function renderLogicComparison(match, finalData, finalReady) {
+  const panel = document.querySelector("#logicAbPanel");
+  if (!panel || !match) {
+    if (panel) panel.hidden = true;
+    return;
+  }
+  panel.hidden = false;
+  const morningAb = match.logic_comparison || {};
+  const finalAb = finalData?.logic_ab || {};
+  const oldPick = finalReady ? finalAb.legacy_final_pick : morningAb.legacy?.pick;
+  const newPick = finalReady ? finalAb.enhanced_final_pick : morningAb.enhanced?.pick || match.pick;
+  document.querySelector("#logicAbPicks").textContent = `旧 ${oldPick || "収集待ち"} ｜ 新 ${newPick || "収集待ち"}`;
+  const requiredRate = Math.max(0, Math.min(100, Number(match.data_rate || 0)));
+  const detailCoverageKnown = finalData?.detail_data_rate != null || match.detail_data_rate != null;
+  const detailRate = Math.max(0, Math.min(100, Number(finalData?.detail_data_rate ?? match.detail_data_rate ?? 0)));
+  document.querySelector("#requiredDataRate").textContent = `${Math.round(requiredRate)}%`;
+  document.querySelector("#detailDataRate").textContent = `${Math.round(detailRate)}%`;
+  document.querySelector("#requiredDataBar").style.width = `${requiredRate}%`;
+  document.querySelector("#detailDataBar").style.width = `${detailRate}%`;
+  const labels = {
+    national_2rate: "全国2連率", national_3rate: "全国3連率",
+    local_2rate: "当地2連率", local_3rate: "当地3連率",
+    motor_3rate: "モーター3連率", boat_3rate: "ボート3連率",
+    f_count: "F情報", l_count: "L情報",
+  };
+  const missing = finalData?.missing_detail_fields || match.missing_detail_fields || [];
+  document.querySelector("#missingDataText").textContent = !detailCoverageKnown
+    ? "詳細取得率は次回の基礎データ生成後に表示します。現在値を100%として扱いません。"
+    : missing.length
+    ? `未取得：${missing.map((field) => labels[field] || field).join("・")}。取得済み項目はすべて新v5で使用中。`
+    : "対象の詳細成績は100%取得済み。取得済み項目をすべて新v5で使用中。";
+  document.querySelector("#improveDataButton").hidden = requiredRate >= 100 && detailRate >= 100;
 }
 
 function buildDevelopmentPrediction(leadingPick, reasons = [], finalReady = false, contenders = [], exhibition = []) {
@@ -768,6 +803,10 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? finalData.contenders
     : match?.contenders || [];
   renderRacerDetails(referenceBlocked ? [] : displayedContenders, finalReady);
+  renderLogicComparison(referenceBlocked ? null : match, finalData, finalReady);
+  latestImprovementRequest = referenceBlocked || !match ? null : {
+    venueId, race: Number(raceSelect.value), raceDate: dateInput.value,
+  };
   const development = referenceBlocked
     ? "DATA BLOCKED：参考データが揃うまで展開予想を生成しません。"
     : buildDevelopmentPrediction(
@@ -1183,6 +1222,13 @@ function applyPerformancePayload(payload) {
     : "収集開始待ち";
   document.querySelector("#oddsAwareVariantPerformance").textContent = formatVariant(variants.odds_aware);
   document.querySelector("#probabilityOnlyVariantPerformance").textContent = formatVariant(variants.probability_only);
+  const logicVariants = payload.logic_variant_summary || {};
+  const legacyLogic = logicVariants.legacy_v4 || {};
+  const enhancedLogic = logicVariants.enhanced_v5 || {};
+  document.querySelector("#legacyLogicSamples").textContent = `${Number(legacyLogic.samples || 0)}件`;
+  document.querySelector("#legacyLogicPerformance").textContent = formatVariant(legacyLogic);
+  document.querySelector("#enhancedLogicSamples").textContent = `${Number(enhancedLogic.samples || 0)}件`;
+  document.querySelector("#enhancedLogicPerformance").textContent = formatVariant(enhancedLogic);
   const backtest = payload.portfolio_variant_backtest_summary || {};
   document.querySelector("#backtestOddsAwarePerformance").textContent = formatVariant(backtest.odds_aware);
   document.querySelector("#backtestProbabilityOnlyPerformance").textContent = formatVariant(backtest.probability_only);
@@ -1260,6 +1306,35 @@ async function refreshAllData({ manual = false } = {}) {
 }
 
 refreshDataButton.addEventListener("click", () => { void refreshAllData({ manual: true }); });
+document.querySelector("#improveDataButton").addEventListener("click", async () => {
+  const button = document.querySelector("#improveDataButton");
+  const status = document.querySelector("#improveDataStatus");
+  if (!latestImprovementRequest) {
+    status.textContent = "先に開催場とレースを選んで分析してください。";
+    return;
+  }
+  button.disabled = true;
+  status.textContent = "公式データを再確認しています…";
+  try {
+    const api = window.betakoRuntime?.on_demand_api;
+    if (api && latestImprovementRequest.raceDate === jstToday()) {
+      await requestRaceRefresh(
+        api,
+        latestImprovementRequest.venueId,
+        latestImprovementRequest.race,
+        latestImprovementRequest.raceDate,
+      );
+      status.textContent = "選択レースの再取得を依頼しました。反映後に取得率を更新します。";
+      await delay(2500);
+    }
+    await refreshAllData({ manual: true });
+    if (!api) status.textContent = "公開データを再読込しました。未提供項目は未取得のまま保持します。";
+  } catch {
+    status.textContent = "再取得に失敗しました。時間をおいてもう一度押してください。";
+  } finally {
+    button.disabled = false;
+  }
+});
 window.addEventListener("offline", () => {
   refreshDataStatus.className = "error";
   refreshDataStatus.textContent = "オフラインです";

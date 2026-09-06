@@ -152,6 +152,10 @@ class RealtimeIntegrityTest(unittest.TestCase):
                 {"boat": boat, "relative_win_probability": probability}
                 for boat, probability in enumerate((30, 22, 18, 13, 10, 7), 1)
             ],
+            "logic_comparison": {"legacy": {"contenders": [
+                {"boat": boat, "relative_win_probability": probability}
+                for boat, probability in enumerate((28, 24, 18, 13, 10, 7), 1)
+            ]}},
         }
         realtime = {
             "exhibition": [
@@ -171,6 +175,8 @@ class RealtimeIntegrityTest(unittest.TestCase):
         )
         six = next(item for item in result["contenders"] if item["boat"] == 6)
         self.assertGreater(six["original_exhibition_adjustment"], 0)
+        self.assertTrue(has_complete_portfolio(result["legacy_probability_portfolio"]))
+        self.assertEqual(result["logic_ab"]["sampling"], "same_race_same_exhibition")
 
     @patch("scripts.fetch_race_realtime.fetch_all_odds")
     @patch("scripts.fetch_race_realtime._fetch_html", return_value="<html></html>")

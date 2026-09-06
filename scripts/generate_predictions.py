@@ -179,6 +179,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     if len(entries) != 6:
         return None
     scored = []
+    legacy_scored = []
     completeness = []
     detail_fields = (
         "national_2rate", "national_3rate", "local_2rate", "local_3rate",
@@ -187,7 +188,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     for entry in entries:
         available = sum(entry[key] is not None for key in ("national", "local", "motor", "boat_rate", "st"))
         completeness.append(available / 5)
-        strength = (
+        legacy_strength = (
             number(entry["national"], 4.5) * MODEL_WEIGHTS["national"]
             + number(entry["local"], 4.2) * MODEL_WEIGHTS["local"]
             + number(entry["motor"], 32.0) * MODEL_WEIGHTS["motor"]
@@ -195,7 +196,9 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
             + COURSE_PRIOR[entry["boat"]] * MODEL_WEIGHTS["course"]
             + CLASS_BONUS[entry["class"]] * MODEL_WEIGHTS["class"]
             + max(-4.0, min(5.0, (0.20 - number(entry["st"], 0.20)) * MODEL_WEIGHTS["st"]))
-            + number(entry.get("national_2rate"), 35.0) * MODEL_WEIGHTS["national_2rate"]
+        )
+        detail_adjustment = (
+            number(entry.get("national_2rate"), 35.0) * MODEL_WEIGHTS["national_2rate"]
             + number(entry.get("national_3rate"), 52.0) * MODEL_WEIGHTS["national_3rate"]
             + number(entry.get("local_2rate"), 33.0) * MODEL_WEIGHTS["local_2rate"]
             + number(entry.get("local_3rate"), 50.0) * MODEL_WEIGHTS["local_3rate"]
@@ -204,12 +207,20 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
             - number(entry.get("f_count"), 0) * MODEL_WEIGHTS["f_penalty"]
             - number(entry.get("l_count"), 0) * MODEL_WEIGHTS["l_penalty"]
         )
-        scored.append((entry, strength))
+        legacy_scored.append((entry, legacy_strength))
+        scored.append((entry, legacy_strength + detail_adjustment))
     maximum = max(score for _, score in scored)
     temperature = max(4.0, MODEL_WEIGHTS["temperature"])
     weights = [(entry, math.exp((score - maximum) / temperature)) for entry, score in scored]
     total = sum(weight for _, weight in weights)
     ranked = sorted(((entry, weight / total) for entry, weight in weights), key=lambda item: item[1], reverse=True)
+    legacy_maximum = max(score for _, score in legacy_scored)
+    legacy_weights = [(entry, math.exp((score - legacy_maximum) / temperature)) for entry, score in legacy_scored]
+    legacy_total = sum(weight for _, weight in legacy_weights)
+    legacy_ranked = sorted(
+        ((entry, weight / legacy_total) for entry, weight in legacy_weights),
+        key=lambda item: item[1], reverse=True,
+    )
     top_boat = ranked[0][0]["boat"]
     factor_winners = [
         max(entries, key=lambda e: number(e["national"], 0))["boat"],
@@ -326,6 +337,27 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
             "course_specific_racer_stats": "unavailable",
             "must_win_status": "unavailable",
             "current_meet_results": "unavailable",
+        },
+        "missing_detail_fields": sorted({
+            field for field in detail_fields if any(entry.get(field) is None for entry in entries)
+        }),
+        "logic_comparison": {
+            "sampling": "parallel_same_race",
+            "legacy": {
+                "version": "v4",
+                "pick": "-".join(str(entry["boat"]) for entry, _ in legacy_ranked[:3]),
+                "contenders": [
+                    {"boat": entry["boat"], "name": entry["name"],
+                     "relative_win_probability": round(probability * 100, 1)}
+                    for entry, probability in legacy_ranked
+                ],
+            },
+            "enhanced": {
+                "version": "v5",
+                "pick": "-".join(str(entry["boat"]) for entry, _ in ranked[:3]),
+            },
+            "axis_changed": legacy_ranked[0][0]["boat"] != ranked[0][0]["boat"],
+            "detail_data_rate": round(detail_data_rate, 1),
         },
         "estimated_probability": round(top_probability * 100, 1),
         "generation_mode": "公開用複合因子ロジック v5（詳細成績・事故情報対応）",

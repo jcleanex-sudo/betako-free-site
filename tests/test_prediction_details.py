@@ -45,6 +45,9 @@ class PredictionDetailsTest(unittest.TestCase):
         prediction = make_prediction("18", 1, entries)
         self.assertEqual(len(prediction["contenders"]), 6)
         self.assertIn("全国/当地2連3連率", prediction["logic"])
+        self.assertEqual(prediction["logic_comparison"]["sampling"], "parallel_same_race")
+        self.assertEqual(len(prediction["logic_comparison"]["legacy"]["contenders"]), 6)
+        self.assertEqual(prediction["detail_data_rate"], 100.0)
         self.assertTrue(all(item["must_win_status"] == "unavailable" for item in prediction["contenders"]))
         self.assertTrue(any("推測しない" in reason for reason in prediction["reasons"]))
 

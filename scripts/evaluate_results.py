@@ -20,6 +20,7 @@ HEADERS = {"User-Agent": "Mozilla/5.0 BETAKO-Free/1.0", "Accept-Language": "ja-J
 EVALUATION_VERSION = "main6-v1"
 MARKET_EVALUATION_VERSION = "five-market-ev-v1"
 PORTFOLIO_VARIANT_EVALUATION_VERSION = "fixed13-ab-v1"
+LOGIC_VARIANT_EVALUATION_VERSION = "logic-v4-v5-ab-v1"
 EXHIBITION = DATA / "exhibition.json"
 RESULT_MARKETS = {
     "単勝": "single", "2連単": "exacta", "2連複": "quinella",
@@ -349,6 +350,44 @@ def evaluate_portfolio_variants(date: str, exhibition: dict, records: dict):
     return records
 
 
+def evaluate_logic_variants(date: str, exhibition: dict, records: dict):
+    """Evaluate legacy v4 and enhanced v5 on identical races and results."""
+    candidates = exhibition.get("recommendations") or exhibition.get("races", [])
+    for race_item in candidates:
+        enhanced = race_item.get("probability_only_portfolio") or race_item.get("portfolio") or {}
+        legacy = race_item.get("legacy_probability_portfolio") or {}
+        complete = lambda portfolio: all(
+            len(portfolio.get(market) or []) == count for market, count in PORTFOLIO_COUNTS.items()
+        )
+        if race_item.get("status") != "FINAL" or not complete(enhanced) or not complete(legacy):
+            continue
+        venue_id = str(race_item.get("venue_id") or "").zfill(2)
+        race = int(race_item.get("race") or 0)
+        keys = {
+            "legacy_v4": f"{date}-{venue_id}-{race}-logic-v4",
+            "enhanced_v5": f"{date}-{venue_id}-{race}-logic-v5",
+        }
+        if all(records.get(key, {}).get("evaluation_version") == LOGIC_VARIANT_EVALUATION_VERSION for key in keys.values()):
+            continue
+        try:
+            result = fetch_all_results(date, venue_id, race)
+        except requests.RequestException as exc:
+            print(f"{date}-{venue_id}-{race}-logic-ab: {exc}")
+            continue
+        if not result:
+            continue
+        for strategy, portfolio, suffix in (
+            ("legacy_v4", legacy, "logic-v4"),
+            ("enhanced_v5", enhanced, "logic-v5"),
+        ):
+            record = _portfolio_result_record(date, race_item, result, portfolio, strategy, suffix)
+            if record:
+                record["evaluation_version"] = LOGIC_VARIANT_EVALUATION_VERSION
+                record["detail_data_rate"] = race_item.get("detail_data_rate")
+                records[record["key"]] = record
+    return records
+
+
 def build_today_venue_performance(date: str, history: dict, previous: dict | None = None):
     """Evaluate completed all-race predictions without mixing them into public top-3 stats."""
     previous = previous if previous and previous.get("race_date") == date else {}
@@ -453,6 +492,7 @@ def main():
     market_records = payload.setdefault("market_evaluated", {})
     portfolio_records = payload.setdefault("portfolio_evaluated", {})
     portfolio_variant_records = payload.setdefault("portfolio_variant_evaluated", {})
+    logic_variant_records = payload.setdefault("logic_variant_evaluated", {})
     existing_daily = payload.get("daily", {})
     if history_file.exists():
         history = json.loads(history_file.read_text(encoding="utf-8"))
@@ -537,6 +577,7 @@ def main():
             evaluate_market_recommendations(exhibition_date, exhibition, market_records)
             evaluate_fixed_portfolios(exhibition_date, exhibition, portfolio_records)
             evaluate_portfolio_variants(exhibition_date, exhibition, portfolio_variant_records)
+            evaluate_logic_variants(exhibition_date, exhibition, logic_variant_records)
     payload["updated_at"] = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
     payload["summary"] = summarize(records)
     payload["tiers"] = {
@@ -560,6 +601,14 @@ def main():
     payload["portfolio_variant_daily"] = {
         strategy: build_daily_summaries({key: item for key, item in portfolio_variant_records.items() if item.get("strategy") == strategy})
         for strategy in ("odds_aware", "probability_only")
+    }
+    payload["logic_variant_summary"] = {
+        strategy: summarize({key: item for key, item in logic_variant_records.items() if item.get("strategy") == strategy})
+        for strategy in ("legacy_v4", "enhanced_v5")
+    }
+    payload["logic_variant_daily"] = {
+        strategy: build_daily_summaries({key: item for key, item in logic_variant_records.items() if item.get("strategy") == strategy})
+        for strategy in ("legacy_v4", "enhanced_v5")
     }
     PERFORMANCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(payload["summary"], ensure_ascii=False))

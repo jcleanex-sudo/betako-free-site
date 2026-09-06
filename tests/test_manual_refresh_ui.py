@@ -67,6 +67,19 @@ class ManualRefreshUiTest(unittest.TestCase):
         self.assertIn("portfolio_variant_backtest_summary", script)
         self.assertIn("portfolio_variant_backtest_comparison", script)
 
+    def test_logic_ab_coverage_and_improvement_controls_are_visible(self):
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "app.js").read_text(encoding="utf-8")
+        for marker in (
+            'id="logicAbPanel"', 'id="requiredDataRate"', 'id="detailDataRate"',
+            'id="improveDataButton"', 'id="legacyLogicPerformance"',
+            'id="enhancedLogicPerformance"',
+        ):
+            self.assertIn(marker, html)
+        self.assertIn("function renderLogicComparison", script)
+        self.assertIn("logic_variant_summary", script)
+        self.assertIn("取得済み項目はすべて新v5で使用中", script)
+
 
 if __name__ == "__main__":
     unittest.main()
