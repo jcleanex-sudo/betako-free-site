@@ -311,13 +311,13 @@ function buildNoteDraft(payload, paid = false) {
     ...(fixedPortfolio ? portfolioCopyLines(payload.portfolio) : formationCopyLines("押さえ", payload.cover)),
     ...(fixedPortfolio ? [] : [`ドラ：${doraText}`]), `通常配分：${regularText}`, `資金判定：${doraPlan.status}｜${doraPlan.reason}`,
     serious
-      ? "オッズと条件が改善するまでは購入しないでください。"
+      ? "展示と進入の条件が整うまでは購入しないでください。"
       : fixedPortfolio
-        ? "各100円・合計1,300円。4券種を期待値順に選んだ固定13点で検証するかもかも❤️"
-        : "直前オッズを確認して資金配分を調整するかもかも❤️", "",
+        ? "各100円・合計1,300円。4券種をモデル確率順に選んだ固定13点で検証するかもかも❤️"
+        : "展示と進入を確認して資金配分を調整するかもかも❤️", "",
     fixedPortfolio
-      ? "【会員情報】3連単6点・3連複2点・2連単2点・2連複3点を、直前オッズで期待値順に再計算します。"
-      : "【会員情報】本線・押さえ・ドラ・資金配分は、直前オッズで再計算します。", "",
+      ? "【会員情報】3連単6点・3連複2点・2連単2点・2連複3点を、オッズを使わずモデル確率順に選びます。"
+      : "【会員情報】本線・押さえ・資金配分は、展示と進入を反映して再計算します。", "",
   ] : [
     "【無料公開範囲】",
     serious
@@ -328,9 +328,9 @@ function buildNoteDraft(payload, paid = false) {
   ];
   return [
     ...commonLines, ...memberLines,
-    "【無効条件】", payload.invalidConditions || "直前オッズ・進入・展示気配が想定から変わった場合", "",
+    "【無効条件】", payload.invalidConditions || "進入・展示気配が想定から変わった場合", "",
     serious ? "今回は慎重に判断してください。無理な購入はおすすめしません。" : "条件が崩れたら無理しないでね。次のアっチッチを一緒に待つよ❤️", "",
-    "※検証中の分析情報です。的中・利益を保証しません。オッズ急変時は買い目と資金配分を再計算します。",
+    "※検証中の分析情報です。的中・利益を保証しません。買い目はオッズを使わずモデル確率順に選びます。",
   ].join("\n");
 }
 
@@ -472,7 +472,7 @@ async function refreshSelectedRace({ venueId, race, raceDate, previousFetchedAt,
       if (!isCurrentRaceSelection({ venueId, race, raceDate })) return;
       if (attempt === 3) {
         badge.textContent = "展示更新・公式取得中";
-        detail.textContent = "公式の展示・進入・ST・5券種オッズを取得しています。";
+        detail.textContent = "公式の展示・進入・STを取得し、モデル確率を再計算しています。";
       } else if (attempt === 9) {
         badge.textContent = "展示更新・反映中";
         detail.textContent = "取得した予想を公開データへ反映しています。";
@@ -680,7 +680,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? "3連単 本線6点"
     : skipTarget
     ? "参考買い目6点（見送り）"
-    : betPlan.ranked_by_edge ? "期待値上位6点" : "本線候補6点";
+    : betPlan.ranked_by_probability ? "的中確率上位6点" : "本線候補6点";
   renderFormation(document.querySelector("#mainPicks"), betPlan.main);
   renderFormation(document.querySelector("#coverPicks"), betPlan.cover);
   document.querySelector("#selectionText").textContent = referenceBlocked
@@ -718,7 +718,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   document.querySelector("#invalidConditions").textContent = finalReady
     ? `最終予想：オッズ非反映｜無効条件：展示データ欠損、進入変更の未反映、公式情報取得失敗`
     : finalMode && !finalReady
-    ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}｜締切 ${value?.deadline || "未取得"}｜期待値判定 ${valueStatus}：${valueMessage || "5券種オッズ未公開"}`
+    ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}｜展示・進入・STの6艇分が揃うまで確定しません`
     : match
       ? `無効条件：${(match.invalid_conditions || []).join("／")}`
     : `見送り条件：${dateMatches ? "公式データの取得失敗" : "選択日が本日ではない"}`;
@@ -821,8 +821,8 @@ function renderLongshots(longshots) {
     const status = cutoffReached ? "WATCH" : (check?.status || item.status || "WATCH");
     const message = cutoffReached ? "締切5分前を過ぎたため新規判定を停止" : (check?.message || item.condition);
     const realtime = check
-      ? `展示順位 ${check.time_rank || "--"}位｜最低オッズ ${check.min_odds ? `${check.min_odds}倍` : "--"}｜net edge ${check.net_edge == null ? "--" : `${check.net_edge}%`}｜残り ${remaining == null ? "--" : `${Math.max(0, remaining).toFixed(0)}分`}`
-      : "展示・オッズ条件を確認中";
+      ? `展示順位 ${check.time_rank || "--"}位｜モデル確率 ${check.model_probability == null ? "--" : `${check.model_probability}%`}｜オッズ非反映`
+      : "展示条件を確認中";
     return `<article class="longshotCard">
       <span>${escapeHtml(status)}</span>
       <h3>${escapeHtml(item.venue)} ${escapeHtml(item.race)}R <small>${escapeHtml(item.boat)}号艇</small></h3>
