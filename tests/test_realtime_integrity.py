@@ -3,7 +3,12 @@ import unittest
 from bs4 import BeautifulSoup
 
 from scripts.fetch_race_realtime import _parse_exhibition_table, safe_float
-from scripts.update_exhibition import build_fixed_portfolio, final_prediction, has_complete_portfolio
+from scripts.update_exhibition import (
+    build_fixed_portfolio,
+    build_probability_only_portfolio,
+    final_prediction,
+    has_complete_portfolio,
+)
 
 
 class RealtimeIntegrityTest(unittest.TestCase):
@@ -83,6 +88,19 @@ class RealtimeIntegrityTest(unittest.TestCase):
         portfolio = build_fixed_portfolio(rows, contenders)
         self.assertTrue(all(not ticket["pick"].startswith("6-") for ticket in portfolio["trifecta"]))
         self.assertTrue(all(not ticket["pick"].startswith("6-") for ticket in portfolio["exacta"]))
+
+    def test_probability_only_portfolio_has_13_tickets_and_no_odds_inputs(self):
+        contenders = [
+            {"boat": boat, "relative_win_probability": probability}
+            for boat, probability in enumerate((40, 25, 15, 10, 7, 3), 1)
+        ]
+        portfolio = build_probability_only_portfolio(contenders)
+        self.assertTrue(has_complete_portfolio(portfolio))
+        self.assertEqual(portfolio["trifecta"][0]["pick"], "1-2-3")
+        self.assertTrue(all(
+            ticket["odds"] is None and ticket["selection_basis"] == "model_probability_only"
+            for tickets in portfolio.values() for ticket in tickets
+        ))
 
 
 if __name__ == "__main__":

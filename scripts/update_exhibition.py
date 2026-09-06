@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import os
-from itertools import permutations
+from itertools import combinations, permutations
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -128,6 +128,41 @@ def build_fixed_portfolio(rows, contenders):
             reverse=True,
         )
         portfolio[market] = market_rows[:count]
+    return portfolio
+
+
+def build_probability_only_portfolio(contenders):
+    """Build the same 13-ticket shape using model probability only.
+
+    This shadow variant intentionally has no odds, market-implied probability,
+    net edge, or qualification gate. It is stored separately from the live
+    portfolio so the two strategies can be evaluated on identical races.
+    """
+    boats = [str(item["boat"]) for item in contenders]
+    candidates = {
+        "trifecta": ("-".join(order) for order in permutations(boats, 3)),
+        "trio": ("-".join(group) for group in combinations(boats, 3)),
+        "exacta": ("-".join(order) for order in permutations(boats, 2)),
+        "quinella": ("-".join(group) for group in combinations(boats, 2)),
+    }
+    portfolio = {}
+    for market, count in PORTFOLIO_COUNTS.items():
+        rows = [
+            {
+                "bet_type": market,
+                "pick": pick,
+                "model_probability": round(float(market_probability(contenders, market, pick) or 0), 2),
+                "odds": None,
+                "market_probability": None,
+                "net_edge": None,
+                "expected_profit_yen": None,
+                "qualifies": None,
+                "selection_basis": "model_probability_only",
+            }
+            for pick in candidates[market]
+        ]
+        rows.sort(key=lambda row: row["model_probability"], reverse=True)
+        portfolio[market] = rows[:count]
     return portfolio
 
 
@@ -419,6 +454,7 @@ def final_prediction(prediction, realtime):
     if start_order != sorted(start_order):
         reasons.insert(1, f"進入変化 {'-'.join(map(str, start_order))}（前付け反映）")
     adjusted_contenders = [item[0] for item in adjusted]
+    probability_only_portfolio = build_probability_only_portfolio(adjusted_contenders)
     plan = ticket_plan(adjusted_contenders, final_pick, realtime)
     value = compare_markets(adjusted_contenders, realtime)
     portfolio_trifecta = (value.get("portfolio") or {}).get("trifecta") or []
@@ -433,6 +469,7 @@ def final_prediction(prediction, realtime):
         "morning_pick": prediction["pick"],
         "final_pick": final_pick, "final_score": round(final_score, 1), "reasons": reasons,
         "ticket_plan": plan, "best_value_pick": value_pick,
+        "probability_only_portfolio": probability_only_portfolio,
         "market_comparison": value.get("ranking", []),
         "weather": realtime.get("weather"), "wind_speed": wind, "wave_height": wave,
         "start_order": start_order,

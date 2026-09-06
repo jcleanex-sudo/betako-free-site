@@ -1104,6 +1104,12 @@ function applyPerformancePayload(payload) {
   document.querySelector("#portfolioPerformance").textContent = Number(portfolio.samples || 0)
     ? `${Number(portfolio.hit_rate || 0).toFixed(1)}% / ${Number(portfolio.net_profit_yen || 0).toLocaleString("ja-JP")}円`
     : "集計開始待ち";
+  const variants = payload.portfolio_variant_summary || {};
+  const formatVariant = (value = {}) => Number(value.samples || 0)
+    ? `${Number(value.samples)}件｜的中率 ${Number(value.hit_rate || 0).toFixed(1)}%｜純損益 ${Number(value.net_profit_yen || 0).toLocaleString("ja-JP")}円｜PF ${value.profit_factor ?? 0}｜最大DD ${Number(value.max_drawdown_yen || 0).toLocaleString("ja-JP")}円`
+    : "収集開始待ち";
+  document.querySelector("#oddsAwareVariantPerformance").textContent = formatVariant(variants.odds_aware);
+  document.querySelector("#probabilityOnlyVariantPerformance").textContent = formatVariant(variants.probability_only);
   const renderTier = (name, tier) => {
     const ci = tier.hit_rate_ci95 ? `${tier.hit_rate_ci95[0]}%—${tier.hit_rate_ci95[1]}%` : "--";
     document.querySelector(`#${name}Samples`).textContent = `${tier.samples || 0}件`;

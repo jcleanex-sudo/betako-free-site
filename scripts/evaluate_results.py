@@ -19,6 +19,7 @@ PERFORMANCE = DATA / "performance.json"
 HEADERS = {"User-Agent": "Mozilla/5.0 BETAKO-Free/1.0", "Accept-Language": "ja-JP,ja;q=0.9"}
 EVALUATION_VERSION = "main6-v1"
 MARKET_EVALUATION_VERSION = "five-market-ev-v1"
+PORTFOLIO_VARIANT_EVALUATION_VERSION = "fixed13-ab-v1"
 EXHIBITION = DATA / "exhibition.json"
 RESULT_MARKETS = {
     "単勝": "single", "2連単": "exacta", "2連複": "quinella",
@@ -277,6 +278,77 @@ def evaluate_fixed_portfolios(date: str, exhibition: dict, records: dict):
     return records
 
 
+def _portfolio_result_record(date, race_item, result, portfolio, strategy, key_suffix):
+    ticket_results = []
+    payout = 0
+    for market, count in PORTFOLIO_COUNTS.items():
+        actual = result.get(market)
+        tickets = portfolio.get(market) or []
+        if not actual or len(tickets) != count:
+            return None
+        for ticket in tickets:
+            predicted = normalize_result_pick(ticket.get("pick"), market)
+            hit = predicted == actual["pick"]
+            if hit:
+                payout += int(actual["payout_yen"])
+            ticket_results.append({
+                "bet_type": market,
+                "predicted": predicted,
+                "actual": actual["pick"],
+                "hit": hit,
+                "odds_at_prediction": ticket.get("odds"),
+                "model_probability": ticket.get("model_probability"),
+            })
+    stake = len(ticket_results) * 100
+    venue_id = str(race_item.get("venue_id") or "").zfill(2)
+    race = int(race_item.get("race") or 0)
+    key = f"{date}-{venue_id}-{race}-{key_suffix}"
+    return {
+        "key": key, "venue_id": venue_id, "venue": race_item.get("venue"), "race": race,
+        "strategy": strategy, "tickets": ticket_results,
+        "hit": any(ticket["hit"] for ticket in ticket_results),
+        "hit_count": sum(ticket["hit"] for ticket in ticket_results),
+        "payout_yen": payout, "stake_yen": stake, "profit_yen": payout - stake,
+        "evaluation_version": PORTFOLIO_VARIANT_EVALUATION_VERSION,
+    }
+
+
+def evaluate_portfolio_variants(date: str, exhibition: dict, records: dict):
+    """Evaluate odds-aware and probability-only fixed13 on the same races."""
+    candidates = exhibition.get("recommendations") or exhibition.get("races", [])
+    for race_item in candidates:
+        current = ((race_item.get("value") or {}).get("portfolio") or {})
+        probability_only = race_item.get("probability_only_portfolio") or {}
+        if not all(
+            all(len(portfolio.get(market) or []) == count for market, count in PORTFOLIO_COUNTS.items())
+            for portfolio in (current, probability_only)
+        ):
+            continue
+        venue_id = str(race_item.get("venue_id") or "").zfill(2)
+        race = int(race_item.get("race") or 0)
+        keys = {
+            "odds_aware": f"{date}-{venue_id}-{race}-odds-aware",
+            "probability_only": f"{date}-{venue_id}-{race}-probability-only",
+        }
+        if all(records.get(key, {}).get("evaluation_version") == PORTFOLIO_VARIANT_EVALUATION_VERSION for key in keys.values()):
+            continue
+        try:
+            result = fetch_all_results(date, venue_id, race)
+        except requests.RequestException as exc:
+            print(f"{date}-{venue_id}-{race}-fixed13-ab: {exc}")
+            continue
+        if not result:
+            continue
+        for strategy, portfolio, suffix in (
+            ("odds_aware", current, "odds-aware"),
+            ("probability_only", probability_only, "probability-only"),
+        ):
+            record = _portfolio_result_record(date, race_item, result, portfolio, strategy, suffix)
+            if record:
+                records[record["key"]] = record
+    return records
+
+
 def build_today_venue_performance(date: str, history: dict, previous: dict | None = None):
     """Evaluate completed all-race predictions without mixing them into public top-3 stats."""
     previous = previous if previous and previous.get("race_date") == date else {}
@@ -380,6 +452,7 @@ def main():
     longshot_records = payload.setdefault("longshot_evaluated", {})
     market_records = payload.setdefault("market_evaluated", {})
     portfolio_records = payload.setdefault("portfolio_evaluated", {})
+    portfolio_variant_records = payload.setdefault("portfolio_variant_evaluated", {})
     existing_daily = payload.get("daily", {})
     if history_file.exists():
         history = json.loads(history_file.read_text(encoding="utf-8"))
@@ -463,6 +536,7 @@ def main():
         if exhibition_date in allowed_dates:
             evaluate_market_recommendations(exhibition_date, exhibition, market_records)
             evaluate_fixed_portfolios(exhibition_date, exhibition, portfolio_records)
+            evaluate_portfolio_variants(exhibition_date, exhibition, portfolio_variant_records)
     payload["updated_at"] = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
     payload["summary"] = summarize(records)
     payload["tiers"] = {
@@ -479,6 +553,14 @@ def main():
     payload["market_daily"] = build_daily_summaries(market_records)
     payload["portfolio_summary"] = summarize(portfolio_records)
     payload["portfolio_daily"] = build_daily_summaries(portfolio_records)
+    payload["portfolio_variant_summary"] = {
+        strategy: summarize({key: item for key, item in portfolio_variant_records.items() if item.get("strategy") == strategy})
+        for strategy in ("odds_aware", "probability_only")
+    }
+    payload["portfolio_variant_daily"] = {
+        strategy: build_daily_summaries({key: item for key, item in portfolio_variant_records.items() if item.get("strategy") == strategy})
+        for strategy in ("odds_aware", "probability_only")
+    }
     PERFORMANCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(payload["summary"], ensure_ascii=False))
 

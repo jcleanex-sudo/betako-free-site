@@ -1,7 +1,11 @@
 import unittest
 from unittest.mock import patch
 
-from scripts.evaluate_results import build_today_venue_performance, evaluate_fixed_portfolios
+from scripts.evaluate_results import (
+    build_today_venue_performance,
+    evaluate_fixed_portfolios,
+    evaluate_portfolio_variants,
+)
 
 
 class TodayVenuePerformanceTest(unittest.TestCase):
@@ -51,6 +55,34 @@ class TodayVenuePerformanceTest(unittest.TestCase):
         self.assertTrue(record["hit"])
         self.assertEqual(record["hit_count"], 4)
         self.assertEqual(record["stake_yen"], 1300)
+
+    def test_portfolio_variants_are_compared_on_the_same_race(self):
+        current = {
+            "trifecta": [{"pick": pick, "odds": 10} for pick in ("1-2-3", "1-3-2", "2-1-3", "2-3-1", "3-1-2", "3-2-1")],
+            "trio": [{"pick": pick, "odds": 3} for pick in ("1-2-3", "1-2-4")],
+            "exacta": [{"pick": pick, "odds": 4} for pick in ("1-2", "2-1")],
+            "quinella": [{"pick": pick, "odds": 2} for pick in ("1-2", "1-3", "2-3")],
+        }
+        probability_only = {
+            market: [{**ticket, "odds": None, "model_probability": 20} for ticket in tickets]
+            for market, tickets in current.items()
+        }
+        exhibition = {"races": [{
+            "venue_id": "01", "venue": "桐生", "race": 1,
+            "value": {"portfolio": current},
+            "probability_only_portfolio": probability_only,
+        }]}
+        official = {
+            "trifecta": {"pick": "1-2-3", "payout_yen": 1200},
+            "trio": {"pick": "1-2-3", "payout_yen": 400},
+            "exacta": {"pick": "1-2", "payout_yen": 500},
+            "quinella": {"pick": "1-2", "payout_yen": 300},
+        }
+        with patch("scripts.evaluate_results.fetch_all_results", return_value=official) as fetch:
+            records = evaluate_portfolio_variants("20260820", exhibition, {})
+        fetch.assert_called_once()
+        self.assertEqual(set(item["strategy"] for item in records.values()), {"odds_aware", "probability_only"})
+        self.assertTrue(all(item["stake_yen"] == 1300 for item in records.values()))
 
 
 if __name__ == "__main__":
