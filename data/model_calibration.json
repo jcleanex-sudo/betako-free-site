@@ -1,26 +1,26 @@
 {
-  "updated_at": "2026-09-06 05:44 JST",
+  "updated_at": "2026-09-07 05:47 JST",
   "status": "FROZEN",
   "reason": "モデル改造停止中。データ収集と検証のみ継続",
-  "samples": 6295,
+  "samples": 6439,
   "date_range": [
     "20260726",
-    "20260905"
+    "20260906"
   ],
   "minimum_activation_samples": 800,
-  "train_samples": 5036,
-  "validation_samples": 1259,
+  "train_samples": 5151,
+  "validation_samples": 1288,
   "baseline_validation": {
-    "samples": 1259,
-    "log_loss": 1.2399,
-    "top1_accuracy": 55.44,
-    "brier": 0.59995
+    "samples": 1288,
+    "log_loss": 1.24154,
+    "top1_accuracy": 55.59,
+    "brier": 0.60163
   },
   "candidate_validation": {
-    "samples": 1259,
-    "log_loss": 1.2399,
-    "top1_accuracy": 55.44,
-    "brier": 0.59995
+    "samples": 1288,
+    "log_loss": 1.24154,
+    "top1_accuracy": 55.59,
+    "brier": 0.60163
   },
   "active_weights": {
     "national": 4.87961,
@@ -30,7 +30,15 @@
     "course": 39.43277,
     "class": 0.45212,
     "st": 77.408,
-    "temperature": 14.16
+    "temperature": 14.16,
+    "national_2rate": 0.035,
+    "national_3rate": 0.018,
+    "local_2rate": 0.025,
+    "local_3rate": 0.012,
+    "motor_3rate": 0.025,
+    "boat_3rate": 0.012,
+    "f_penalty": 4.0,
+    "l_penalty": 7.0
   },
   "candidate_weights": {
     "national": 4.87961,
@@ -40,7 +48,15 @@
     "course": 39.43277,
     "class": 0.45212,
     "st": 77.408,
-    "temperature": 14.16
+    "temperature": 14.16,
+    "national_2rate": 0.035,
+    "national_3rate": 0.018,
+    "local_2rate": 0.025,
+    "local_3rate": 0.012,
+    "motor_3rate": 0.025,
+    "boat_3rate": 0.012,
+    "f_penalty": 4.0,
+    "l_penalty": 7.0
   },
   "model_frozen": true,
   "logic_transition": "v4固定（モデル凍結）",
