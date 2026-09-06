@@ -57,6 +57,16 @@ class ManualRefreshUiTest(unittest.TestCase):
         self.assertIn("https://race.boatcast.jp/?jo=", script)
         self.assertIn("updateRaceVideoLink(venueId, venue, raceSelect.value)", script)
 
+    def test_retrospective_odds_ab_comparison_is_visible(self):
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn('id="backtestOddsAwarePerformance"', html)
+        self.assertIn('id="backtestProbabilityOnlyPerformance"', html)
+        self.assertIn('id="backtestComparison"', html)
+        self.assertIn("portfolio_variant_backtest_summary", script)
+        self.assertIn("portfolio_variant_backtest_comparison", script)
+
 
 if __name__ == "__main__":
     unittest.main()

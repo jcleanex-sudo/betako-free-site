@@ -1110,6 +1110,13 @@ function applyPerformancePayload(payload) {
     : "収集開始待ち";
   document.querySelector("#oddsAwareVariantPerformance").textContent = formatVariant(variants.odds_aware);
   document.querySelector("#probabilityOnlyVariantPerformance").textContent = formatVariant(variants.probability_only);
+  const backtest = payload.portfolio_variant_backtest_summary || {};
+  document.querySelector("#backtestOddsAwarePerformance").textContent = formatVariant(backtest.odds_aware);
+  document.querySelector("#backtestProbabilityOnlyPerformance").textContent = formatVariant(backtest.probability_only);
+  const paired = payload.portfolio_variant_backtest_comparison || {};
+  document.querySelector("#backtestComparison").textContent = Number(paired.pairs || 0)
+    ? `${Number(paired.pairs)}組｜的中率差 +${Number(paired.hit_rate_difference_points || 0).toFixed(1)}pt｜損益差 +${Number(paired.net_profit_difference_yen || 0).toLocaleString("ja-JP")}円｜p=${Number(paired.mcnemar_exact_p || 0).toFixed(4)}`
+    : "集計開始待ち";
   const renderTier = (name, tier) => {
     const ci = tier.hit_rate_ci95 ? `${tier.hit_rate_ci95[0]}%—${tier.hit_rate_ci95[1]}%` : "--";
     document.querySelector(`#${name}Samples`).textContent = `${tier.samples || 0}件`;

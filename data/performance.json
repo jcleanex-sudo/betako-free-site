@@ -29579,5 +29579,50 @@
         "last_completed_race": 12
       }
     ]
+  },
+  "portfolio_variant_backtest_summary": {
+    "odds_aware": {
+      "samples": 188,
+      "hits": 118,
+      "hit_rate": 62.8,
+      "hit_rate_ci95": [
+        55.7,
+        69.4
+      ],
+      "net_profit_yen": -74090,
+      "profit_factor": 0.47,
+      "max_drawdown_yen": 74090
+    },
+    "probability_only": {
+      "samples": 188,
+      "hits": 125,
+      "hit_rate": 66.5,
+      "hit_rate_ci95": [
+        59.5,
+        72.8
+      ],
+      "net_profit_yen": -54450,
+      "profit_factor": 0.59,
+      "max_drawdown_yen": 66310
+    }
+  },
+  "portfolio_variant_backtest_coverage": {
+    "eligible_current_records": 188,
+    "paired_snapshots": 188,
+    "evaluated_pairs": 188,
+    "method": "各レースで現行固定13点が最初に確定したGitスナップショットを、結果情報なしで再生",
+    "odds_aware_source": "当時保存された現行固定13点",
+    "probability_only_source": "同じ展示スナップショットをオッズなしで再予想"
+  },
+  "portfolio_variant_backtest_comparison": {
+    "pairs": 188,
+    "both_hit": 114,
+    "odds_aware_only_hit": 4,
+    "probability_only_hit": 11,
+    "both_miss": 59,
+    "hit_rate_difference_points": 3.7,
+    "net_profit_difference_yen": 19640,
+    "mcnemar_exact_p": 0.1185,
+    "statistically_significant_5pct": false
   }
 }
