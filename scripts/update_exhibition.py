@@ -457,19 +457,24 @@ def final_prediction(prediction, realtime):
     probability_only_portfolio = build_probability_only_portfolio(adjusted_contenders)
     plan = ticket_plan(adjusted_contenders, final_pick, realtime)
     value = compare_markets(adjusted_contenders, realtime)
-    portfolio_trifecta = (value.get("portfolio") or {}).get("trifecta") or []
-    portfolio_complete = has_complete_portfolio(value.get("portfolio"))
+    odds_aware_portfolio = value.get("portfolio") or {}
+    portfolio_trifecta = probability_only_portfolio.get("trifecta") or []
+    portfolio_complete = has_complete_portfolio(probability_only_portfolio)
     if portfolio_complete:
-        plan = {"main": portfolio_trifecta, "cover": [], "ranked_by_edge": True}
-    value_pick = value.get("pick") or (plan["main"][0]["pick"] if plan["main"] else final_pick)
+        plan = {"main": portfolio_trifecta, "cover": [], "ranked_by_probability": True}
+    value_pick = plan["main"][0]["pick"] if plan["main"] else final_pick
     return {
         "venue": prediction["venue"], "venue_id": prediction["venue_id"], "race": prediction["race"],
+        "data_rate": prediction.get("data_rate", 100),
         "status": "FINAL" if portfolio_complete else "WAIT",
-        "message": "展示後再計算済み" if portfolio_complete else "固定13点が全件揃うまで取得継続",
+        "message": "展示後再計算済み（オッズ非反映）" if portfolio_complete else "固定13点が全件揃うまで取得継続",
         "morning_pick": prediction["pick"],
         "final_pick": final_pick, "final_score": round(final_score, 1), "reasons": reasons,
         "ticket_plan": plan, "best_value_pick": value_pick,
+        "portfolio": probability_only_portfolio,
         "probability_only_portfolio": probability_only_portfolio,
+        "odds_aware_portfolio": odds_aware_portfolio,
+        "selection_basis": "model_probability_only",
         "market_comparison": value.get("ranking", []),
         "weather": realtime.get("weather"), "wind_speed": wind, "wave_height": wave,
         "start_order": start_order,

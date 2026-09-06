@@ -229,10 +229,10 @@ def evaluate_fixed_portfolios(date: str, exhibition: dict, records: dict):
     candidates = exhibition.get("recommendations") or exhibition.get("races", [])
     for race_item in candidates:
         value = race_item.get("value") or {}
-        portfolio = value.get("portfolio") or {}
+        portfolio = race_item.get("portfolio") or value.get("portfolio") or {}
         if (
             race_item.get("status") != "FINAL"
-            or int(value.get("data_rate") or 0) != 100
+            or int(race_item.get("data_rate") or value.get("data_rate") or 0) != 100
             or any(len(portfolio.get(market) or []) != count for market, count in PORTFOLIO_COUNTS.items())
         ):
             continue

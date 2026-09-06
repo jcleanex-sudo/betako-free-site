@@ -547,7 +547,10 @@ def fetch_exhibition(stadium_id: str, race_number: int, race_date: str) -> dict:
                 for item in exhibition
             )
         )
-        odds = fetch_all_odds(stadium_id, race_number, race_date_compact) if exhibition_ready else None
+        # Live predictions no longer use odds to choose tickets. Keep the
+        # four-page odds fetch opt-in for offline/reference experiments only.
+        collect_reference_odds = os.environ.get("BOATRACE_COLLECT_REFERENCE_ODDS") == "1"
+        odds = fetch_all_odds(stadium_id, race_number, race_date_compact) if exhibition_ready and collect_reference_odds else None
         realtime = {
             "stadium_id": stadium_id,
             "stadium_name": STADIUM_NAMES.get(stadium_id, f"場{stadium_id}"),

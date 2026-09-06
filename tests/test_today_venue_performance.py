@@ -56,6 +56,29 @@ class TodayVenuePerformanceTest(unittest.TestCase):
         self.assertEqual(record["hit_count"], 4)
         self.assertEqual(record["stake_yen"], 1300)
 
+    def test_published_probability_portfolio_is_evaluated_without_odds(self):
+        portfolio = {
+            "trifecta": [{"pick": pick} for pick in ("1-2-3", "1-3-2", "2-1-3", "2-3-1", "3-1-2", "3-2-1")],
+            "trio": [{"pick": pick} for pick in ("1-2-3", "1-2-4")],
+            "exacta": [{"pick": pick} for pick in ("1-2", "2-1")],
+            "quinella": [{"pick": pick} for pick in ("1-2", "1-3", "2-3")],
+        }
+        exhibition = {"races": [{
+            "venue_id": "01", "venue": "桐生", "race": 1,
+            "status": "FINAL", "data_rate": 100, "portfolio": portfolio,
+            "value": {"status": "DATA BLOCKED", "data_rate": 0, "portfolio": {}},
+        }]}
+        official = {
+            "trifecta": {"pick": "1-2-3", "payout_yen": 1200},
+            "trio": {"pick": "1-2-3", "payout_yen": 400},
+            "exacta": {"pick": "1-2", "payout_yen": 500},
+            "quinella": {"pick": "1-2", "payout_yen": 300},
+        }
+        with patch("scripts.evaluate_results.fetch_all_results", return_value=official):
+            records = evaluate_fixed_portfolios("20260907", exhibition, {})
+
+        self.assertTrue(records["20260907-01-1-fixed13"]["hit"])
+
     def test_portfolio_variants_are_compared_on_the_same_race(self):
         current = {
             "trifecta": [{"pick": pick, "odds": 10} for pick in ("1-2-3", "1-3-2", "2-1-3", "2-3-1", "3-1-2", "3-2-1")],

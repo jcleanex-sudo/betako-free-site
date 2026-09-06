@@ -32,7 +32,7 @@
   </section>
 
   <section class="predictCard" id="predict">
-      <div class="sectionHead"><div><p class="eyebrow">RACE SELECT</p><h2>開催場を選んで予想</h2></div><p>本日開催の全会場・全1R〜12Rを手動選択。展示・オッズ確定後は固定13点を期待値順に確認できます。</p></div>
+      <div class="sectionHead"><div><p class="eyebrow">RACE SELECT</p><h2>開催場を選んで予想</h2></div><p>本日開催の全会場・全1R〜12Rを手動選択。展示・進入・ST確定後は、オッズに左右されない固定13点を的中確率順に確認できます。</p></div>
     <form id="predictionForm">
       <label>開催日<input id="raceDate" type="date" required></label>
       <label>開催場<select id="venue"></select></label>
@@ -85,8 +85,8 @@
   </section>
 
   <section class="logicSection" id="logic">
-    <div class="sectionHead"><div><p class="eyebrow">PREDICTION LOGIC</p><h2>単一ロジックに頼らない</h2></div><p>能力・展示・公式オッズを複合評価し、5券種から期待値の高い候補だけを選びます。</p></div>
-    <div class="logicFlow"><article><b>01</b><h3>基礎能力</h3><p>級別、全国・当地成績を評価</p></article><article><b>02</b><h3>水面適性</h3><p>枠番コース、風・波を補正</p></article><article><b>03</b><h3>機力評価</h3><p>モーター、ボート、ST傾向を比較</p></article><article><b>04</b><h3>展示後再計算</h3><p>展示タイム、進入変化、直前気配を反映</p></article><article><b>05</b><h3>5券種期待値</h3><p>単勝・2連単・2連複・3連複・3連単をnet edge順に比較</p></article></div>
+    <div class="sectionHead"><div><p class="eyebrow">PREDICTION LOGIC</p><h2>単一ロジックに頼らない</h2></div><p>能力・機力・展示・進入を複合評価し、オッズに左右されず5券種の買い目を選びます。</p></div>
+    <div class="logicFlow"><article><b>01</b><h3>基礎能力</h3><p>級別、全国・当地成績を評価</p></article><article><b>02</b><h3>水面適性</h3><p>枠番コース、風・波を補正</p></article><article><b>03</b><h3>機力評価</h3><p>モーター、ボート、ST傾向を比較</p></article><article><b>04</b><h3>展示後再計算</h3><p>展示タイム、進入変化、直前気配を反映</p></article><article><b>05</b><h3>的中確率順位</h3><p>オッズを使わず、モデル確率だけで固定13点を選定</p></article></div>
   </section>
 
   <section class="operations" id="operations">
@@ -96,6 +96,6 @@
 
   <footer><a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO</span></a><p>勝つことより先に、大きく負けないこと。</p><small>AI予想は検証中の分析情報です。舟券購入は自己責任で行ってください。</small></footer>
 </main>
-<script src="app.js?v=20260906-2"></script>
+<script src="app.js?v=20260907-1"></script>
 </body>
 </html>

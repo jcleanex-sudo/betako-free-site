@@ -1,8 +1,9 @@
 import unittest
+from unittest.mock import patch
 
 from bs4 import BeautifulSoup
 
-from scripts.fetch_race_realtime import _parse_exhibition_table, safe_float
+from scripts.fetch_race_realtime import _parse_exhibition_table, fetch_exhibition, safe_float
 from scripts.update_exhibition import (
     build_fixed_portfolio,
     build_probability_only_portfolio,
@@ -101,6 +102,49 @@ class RealtimeIntegrityTest(unittest.TestCase):
             ticket["odds"] is None and ticket["selection_basis"] == "model_probability_only"
             for tickets in portfolio.values() for ticket in tickets
         ))
+
+    def test_complete_exhibition_can_finalize_without_odds(self):
+        prediction = {
+            "venue": "徳山", "venue_id": "18", "race": 3, "data_rate": 100,
+            "pick": "1-2-3", "score": 75.0,
+            "contenders": [
+                {"boat": boat, "relative_win_probability": probability}
+                for boat, probability in enumerate((30, 22, 18, 13, 10, 7), 1)
+            ],
+        }
+        realtime = {
+            "exhibition": [
+                {"boat": boat, "course": boat, "time": 6.8 + boat / 100,
+                 "st": f".1{boat}", "time_rank": boat, "st_rank": boat}
+                for boat in range(1, 7)
+            ],
+            "odds": None, "wind_speed": 2, "wave_height": 1,
+            "fetched_at": "2026-09-07T09:30:00+09:00",
+            "source_url": "https://example.invalid",
+        }
+
+        result = final_prediction(prediction, realtime)
+
+        self.assertEqual(result["status"], "FINAL")
+        self.assertEqual(result["selection_basis"], "model_probability_only")
+        self.assertTrue(has_complete_portfolio(result["portfolio"]))
+        self.assertEqual(result["value"]["status"], "DATA BLOCKED")
+
+    @patch("scripts.fetch_race_realtime.fetch_all_odds")
+    @patch("scripts.fetch_race_realtime._fetch_html", return_value="<html></html>")
+    def test_live_exhibition_does_not_fetch_reference_odds_by_default(self, _fetch_html, fetch_odds):
+        rows = [
+            {"boat": boat, "course": boat, "time": 6.8 + boat / 100,
+             "st": f".1{boat}", "tilt": 0, "weight": 52}
+            for boat in range(1, 7)
+        ]
+        with (
+            patch("scripts.fetch_race_realtime._parse_exhibition_table", return_value=rows),
+            patch.dict("scripts.fetch_race_realtime.os.environ", {}, clear=True),
+        ):
+            result = fetch_exhibition("18", 3, "20260907")
+        self.assertEqual(len(result["exhibition"]), 6)
+        fetch_odds.assert_not_called()
 
 
 if __name__ == "__main__":

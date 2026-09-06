@@ -564,11 +564,11 @@ function renderMarketComparison(finalData, finalReady) {
   const value = finalData?.value || {};
   const heading = document.createElement("div");
   heading.className = "marketComparisonHead";
-  heading.innerHTML = `<b>5券種 期待値ランキング</b><span>公式オッズ取得率 ${Number(value.data_rate || 0)}%</span>`;
+  heading.innerHTML = `<b>参考オッズ情報</b><span>買い目選定には不使用｜取得率 ${Number(value.data_rate || 0)}%</span>`;
   const list = document.createElement("div");
   list.className = "marketComparisonList";
   if (!rows.length) {
-    list.textContent = "DATA BLOCKED：5券種のオッズが揃うまで予想を出しません。";
+    list.textContent = "オッズ未取得。予想はモデル確率だけで確定しています。";
   } else {
     rows.slice(0, 6).forEach((row, index) => {
       const item = document.createElement("div");
@@ -599,7 +599,7 @@ function renderFixedPortfolio(portfolio, finalReady) {
   definitions.forEach(([market, label, expected]) => {
     const tickets = portfolio?.[market] || [];
     const group = document.createElement("section");
-    const chips = tickets.map((ticket) => `<span class="${ticket.qualifies ? "qualified" : "reference"}">${escapeHtml(ticket.pick)} <small>${Number(ticket.odds).toFixed(1)}倍</small></span>`).join("");
+    const chips = tickets.map((ticket) => `<span class="reference">${escapeHtml(ticket.pick)} <small>推定 ${Number(ticket.model_probability || 0).toFixed(1)}%</small></span>`).join("");
     group.innerHTML = `<b>${label} ${expected}点</b><div>${chips || '<span class="reference">DATA BLOCKED</span>'}</div>`;
     groups.append(group);
   });
@@ -607,7 +607,7 @@ function renderFixedPortfolio(portfolio, finalReady) {
 }
 
 function hasCompleteFixedPortfolio(finalData) {
-  const portfolio = finalData?.value?.portfolio;
+  const portfolio = selectedFixedPortfolio(finalData);
   const completeMarkets = Object.entries(FIXED_PORTFOLIO_COUNTS).every(([market, expected]) => {
     const tickets = portfolio?.[market];
     if (!Array.isArray(tickets) || tickets.length !== expected) return false;
@@ -616,6 +616,10 @@ function hasCompleteFixedPortfolio(finalData) {
   });
   const main = finalData?.ticket_plan?.main;
   return completeMarkets && Array.isArray(main) && main.length === FIXED_PORTFOLIO_COUNTS.trifecta;
+}
+
+function selectedFixedPortfolio(finalData) {
+  return finalData?.portfolio || finalData?.probability_only_portfolio || finalData?.value?.portfolio;
 }
 
 document.querySelector("#predictionForm").addEventListener("submit", (event) => {
@@ -639,7 +643,8 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   const finalReady = finalMode && finalData?.status === "FINAL" && hasCompleteFixedPortfolio(finalData);
   renderExhibitionTimes(finalData, finalMode);
   renderMarketComparison(finalData, finalReady);
-  renderFixedPortfolio(finalData?.value?.portfolio, finalReady);
+  const selectedPortfolio = selectedFixedPortfolio(finalData);
+  renderFixedPortfolio(selectedPortfolio, finalReady);
   document.querySelector(".ticketPlan").hidden = finalReady;
   const exhibitionBadge = document.querySelector("#exhibitionBadge");
   exhibitionBadge.hidden = !finalMode || finalReady;
@@ -658,7 +663,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     || Number(match.score) < PUBLIC_THRESHOLDS.score
     || Number(match.agreement) < PUBLIC_THRESHOLDS.agreement
     || referenceBlocked;
-  const skipTarget = referenceBlocked || (finalMode ? !finalReady || valueStatus !== "UP" : morningSkip);
+  const skipTarget = referenceBlocked || (finalMode ? !finalReady : morningSkip);
   const decisionBadge = document.querySelector("#decisionBadge");
   decisionBadge.hidden = !skipTarget;
   decisionBadge.textContent = referenceBlocked ? "DATA BLOCKED" : "見送り対象";
@@ -688,7 +693,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
   document.querySelector("#predictionDetail").textContent = referenceBlocked
     ? `参考データ取得率 ${Number(match.data_rate).toFixed(1)}%｜100%未満のため買い目を生成しません`
     : finalReady
-      ? `期待値最上位 ${value?.bet_type_label || "券種未確定"} ${finalData.best_value_pick || finalData.final_pick}｜オッズ ${value?.odds ? `${value.odds}倍` : "未公開"}｜的中推定 ${value?.model_probability == null ? "--" : `${value.model_probability}%`}｜net edge ${value?.net_edge == null ? "--" : `${value.net_edge}%`}｜残り ${liveRemaining == null ? "--" : `${Math.max(0, liveRemaining).toFixed(0)}分`}｜判定 ${valueStatus}`
+      ? `オッズ非反映・モデル確率順の固定13点｜1着候補 ${finalData.final_pick?.split("-")[0] || "--"}号艇｜展示・進入・ST反映済み｜オッズで買い目を変更しません`
     : match
       ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
     : dateMatches
@@ -711,7 +716,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     return item;
   }));
   document.querySelector("#invalidConditions").textContent = finalReady
-    ? `期待値判定：${valueMessage || "オッズ未公開のため判定なし"}｜無効条件：締切5分未満、オッズ急変、展示データ欠損、公式情報取得失敗`
+    ? `最終予想：オッズ非反映｜無効条件：展示データ欠損、進入変更の未反映、公式情報取得失敗`
     : finalMode && !finalReady
     ? `WAIT：${finalData?.message || "展示データが未取得です。朝予想を維持します。"}｜締切 ${value?.deadline || "未取得"}｜期待値判定 ${valueStatus}：${valueMessage || "5券種オッズ未公開"}`
     : match
@@ -725,11 +730,11 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     mainLabel: document.querySelector("#mainLabel").textContent,
     main: betPlan.main || [],
     cover: betPlan.cover || [],
-    portfolio: finalReady ? value?.portfolio || null : null,
+    portfolio: finalReady ? selectedPortfolio || null : null,
     detail: document.querySelector("#predictionDetail").textContent,
     invalidConditions: document.querySelector("#invalidConditions").textContent,
     finalReady,
-    judgement: referenceBlocked ? "DATA BLOCKED" : finalReady ? valueStatus : "WATCH",
+    judgement: referenceBlocked ? "DATA BLOCKED" : finalReady ? "FINAL" : "WATCH",
     score: finalReady ? Math.round(finalData.final_score) : Math.round(match?.score || 0),
     agreement: Math.round(match?.agreement || 0),
     dataRate: Math.round(match?.data_rate || 0),
