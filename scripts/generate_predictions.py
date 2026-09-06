@@ -37,6 +37,13 @@ MODEL_CONFIG = ROOT / "data" / "model_calibration.json"
 DEFAULT_MODEL_WEIGHTS = {
     "national": 7.5, "local": 4.0, "motor": 0.28, "boat_rate": 0.10,
     "course": 24.0, "class": 1.0, "st": 80.0, "temperature": 12.0,
+    # Supplementary official statistics.  Keep these deliberately smaller
+    # than the established win-rate/course terms so that one new field cannot
+    # overturn the model by itself.
+    "national_2rate": 0.035, "national_3rate": 0.018,
+    "local_2rate": 0.025, "local_3rate": 0.012,
+    "motor_3rate": 0.025, "boat_3rate": 0.012,
+    "f_penalty": 4.0, "l_penalty": 7.0,
 }
 
 
@@ -117,15 +124,41 @@ def parse_entry(tbody, stadium_id: str):
 
     national, local, motor, boat_stats = floats(4), floats(5), floats(6), floats(7)
     st_match = re.search(r"(\d+\.\d+)$", cells[3] if len(cells) > 3 else "")
+    registration_match = re.search(r"(?<!\d)(\d{4})(?!\d)", source)
+    age_match = re.search(r"(\d{2})歳", source)
+    weight_match = re.search(r"(\d{2}(?:\.\d+)?)\s*kg", source, re.I)
+    start_cell = cells[3] if len(cells) > 3 else ""
+    f_match = re.search(r"F\s*(\d+)", start_cell, re.I)
+    l_match = re.search(r"L\s*(\d+)", start_cell, re.I)
+
+    def rate(values, index):
+        return values[index] if len(values) > index else None
+
     return {
         "boat": boat,
         "name": racer_name,
         "class": racer_class,
+        "registration_number": registration_match.group(1) if registration_match else None,
+        "age": int(age_match.group(1)) if age_match else None,
+        "weight": number(weight_match.group(1)) if weight_match else None,
         "national": national[0] if national else None,
+        "national_2rate": rate(national, 1),
+        "national_3rate": rate(national, 2),
         "local": local[0] if local else None,
+        "local_2rate": rate(local, 1),
+        "local_3rate": rate(local, 2),
         "motor": motor[0] if motor else None,
+        "motor_3rate": rate(motor, 1),
         "boat_rate": boat_stats[0] if boat_stats else None,
+        "boat_3rate": rate(boat_stats, 1),
         "st": number(st_match.group(1), 0.20) if st_match else None,
+        "f_count": int(f_match.group(1)) if f_match else None,
+        "l_count": int(l_match.group(1)) if l_match else None,
+        # These values are not universally present on the official racelist.
+        # They remain explicit unknowns until a verified provider supplies them.
+        "course_specific": None,
+        "must_win_status": "unavailable",
+        "current_meet_results": None,
         "stadium": stadium_id,
     }
 
@@ -147,6 +180,10 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         return None
     scored = []
     completeness = []
+    detail_fields = (
+        "national_2rate", "national_3rate", "local_2rate", "local_3rate",
+        "motor_3rate", "boat_3rate", "f_count", "l_count",
+    )
     for entry in entries:
         available = sum(entry[key] is not None for key in ("national", "local", "motor", "boat_rate", "st"))
         completeness.append(available / 5)
@@ -158,6 +195,14 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
             + COURSE_PRIOR[entry["boat"]] * MODEL_WEIGHTS["course"]
             + CLASS_BONUS[entry["class"]] * MODEL_WEIGHTS["class"]
             + max(-4.0, min(5.0, (0.20 - number(entry["st"], 0.20)) * MODEL_WEIGHTS["st"]))
+            + number(entry.get("national_2rate"), 35.0) * MODEL_WEIGHTS["national_2rate"]
+            + number(entry.get("national_3rate"), 52.0) * MODEL_WEIGHTS["national_3rate"]
+            + number(entry.get("local_2rate"), 33.0) * MODEL_WEIGHTS["local_2rate"]
+            + number(entry.get("local_3rate"), 50.0) * MODEL_WEIGHTS["local_3rate"]
+            + number(entry.get("motor_3rate"), 50.0) * MODEL_WEIGHTS["motor_3rate"]
+            + number(entry.get("boat_3rate"), 50.0) * MODEL_WEIGHTS["boat_3rate"]
+            - number(entry.get("f_count"), 0) * MODEL_WEIGHTS["f_penalty"]
+            - number(entry.get("l_count"), 0) * MODEL_WEIGHTS["l_penalty"]
         )
         scored.append((entry, strength))
     maximum = max(score for _, score in scored)
@@ -174,6 +219,9 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     ]
     agreement = factor_winners.count(top_boat) / len(factor_winners) * 100
     data_rate = sum(completeness) / len(completeness) * 100
+    detail_data_rate = sum(
+        entry.get(field) is not None for entry in entries for field in detail_fields
+    ) / (len(entries) * len(detail_fields)) * 100
     top_probability = ranked[0][1]
     score = min(90.0, 25.0 + top_probability * 45.0 + agreement * 0.15 + data_rate * 0.03)
     label = (
@@ -183,6 +231,11 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     )
     top_entry = ranked[0][0]
     top_factor_count = factor_winners.count(top_boat)
+    motor_rank = {
+        entry["boat"]: rank for rank, entry in enumerate(
+            sorted(entries, key=lambda item: number(item.get("motor"), -1), reverse=True), 1
+        )
+    }
     contenders = [
         {
             "boat": entry["boat"],
@@ -190,16 +243,36 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
             "class": entry["class"],
             "relative_win_probability": round(probability * 100, 1),
             "national_win_rate": entry["national"],
+            "national_2rate": entry.get("national_2rate"),
+            "national_3rate": entry.get("national_3rate"),
             "local_win_rate": entry["local"],
+            "local_2rate": entry.get("local_2rate"),
+            "local_3rate": entry.get("local_3rate"),
             "motor_2rate": entry["motor"],
+            "motor_3rate": entry.get("motor_3rate"),
+            "motor_rank_in_race": motor_rank.get(entry["boat"]),
+            "boat_2rate": entry.get("boat_rate"),
+            "boat_3rate": entry.get("boat_3rate"),
             "avg_st": entry["st"],
+            "f_count": entry.get("f_count"),
+            "l_count": entry.get("l_count"),
+            "age": entry.get("age"),
+            "weight": entry.get("weight"),
+            "registration_number": entry.get("registration_number"),
+            "course_specific": entry.get("course_specific"),
+            "must_win_status": entry.get("must_win_status", "unavailable"),
+            "current_meet_results": entry.get("current_meet_results"),
         }
         for entry, probability in ranked
     ]
     reasons = [
         f"{top_boat}号艇 {top_entry['name']}（{top_entry['class']}）を1着軸に評価",
-        f"全国勝率 {number(top_entry['national'], 0):.2f}・当地勝率 {number(top_entry['local'], 0):.2f}・モーター2連率 {number(top_entry['motor'], 0):.1f}%",
+        f"全国勝率 {number(top_entry['national'], 0):.2f}・2連率 {number(top_entry.get('national_2rate'), 0):.1f}%・3連率 {number(top_entry.get('national_3rate'), 0):.1f}%",
+        f"当地勝率 {number(top_entry['local'], 0):.2f}・当地2連率 {number(top_entry.get('local_2rate'), 0):.1f}%・当地3連率 {number(top_entry.get('local_3rate'), 0):.1f}%",
+        f"モーター2連率 {number(top_entry['motor'], 0):.1f}%（レース内{motor_rank.get(top_boat)}位）・3連率 {number(top_entry.get('motor_3rate'), 0):.1f}%",
+        f"平均ST {number(top_entry['st'], 0.20):.2f}・F{top_entry.get('f_count') if top_entry.get('f_count') is not None else '未取得'}・L{top_entry.get('l_count') if top_entry.get('l_count') is not None else '未取得'}を反映",
         f"能力・当地・モーター・STの4因子中 {top_factor_count}因子が軸艇と一致",
+        "勝負駆け・選手別コース成績は公式確認値が取れた場合のみ反映（未取得時は推測しない）",
     ]
     invalid_conditions = [
         "展示タイム・進入・欠場に大きな変化が出た場合",
@@ -237,7 +310,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
                 f"当地勝率 {number(entry['local'], 0):.2f}・モーター2連率 {number(entry['motor'], 0):.1f}%・平均ST {number(entry['st'], 0.20):.2f}",
                 f"穴評価4因子のうち {signals}因子が基準を通過",
             ],
-            "condition": "展示順位上位かつ3連単オッズ公開後に期待値を再確認",
+            "condition": "展示順位上位かつ進入・ST確認後にモデル確率を再評価",
         }
     return {
         "venue_id": stadium_id,
@@ -248,9 +321,15 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         "pick": "-".join(str(entry["boat"]) for entry, _ in ranked[:3]),
         "agreement": round(agreement, 1),
         "data_rate": round(data_rate, 1),
+        "detail_data_rate": round(detail_data_rate, 1),
+        "optional_features": {
+            "course_specific_racer_stats": "unavailable",
+            "must_win_status": "unavailable",
+            "current_meet_results": "unavailable",
+        },
         "estimated_probability": round(top_probability * 100, 1),
-        "generation_mode": "公開用複合因子ロジック v4（過去検証対応）",
-        "logic": "基礎能力・当地適性・モーター・ST・コース補正",
+        "generation_mode": "公開用複合因子ロジック v5（詳細成績・事故情報対応）",
+        "logic": "基礎能力・全国/当地2連3連率・モーター/ボート・ST・F/L・コース補正",
         "contenders": contenders,
         "reasons": reasons,
         "invalid_conditions": invalid_conditions,

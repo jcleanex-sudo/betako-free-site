@@ -175,6 +175,14 @@ form button span { float: right; }
 .developmentPrediction { margin-top: 11px; padding: 10px; border: 1px solid rgba(64,226,231,.16); border-radius: 8px; background: rgba(64,226,231,.035); }
 .developmentPrediction b { color: var(--cyan); font-size: 10px; }
 .developmentPrediction p { margin: 6px 0 0; color: #dce8f3; font-size: 11px; line-height: 1.7; }
+.racerDetailPanel { margin-top: 11px; padding: 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: rgba(8,18,31,.5); }
+.racerDetailPanel > b { color: #fff; font-size: 11px; }
+.racerDetailScroller { margin-top: 7px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.racerDetailPanel table { width: 100%; min-width: 760px; border-collapse: collapse; color: #dce8f3; font-size: 10px; }
+.racerDetailPanel th, .racerDetailPanel td { padding: 7px 6px; border-bottom: 1px solid rgba(255,255,255,.09); text-align: left; white-space: nowrap; }
+.racerDetailPanel th { color: var(--cyan); background: rgba(64,226,231,.06); }
+.racerDetailPanel tbody tr:first-child td { color: #fff; font-weight: 700; }
+.racerDetailPanel > small { display: block; margin-top: 7px; color: #91a5b8; line-height: 1.55; }
 .manualCopyActions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 .manualCopyButton { width: auto; margin-top: 0; padding: 10px 15px; font-size: 11px; }
 .manualVideoButton { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 10px 15px; border: 1px solid rgba(255,91,91,.55); border-radius: 8px; color: #fff; background: linear-gradient(135deg, #e54343, #a9152d); box-shadow: 0 5px 18px rgba(229,67,67,.18); font-size: 11px; font-weight: 900; text-decoration: none; }

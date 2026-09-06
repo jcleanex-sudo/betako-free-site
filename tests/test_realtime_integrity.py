@@ -40,6 +40,18 @@ class RealtimeIntegrityTest(unittest.TestCase):
         self.assertEqual(rows[0]["boat"], 6)
         self.assertIsNone(rows[0]["time"])
 
+    def test_exhibition_parser_reads_only_labelled_original_times(self):
+        html = """
+        <table><tr><th>艇番</th><th>一周タイム</th><th>まわり足</th><th>直線タイム</th></tr>
+          <tr><td>1</td><td>36.40</td><td>5.60</td><td>7.20</td></tr>
+          <tr><td>2</td><td>36.55</td><td>5.72</td><td>7.11</td></tr>
+        </table>
+        """
+        rows = _parse_exhibition_table(BeautifulSoup(html, "lxml"))
+        self.assertEqual(rows[0]["lap_time"], 36.40)
+        self.assertEqual(rows[0]["turn_time"], 5.60)
+        self.assertEqual(rows[1]["straight_time"], 7.11)
+
     def test_final_prediction_waits_for_course_and_start_timing(self):
         prediction = {
             "venue": "徳山", "venue_id": "18", "race": 3,
@@ -129,6 +141,36 @@ class RealtimeIntegrityTest(unittest.TestCase):
         self.assertEqual(result["selection_basis"], "model_probability_only")
         self.assertTrue(has_complete_portfolio(result["portfolio"]))
         self.assertEqual(result["value"]["status"], "DATA BLOCKED")
+        self.assertEqual(len(result["contenders"]), 6)
+        self.assertEqual(result["original_exhibition_metrics_used"], [])
+
+    def test_original_exhibition_only_affects_model_when_all_six_are_ranked(self):
+        prediction = {
+            "venue": "徳山", "venue_id": "18", "race": 3, "data_rate": 100,
+            "pick": "1-2-3", "score": 75.0,
+            "contenders": [
+                {"boat": boat, "relative_win_probability": probability}
+                for boat, probability in enumerate((30, 22, 18, 13, 10, 7), 1)
+            ],
+        }
+        realtime = {
+            "exhibition": [
+                {"boat": boat, "course": boat, "time": 6.8 + boat / 100,
+                 "st": f".1{boat}", "time_rank": boat, "st_rank": boat,
+                 "lap_rank": 7 - boat, "turn_rank": 7 - boat,
+                 "straight_rank": 7 - boat}
+                for boat in range(1, 7)
+            ],
+            "odds": None, "wind_speed": 2, "wave_height": 1,
+            "original_exhibition_status": "available",
+        }
+        result = final_prediction(prediction, realtime)
+        self.assertEqual(
+            result["original_exhibition_metrics_used"],
+            ["lap_rank", "straight_rank", "turn_rank"],
+        )
+        six = next(item for item in result["contenders"] if item["boat"] == 6)
+        self.assertGreater(six["original_exhibition_adjustment"], 0)
 
     @patch("scripts.fetch_race_realtime.fetch_all_odds")
     @patch("scripts.fetch_race_realtime._fetch_html", return_value="<html></html>")

@@ -373,6 +373,10 @@ def final_prediction(prediction, realtime):
         }
 
     by_boat = {item["boat"]: item for item in realtime["exhibition"]}
+    complete_original_metrics = {
+        field for field in ("lap_rank", "turn_rank", "straight_rank")
+        if all(by_boat.get(boat, {}).get(field) in range(1, 7) for boat in range(1, 7))
+    }
     adjusted = []
     course_values = {1: 7.0, 2: 3.0, 3: 1.5, 4: 0.0, 5: -1.0, 6: -2.0}
     for contender in prediction.get("contenders", []):
@@ -381,17 +385,41 @@ def final_prediction(prediction, realtime):
         st_rank = exhibition.get("st_rank") or 6
         actual_course = exhibition.get("course") or contender["boat"]
         course_adjustment = course_values.get(actual_course, 0) - course_values.get(contender["boat"], 0)
+        original_adjustment = 0.0
+        if "lap_rank" in complete_original_metrics:
+            original_adjustment += (7 - exhibition["lap_rank"]) * 0.45
+        if "turn_rank" in complete_original_metrics:
+            original_adjustment += (7 - exhibition["turn_rank"]) * 0.40
+        if "straight_rank" in complete_original_metrics:
+            original_adjustment += (7 - exhibition["straight_rank"]) * 0.35
         adjusted_score = max(
             0.1,
             contender["relative_win_probability"]
             + (7 - time_rank) * 1.6
             + (7 - st_rank) * 0.8
-            + course_adjustment,
+            + course_adjustment
+            + original_adjustment,
         )
-        adjusted.append((contender, adjusted_score, exhibition, course_adjustment))
+        adjusted.append((contender, adjusted_score, exhibition, course_adjustment, original_adjustment))
     adjusted_total = sum(item[1] for item in adjusted) or 1
     adjusted = [
-        ({**item[0], "relative_win_probability": round(item[1] / adjusted_total * 100, 2)}, item[1], item[2], item[3])
+        ({
+            **item[0],
+            "relative_win_probability": round(item[1] / adjusted_total * 100, 2),
+            "actual_course": item[2].get("course"),
+            "exhibition_time": item[2].get("time"),
+            "exhibition_time_rank": item[2].get("time_rank"),
+            "exhibition_st": item[2].get("st"),
+            "exhibition_st_rank": item[2].get("st_rank"),
+            "lap_time": item[2].get("lap_time"),
+            "lap_rank": item[2].get("lap_rank"),
+            "turn_time": item[2].get("turn_time"),
+            "turn_rank": item[2].get("turn_rank"),
+            "straight_time": item[2].get("straight_time"),
+            "straight_rank": item[2].get("straight_rank"),
+            "course_adjustment": round(item[3], 2),
+            "original_exhibition_adjustment": round(item[4], 2),
+        }, item[1], item[2], item[3], item[4])
         for item in adjusted
     ]
     adjusted.sort(key=lambda item: item[1], reverse=True)
@@ -420,12 +448,25 @@ def final_prediction(prediction, realtime):
     reasons = [
         f"展示最速は{fastest['boat']}号艇 {fastest['time']:.2f}",
         f"風速{wind:g}m・波高{wave:g}cm・天候{realtime.get('weather') or '不明'}",
-        "朝の能力評価に展示順位・ST展示順位・実際の進入コースを加えて再計算",
+        "朝の詳細成績評価に展示順位・ST展示順位・実際の進入コースを加えて再計算",
     ]
     start_order = [item["boat"] for item in sorted(realtime["exhibition"], key=lambda item: item.get("course") or item["boat"])]
     if start_order != sorted(start_order):
         reasons.insert(1, f"進入変化 {'-'.join(map(str, start_order))}（前付け反映）")
     adjusted_contenders = [item[0] for item in adjusted]
+    top = adjusted_contenders[0]
+    reasons.extend([
+        f"軸艇は全国勝率{float(top.get('national_win_rate') or 0):.2f}・当地勝率{float(top.get('local_win_rate') or 0):.2f}・平均ST{float(top.get('avg_st') or .20):.2f}",
+        f"軸艇モーター2連率{float(top.get('motor_2rate') or 0):.1f}%（レース内{top.get('motor_rank_in_race') or '--'}位）・展示{top.get('exhibition_time_rank') or '--'}位・ST展示{top.get('exhibition_st_rank') or '--'}位",
+    ])
+    original_labels = {
+        "lap_rank": "一周", "turn_rank": "まわり足", "straight_rank": "直線",
+    }
+    if complete_original_metrics:
+        reflected = "・".join(original_labels[field] for field in sorted(complete_original_metrics))
+        reasons.append(f"場独自展示（{reflected}）は6艇完備を確認して反映")
+    else:
+        reasons.append("一周・まわり足・直線の場独自展示は共通公式ページ未提供のため推測せず未反映")
     probability_only_portfolio = build_probability_only_portfolio(adjusted_contenders)
     plan = ticket_plan(adjusted_contenders, final_pick, realtime)
     value = compare_markets(adjusted_contenders, realtime)
@@ -442,6 +483,9 @@ def final_prediction(prediction, realtime):
         "message": "展示後再計算済み（オッズ非反映）" if portfolio_complete else "固定13点が全件揃うまで取得継続",
         "morning_pick": prediction["pick"],
         "final_pick": final_pick, "final_score": round(final_score, 1), "reasons": reasons,
+        "contenders": adjusted_contenders,
+        "original_exhibition_status": realtime.get("original_exhibition_status", "unknown"),
+        "original_exhibition_metrics_used": sorted(complete_original_metrics),
         "ticket_plan": plan, "best_value_pick": value_pick,
         "portfolio": probability_only_portfolio,
         "probability_only_portfolio": probability_only_portfolio,

@@ -207,13 +207,71 @@ function portfolioCopyLines(portfolio = {}) {
   }).filter(Boolean);
 }
 
-function buildDevelopmentPrediction(leadingPick, reasons = [], finalReady = false) {
+function formatRate(value, suffix = "") {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? `${parsed.toFixed(1)}${suffix}` : "未取得";
+}
+
+function renderRacerDetails(contenders = [], finalReady = false) {
+  const panel = document.querySelector("#racerDetailPanel");
+  const body = document.querySelector("#racerDetailRows");
+  if (!panel || !body || contenders.length !== 6) {
+    if (panel) panel.hidden = true;
+    return;
+  }
+  panel.hidden = false;
+  body.replaceChildren(...[...contenders].sort((a, b) => Number(a.boat) - Number(b.boat)).map((racer) => {
+    const row = document.createElement("tr");
+    const exhibition = finalReady
+      ? `${formatRate(racer.exhibition_time)} / ${racer.exhibition_time_rank || "--"}位`
+      : "展示前";
+    const cells = [
+      `${racer.boat} ${racer.name || "選手名未取得"}`,
+      racer.class || "--",
+      `${formatRate(racer.national_win_rate)}｜2連${formatRate(racer.national_2rate, "%")}｜3連${formatRate(racer.national_3rate, "%")}`,
+      `${formatRate(racer.local_win_rate)}｜2連${formatRate(racer.local_2rate, "%")}｜3連${formatRate(racer.local_3rate, "%")}`,
+      `2連${formatRate(racer.motor_2rate, "%")}｜${racer.motor_rank_in_race || "--"}位`,
+      `${formatRate(racer.avg_st)} / F${racer.f_count ?? "--"} / L${racer.l_count ?? "--"}`,
+      exhibition,
+    ];
+    cells.forEach((value) => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      row.append(cell);
+    });
+    return row;
+  }));
+  document.querySelector("#optionalDataStatus").textContent = finalReady
+    ? "勝負駆け・選手別コース成績・場独自の一周/まわり足/直線は、公式確認値がある項目だけ反映します。未取得値は推測しません。"
+    : "展示前評価。勝負駆け・選手別コース成績は公式確認値がある場合だけ反映し、未取得値は推測しません。";
+}
+
+function buildDevelopmentPrediction(leadingPick, reasons = [], finalReady = false, contenders = [], exhibition = []) {
   const boats = String(leadingPick || "").split("-").filter(Boolean);
   if (boats.length < 3) return "データ不足のため展開を確定できません。見送り対象です。";
   const [axis, second, third] = boats;
-  const phase = finalReady ? "展示後データでは" : "朝データでは";
-  const reason = reasons.filter(Boolean).slice(0, 2).join("。 ");
-  return `${phase}${axis}号艇の先頭争いを軸に、${second}号艇と${third}号艇の連下進出を評価。${reason ? `${reason}。` : "進入や展示気配が変われば評価を下げます。"}`;
+  const byBoat = new Map(contenders.map((item) => [String(item.boat), item]));
+  const axisData = byBoat.get(axis) || {};
+  const secondData = byBoat.get(second) || {};
+  const thirdData = byBoat.get(third) || {};
+  const fourth = contenders.find((item) => !boats.includes(String(item.boat)));
+  const actualCourse = Number(axisData.actual_course || axis);
+  const attack = actualCourse === 1 ? "イン先マイから逃げ切り" : actualCourse === 2 ? "差し" : actualCourse <= 4 ? "まくり差し" : "展開を突く外まい";
+  const startOrder = [...exhibition]
+    .filter((item) => item?.boat)
+    .sort((a, b) => Number(a.course || a.boat) - Number(b.course || b.boat))
+    .map((item) => item.boat);
+  const orderText = startOrder.length === 6 ? startOrder.join("-") : "枠なり想定";
+  const phase = finalReady ? "展示後" : "展示前";
+  const axisStats = `${axis}号艇${axisData.name ? ` ${axisData.name}` : ""}は全国${formatRate(axisData.national_win_rate)}、当地${formatRate(axisData.local_win_rate)}、平均ST${formatRate(axisData.avg_st)}`;
+  const opponents = `${second}号艇${secondData.name ? ` ${secondData.name}` : ""}を対抗、${third}号艇${thirdData.name ? ` ${thirdData.name}` : ""}を3番手に評価`;
+  const exhibitionText = finalReady
+    ? `進入${orderText}。軸艇は展示${axisData.exhibition_time_rank || "--"}位、ST展示${axisData.exhibition_st_rank || "--"}位で、${attack}を本線に読む`
+    : `進入は${orderText}。展示公開後に実進入、展示タイム、STを再確認して軸を再計算する`;
+  const risk = fourth
+    ? `崩れる条件は進入変化、軸艇の展示/ST劣勢、または${fourth.boat}号艇${fourth.name ? ` ${fourth.name}` : ""}の気配上昇。該当時は買い目を再評価する`
+    : "進入変化や展示気配の悪化があれば買い目を再評価する";
+  return `${phase}：${axisStats}。${opponents}。${exhibitionText}。1マークは${axis}号艇の${attack}を起点に、${second}号艇の追走と${third}号艇の連下進出を想定。${risk}。`;
 }
 
 function buildManualCopyText(payload) {
@@ -695,7 +753,7 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     : finalReady
       ? `オッズ非反映・モデル確率順の固定13点｜1着候補 ${finalData.final_pick?.split("-")[0] || "--"}号艇｜展示・進入・ST反映済み｜オッズで買い目を変更しません`
     : match
-      ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜データ取得率 ${Math.round(match.data_rate)}%`
+      ? `本線候補 ${match.pick}｜相対1着推定 ${Math.round(match.estimated_probability)}%｜一致度 ${Math.round(match.agreement)}%｜必須データ ${Math.round(match.data_rate)}%${Number.isFinite(Number(match.detail_data_rate)) ? `｜詳細成績 ${Math.round(match.detail_data_rate)}%` : ""}`
     : dateMatches
       ? "公式データを取得できなかったレースです。DATA BLOCKEDとして見送ります。"
       : "選択日の予想データはありません。本日の日付を選択してください。";
@@ -706,9 +764,19 @@ document.querySelector("#predictionForm").addEventListener("submit", (event) => 
     ? finalData.reasons
     : [...(match?.reasons || []), ...buildAxisEvidence(match)];
   const leadingPick = referenceBlocked ? "" : finalReady ? finalData.final_pick : match?.pick;
+  const displayedContenders = finalReady && finalData?.contenders?.length === 6
+    ? finalData.contenders
+    : match?.contenders || [];
+  renderRacerDetails(referenceBlocked ? [] : displayedContenders, finalReady);
   const development = referenceBlocked
     ? "DATA BLOCKED：参考データが揃うまで展開予想を生成しません。"
-    : buildDevelopmentPrediction(leadingPick, displayedReasons, finalReady);
+    : buildDevelopmentPrediction(
+        leadingPick,
+        displayedReasons,
+        finalReady,
+        displayedContenders,
+        finalData?.exhibition || [],
+      );
   document.querySelector("#developmentText").textContent = development;
   reasons.replaceChildren(...displayedReasons.map((reason) => {
     const item = document.createElement("li");

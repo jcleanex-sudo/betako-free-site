@@ -229,6 +229,9 @@ def _parse_exhibition_table(soup):
                 "boat": boat,
                 "course": None,
                 "time": exhibition_time,
+                "lap_time": None,
+                "turn_time": None,
+                "straight_time": None,
                 "tilt": tilt,
                 "weight": weight,
                 "st": None,
@@ -249,12 +252,50 @@ def _parse_exhibition_table(soup):
                 "boat": boat,
                 "course": None,
                 "time": None,
+                "lap_time": None,
+                "turn_time": None,
+                "straight_time": None,
                 "tilt": None,
                 "weight": None,
                 "st": None,
             })
             exhibition[boat]["course"] = course
             exhibition[boat]["st"] = st
+
+    # 一周・まわり足・直線は各場が独自に公開する参考値で、公式共通
+    # beforeinfo表には常設されていない。見出しが明記された表だけを
+    # 読み、列位置や欠損値を推測しない。
+    aliases = {
+        "lap_time": ("一周タイム", "一周"),
+        "turn_time": ("まわり足タイム", "回り足タイム", "まわり足", "回り足"),
+        "straight_time": ("直線タイム", "直線"),
+    }
+    for candidate in soup.find_all("table"):
+        header_cells = candidate.find("tr")
+        if not header_cells:
+            continue
+        headers = [cell.get_text(" ", strip=True) for cell in header_cells.find_all(["th", "td"])]
+        column_map = {}
+        for field, names in aliases.items():
+            index = next((i for i, label in enumerate(headers) if any(name in label for name in names)), None)
+            if index is not None:
+                column_map[field] = index
+        if not column_map:
+            continue
+        for row in candidate.find_all("tr")[1:]:
+            cells = [cell.get_text(" ", strip=True) for cell in row.find_all(["th", "td"])]
+            boat = safe_int(cells[0] if cells else None)
+            if boat not in range(1, 7):
+                continue
+            exhibition.setdefault(boat, {
+                "boat": boat, "course": None, "time": None,
+                "lap_time": None, "turn_time": None, "straight_time": None,
+                "tilt": None, "weight": None, "st": None,
+            })
+            for field, index in column_map.items():
+                value = safe_float(cells[index]) if index < len(cells) else None
+                if value is not None and 0 < value < 60:
+                    exhibition[boat][field] = value
 
     return [exhibition[boat] for boat in sorted(exhibition)]
 
@@ -495,9 +536,20 @@ def add_exhibition_ranks(exhibition):
         item["time_rank"] = rank
     for rank, item in enumerate(st_ranked, 1):
         item["st_rank"] = rank
+    for field in ("lap_time", "turn_time", "straight_time"):
+        ranked = sorted(
+            [item for item in exhibition if item.get(field) is not None],
+            key=lambda item: item[field],
+        )
+        rank_field = field.replace("_time", "_rank")
+        for rank, item in enumerate(ranked, 1):
+            item[rank_field] = rank
     for item in exhibition:
         item.setdefault("time_rank", None)
         item.setdefault("st_rank", None)
+        item.setdefault("lap_rank", None)
+        item.setdefault("turn_rank", None)
+        item.setdefault("straight_rank", None)
     return exhibition
 
 
@@ -519,6 +571,7 @@ def empty_realtime(stadium_id, race_number, race_date, error=None):
         "fetched_at": None,
         "source": "boatrace_beforeinfo",
         "source_url": None,
+        "original_exhibition_status": "not_provided_by_common_source",
         "error": str(error) if error else None,
     }
 
@@ -567,6 +620,15 @@ def fetch_exhibition(stadium_id: str, race_number: int, race_date: str) -> dict:
             "fetched_at": datetime.now(JST).isoformat(timespec="seconds"),
             "source": "boatrace_beforeinfo",
             "source_url": source_url,
+            "original_exhibition_status": (
+                "available"
+                if any(
+                    item.get(field) is not None
+                    for item in exhibition
+                    for field in ("lap_time", "turn_time", "straight_time")
+                )
+                else "not_provided_by_common_source"
+            ),
             "error": None,
         }
         realtime["evaluation"] = evaluate_exhibition(realtime)

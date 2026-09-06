@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="全国24場を複数因子で分析するボートレースAI BETAKO">
   <title>BETAKO | データで選ぶボートレースAI</title>
-  <link rel="stylesheet" href="style.css?v=20260823-1">
+  <link rel="stylesheet" href="style.css?v=20260907-2">
 </head>
 <body>
 <main id="top">
@@ -40,7 +40,7 @@
       <label>予想タイプ<select id="predictionType"><option value="展示後AI最終予想" selected>おすすめ（固定13点）</option><option value="朝AI予想">朝AI参考予想（6点）</option></select></label>
       <button type="submit">このレースを分析 <span>→</span></button>
     </form>
-    <div class="selectionResult" id="selectionResult" role="status" hidden><span id="venueCode">01</span><div><b class="exhibitionBadge" id="exhibitionBadge" hidden>展示前</b><b class="decisionBadge" id="decisionBadge" hidden>見送り対象</b><strong id="selectionText"></strong><small id="predictionDetail"></small><div class="marketComparison" id="marketComparison" hidden></div><div class="marketTicketPlan" id="marketTicketPlan" hidden></div><div class="ticketPlan"><section class="ticketGroup"><b id="mainLabel">3連単候補6点</b><div class="formationRows" id="mainPicks">--</div></section><section class="ticketGroup" id="coverGroup"><b>展示前の追加候補</b><div class="formationRows" id="coverPicks">--</div></section></div><div class="developmentPrediction"><b>展開予想</b><p id="developmentText">--</p></div><ul id="predictionReasons"></ul><small id="invalidConditions"></small><div class="manualCopyActions"><a class="manualVideoButton" id="openRaceVideo" href="https://race.boatcast.jp/" target="_blank" rel="noopener" aria-label="公式レース映像を開く">📺 レース映像（公式）</a><button class="copyButton manualCopyButton" id="copyManualPrediction" type="button">X投稿用にコピー</button><button class="copyButton manualCopyButton noteFreeButton" id="createFreeNoteDraft" type="button">note無料版を作成</button><button class="copyButton manualCopyButton noteCopyButton" id="createPaidNoteDraft" type="button">有料会員版を作成</button><small id="manualCopyStatus" role="status"></small></div><section class="noteDraftPanel" id="noteDraftPanel" hidden><b id="noteDraftTitle">note用原稿</b><pre id="noteDraftText"></pre></section></div></div>
+    <div class="selectionResult" id="selectionResult" role="status" hidden><span id="venueCode">01</span><div><b class="exhibitionBadge" id="exhibitionBadge" hidden>展示前</b><b class="decisionBadge" id="decisionBadge" hidden>見送り対象</b><strong id="selectionText"></strong><small id="predictionDetail"></small><div class="marketComparison" id="marketComparison" hidden></div><div class="marketTicketPlan" id="marketTicketPlan" hidden></div><div class="ticketPlan"><section class="ticketGroup"><b id="mainLabel">3連単候補6点</b><div class="formationRows" id="mainPicks">--</div></section><section class="ticketGroup" id="coverGroup"><b>展示前の追加候補</b><div class="formationRows" id="coverPicks">--</div></section></div><div class="developmentPrediction"><b>展開予想（詳細）</b><p id="developmentText">--</p></div><section class="racerDetailPanel" id="racerDetailPanel" hidden><b>6艇 詳細比較</b><div class="racerDetailScroller"><table><thead><tr><th>艇/選手</th><th>級</th><th>全国</th><th>当地</th><th>モーター</th><th>ST/F/L</th><th>展示</th></tr></thead><tbody id="racerDetailRows"></tbody></table></div><small id="optionalDataStatus"></small></section><ul id="predictionReasons"></ul><small id="invalidConditions"></small><div class="manualCopyActions"><a class="manualVideoButton" id="openRaceVideo" href="https://race.boatcast.jp/" target="_blank" rel="noopener" aria-label="公式レース映像を開く">📺 レース映像（公式）</a><button class="copyButton manualCopyButton" id="copyManualPrediction" type="button">X投稿用にコピー</button><button class="copyButton manualCopyButton noteFreeButton" id="createFreeNoteDraft" type="button">note無料版を作成</button><button class="copyButton manualCopyButton noteCopyButton" id="createPaidNoteDraft" type="button">有料会員版を作成</button><small id="manualCopyStatus" role="status"></small></div><section class="noteDraftPanel" id="noteDraftPanel" hidden><b id="noteDraftTitle">note用原稿</b><pre id="noteDraftText"></pre></section></div></div>
   </section>
 
   <section class="venuePerformanceSection" id="today-venues">
@@ -86,7 +86,7 @@
 
   <section class="logicSection" id="logic">
     <div class="sectionHead"><div><p class="eyebrow">PREDICTION LOGIC</p><h2>単一ロジックに頼らない</h2></div><p>能力・機力・展示・進入を複合評価し、オッズに左右されず5券種の買い目を選びます。</p></div>
-    <div class="logicFlow"><article><b>01</b><h3>基礎能力</h3><p>級別、全国・当地成績を評価</p></article><article><b>02</b><h3>水面適性</h3><p>枠番コース、風・波を補正</p></article><article><b>03</b><h3>機力評価</h3><p>モーター、ボート、ST傾向を比較</p></article><article><b>04</b><h3>展示後再計算</h3><p>展示タイム、進入変化、直前気配を反映</p></article><article><b>05</b><h3>的中確率順位</h3><p>オッズを使わず、モデル確率だけで固定13点を選定</p></article></div>
+    <div class="logicFlow"><article><b>01</b><h3>選手詳細</h3><p>級別、全国・当地の勝率/2連率/3連率、F/L、STを評価</p></article><article><b>02</b><h3>水面・進入</h3><p>実進入、前付け、枠番コース、風・波を補正</p></article><article><b>03</b><h3>機力評価</h3><p>モーター/ボート成績とレース内順位を比較</p></article><article><b>04</b><h3>展示後再計算</h3><p>展示タイム、STと、提供場では一周・まわり足・直線を反映</p></article><article><b>05</b><h3>的中確率順位</h3><p>オッズを使わず、モデル確率だけで固定13点を選定</p></article></div>
   </section>
 
   <section class="operations" id="operations">
@@ -96,6 +96,6 @@
 
   <footer><a class="brand" href="#top"><span class="brandMark">B</span><span>BETAKO</span></a><p>勝つことより先に、大きく負けないこと。</p><small>AI予想は検証中の分析情報です。舟券購入は自己責任で行ってください。</small></footer>
 </main>
-<script src="app.js?v=20260907-1"></script>
+<script src="app.js?v=20260907-2"></script>
 </body>
 </html>
