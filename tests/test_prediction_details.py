@@ -2,10 +2,29 @@ import unittest
 
 from bs4 import BeautifulSoup
 
-from scripts.generate_predictions import make_prediction, parse_entry
+from scripts.generate_predictions import make_prediction, parse_entry, parse_point_rank
 
 
 class PredictionDetailsTest(unittest.TestCase):
+    def test_point_rank_parser_uses_official_registration_number_and_columns(self):
+        html = """
+        <table><tbody><tr>
+          <td>1</td><td>3960</td><td>水面 太郎</td><td>A1</td>
+          <td>8.67</td><td>１３ ２ １　３１</td><td>52</td><td>0</td>
+          <td>12R</td><td></td><td>賞典除外</td>
+        </tr></tbody></table>
+        """
+        parsed = parse_point_rank(BeautifulSoup(html, "lxml"))
+        self.assertEqual(parsed["3960"]["point_rank"], 1)
+        self.assertEqual(parsed["3960"]["point_rate"], 8.67)
+        self.assertEqual(parsed["3960"]["current_meet_results"], "１３ ２ １　３１")
+        self.assertEqual(parsed["3960"]["meet_points"], 52)
+        self.assertEqual(parsed["3960"]["meet_note"], "賞典除外")
+
+    def test_point_rank_parser_does_not_invent_unpublished_rows(self):
+        html = "<div>得点率情報はありません。</div>"
+        self.assertEqual(parse_point_rank(BeautifulSoup(html, "lxml")), {})
+
     def test_racelist_parser_keeps_detailed_official_statistics(self):
         html = """
         <tbody class="is-fs12"><tr>
@@ -39,7 +58,8 @@ class PredictionDetailsTest(unittest.TestCase):
                 "boat_rate": 34 - boat, "boat_3rate": 51 - boat,
                 "st": .14 + boat / 100, "f_count": 0, "l_count": 0,
                 "course_specific": None, "must_win_status": "unavailable",
-                "current_meet_results": None, "age": None, "weight": None,
+                "current_meet_results": "１２３", "point_rate": 6.25,
+                "age": None, "weight": None,
                 "registration_number": None,
             })
         prediction = make_prediction("18", 1, entries)

@@ -221,6 +221,13 @@ function renderRacerDetails(contenders = [], finalReady = false) {
     return;
   }
   panel.hidden = false;
+  const headerRow = panel.querySelector("thead tr");
+  if (headerRow && !headerRow.querySelector('[data-column="current-meet"]')) {
+    const heading = document.createElement("th");
+    heading.dataset.column = "current-meet";
+    heading.textContent = "今節";
+    headerRow.insertBefore(heading, headerRow.lastElementChild);
+  }
   body.replaceChildren(...[...contenders].sort((a, b) => Number(a.boat) - Number(b.boat)).map((racer) => {
     const row = document.createElement("tr");
     const exhibition = finalReady
@@ -233,6 +240,9 @@ function renderRacerDetails(contenders = [], finalReady = false) {
       `${formatRate(racer.local_win_rate)}｜2連${formatRate(racer.local_2rate, "%")}｜3連${formatRate(racer.local_3rate, "%")}`,
       `2連${formatRate(racer.motor_2rate, "%")}｜${racer.motor_rank_in_race || "--"}位`,
       `${formatRate(racer.avg_st)} / F${racer.f_count ?? "--"} / L${racer.l_count ?? "--"}`,
+      racer.point_rate == null
+        ? "公式未掲載"
+        : `得点率${formatRate(racer.point_rate)}｜${racer.point_rank || "--"}位｜${racer.current_meet_results || "成績未掲載"}`,
       exhibition,
     ];
     cells.forEach((value) => {
@@ -271,6 +281,7 @@ function renderLogicComparison(match, finalData, finalReady) {
     local_2rate: "当地2連率", local_3rate: "当地3連率",
     motor_3rate: "モーター3連率", boat_3rate: "ボート3連率",
     f_count: "F情報", l_count: "L情報",
+    point_rate: "今節得点率", current_meet_results: "今節成績",
   };
   const missing = finalData?.missing_detail_fields || match.missing_detail_fields || [];
   document.querySelector("#missingDataText").textContent = !detailCoverageKnown

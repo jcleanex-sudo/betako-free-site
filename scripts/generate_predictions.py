@@ -13,6 +13,8 @@ from urllib.parse import parse_qs, urlparse
 
 import requests
 from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 JST = timezone(timedelta(hours=9))
 BASE = "https://www.boatrace.jp/owpc/pc/race"
@@ -65,6 +67,16 @@ def session():
     if not hasattr(_THREAD_LOCAL, "session"):
         _THREAD_LOCAL.session = requests.Session()
         _THREAD_LOCAL.session.headers.update(HEADERS)
+        retry = Retry(
+            total=2,
+            connect=2,
+            read=2,
+            status=2,
+            backoff_factor=0.35,
+            status_forcelist=(429, 500, 502, 503, 504),
+            allowed_methods=frozenset(("GET",)),
+        )
+        _THREAD_LOCAL.session.mount("https://", HTTPAdapter(max_retries=retry))
     return _THREAD_LOCAL.session
 
 
@@ -175,6 +187,46 @@ def fetch_race(date: str, stadium_id: str, race: int):
     return [entry for entry in entries if entry]
 
 
+def parse_point_rank(soup):
+    """Parse only values explicitly published in the official meet standings."""
+    standings = {}
+    for row in soup.select("table tbody tr"):
+        cells = [cell.get_text(" ", strip=True) for cell in row.find_all(["th", "td"])]
+        joined = " ".join(cells)
+        registration = re.search(r"(?<!\d)(\d{4})(?!\d)", joined)
+        racer_class = next((value for value in ("A1", "A2", "B1", "B2") if value in cells), None)
+        if not registration or not racer_class:
+            continue
+        class_index = cells.index(racer_class)
+        point_rank = number(cells[0], None) if cells else None
+        point_rate = number(cells[class_index + 1], None) if len(cells) > class_index + 1 else None
+        meet_results = cells[class_index + 2] if len(cells) > class_index + 2 else None
+        points = number(cells[class_index + 3], None) if len(cells) > class_index + 3 else None
+        deduction = number(cells[class_index + 4], None) if len(cells) > class_index + 4 else None
+        note = next((cell for cell in cells[class_index + 5:] if any(
+            word in cell for word in ("賞典除外", "途中帰郷", "帰郷", "欠場", "勝負駆け")
+        )), None)
+        standings[registration.group(1)] = {
+            "point_rank": int(point_rank) if point_rank is not None else None,
+            "point_rate": point_rate,
+            "current_meet_results": meet_results or None,
+            "meet_points": points,
+            "meet_deduction": deduction,
+            "must_win_status": "official_note" if note and "勝負駆け" in note else "not_published",
+            "meet_note": note,
+        }
+    return standings
+
+
+def fetch_point_rank(date: str, stadium_id: str):
+    """Fetch the official meet standings once per venue and reuse for all 12 races."""
+    response = session().get(
+        f"{BASE}/pointrank", params={"jcd": stadium_id, "hd": date}, timeout=REQUEST_TIMEOUT,
+    )
+    response.raise_for_status()
+    return parse_point_rank(BeautifulSoup(response.text, "lxml"))
+
+
 def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     if len(entries) != 6:
         return None
@@ -184,6 +236,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     detail_fields = (
         "national_2rate", "national_3rate", "local_2rate", "local_3rate",
         "motor_3rate", "boat_3rate", "f_count", "l_count",
+        "point_rate", "current_meet_results",
     )
     for entry in entries:
         available = sum(entry[key] is not None for key in ("national", "local", "motor", "boat_rate", "st"))
@@ -206,6 +259,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
             + number(entry.get("boat_3rate"), 50.0) * MODEL_WEIGHTS["boat_3rate"]
             - number(entry.get("f_count"), 0) * MODEL_WEIGHTS["f_penalty"]
             - number(entry.get("l_count"), 0) * MODEL_WEIGHTS["l_penalty"]
+            + (number(entry.get("point_rate"), 5.0) - 5.0) * 0.40
         )
         legacy_scored.append((entry, legacy_strength))
         scored.append((entry, legacy_strength + detail_adjustment))
@@ -273,6 +327,11 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
             "course_specific": entry.get("course_specific"),
             "must_win_status": entry.get("must_win_status", "unavailable"),
             "current_meet_results": entry.get("current_meet_results"),
+            "point_rank": entry.get("point_rank"),
+            "point_rate": entry.get("point_rate"),
+            "meet_points": entry.get("meet_points"),
+            "meet_deduction": entry.get("meet_deduction"),
+            "meet_note": entry.get("meet_note"),
         }
         for entry, probability in ranked
     ]
@@ -336,7 +395,7 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
         "optional_features": {
             "course_specific_racer_stats": "unavailable",
             "must_win_status": "unavailable",
-            "current_meet_results": "unavailable",
+            "current_meet_results": "official_pointrank_when_published",
         },
         "missing_detail_fields": sorted({
             field for field in detail_fields if any(entry.get(field) is None for entry in entries)
@@ -360,8 +419,8 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
             "detail_data_rate": round(detail_data_rate, 1),
         },
         "estimated_probability": round(top_probability * 100, 1),
-        "generation_mode": "公開用複合因子ロジック v5（詳細成績・事故情報対応）",
-        "logic": "基礎能力・全国/当地2連3連率・モーター/ボート・ST・F/L・コース補正",
+        "generation_mode": "公開用複合因子ロジック v5（詳細成績・事故情報・今節得点率対応）",
+        "logic": "基礎能力・全国/当地2連3連率・モーター/ボート・ST・F/L・今節得点率・コース補正",
         "contenders": contenders,
         "reasons": reasons,
         "invalid_conditions": invalid_conditions,
@@ -369,9 +428,14 @@ def make_prediction(stadium_id: str, race: int, entries: list[dict]):
     }
 
 
-def fetch_prediction(date, stadium_id, race):
+def fetch_prediction(date, stadium_id, race, point_rank=None):
     try:
-        return make_prediction(stadium_id, race, fetch_race(date, stadium_id, race)), None
+        entries = fetch_race(date, stadium_id, race)
+        point_rank = point_rank or {}
+        for entry in entries:
+            details = point_rank.get(entry.get("registration_number")) or {}
+            entry.update(details)
+        return make_prediction(stadium_id, race, entries), None
     except Exception as exc:
         return None, f"{STADIUMS[stadium_id]} {race}R: {type(exc).__name__}"
 
@@ -386,14 +450,29 @@ def main():
         "official_venues": [], "venue_count": 0, "expected_races": 0,
         "fetched_races": 0, "collection_rate": 0,
         "reference_expected": 0, "reference_fetched": 0, "reference_rate": 0,
+        "supplemental_sources": [],
     }
     try:
         venues = discover_venues(date)
         predictions = []
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            point_futures = {executor.submit(fetch_point_rank, date, stadium_id): stadium_id for stadium_id in venues}
+            point_rank_by_venue = {}
+            point_rank_status = {}
+            for future in as_completed(point_futures):
+                stadium_id = point_futures[future]
+                try:
+                    point_rank_by_venue[stadium_id] = future.result()
+                    point_rank_status[stadium_id] = (
+                        "取得済み" if point_rank_by_venue[stadium_id] else "公式未掲載"
+                    )
+                except Exception:
+                    point_rank_by_venue[stadium_id] = {}
+                    point_rank_status[stadium_id] = "取得エラー"
         jobs = [(stadium_id, race) for stadium_id in venues for race in range(1, 13)]
         with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             futures = {
-                executor.submit(fetch_prediction, date, stadium_id, race): (stadium_id, race)
+                executor.submit(fetch_prediction, date, stadium_id, race, point_rank_by_venue.get(stadium_id)): (stadium_id, race)
                 for stadium_id, race in jobs
             }
             for future in as_completed(futures):
@@ -439,6 +518,16 @@ def main():
                         default=0,
                     ), 1),
                     "complete": counts[stadium_id] == 12,
+                }
+                for stadium_id in venues
+            ],
+            supplemental_sources=[
+                {
+                    "venue_id": stadium_id,
+                    "venue": STADIUMS[stadium_id],
+                    "source": "official_point_rank",
+                    "status": point_rank_status.get(stadium_id, "未確認"),
+                    "racers": len(point_rank_by_venue.get(stadium_id, {})),
                 }
                 for stadium_id in venues
             ],
