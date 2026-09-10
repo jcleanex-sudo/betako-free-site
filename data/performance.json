@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10 18:50 JST",
+  "updated_at": "2026-09-10 23:31 JST",
   "evaluated": {
     "20260803-22-6": {
       "key": "20260803-22-6",
@@ -31288,7 +31288,7 @@
   },
   "today_venue_performance": {
     "race_date": "2026-09-10",
-    "updated_at": "2026-09-10 18:50 JST",
+    "updated_at": "2026-09-10 23:31 JST",
     "basis": "当日朝に保存した全レース予想のうち公式結果確定済みレースのみ",
     "thresholds": {
       "minimum_samples": 5,
@@ -31382,6 +31382,50 @@
         "hit": false,
         "actual": "1-2-3",
         "payout_yen": 2690,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260910-01-9": {
+        "key": "20260910-01-9",
+        "venue_id": "01",
+        "venue": "桐生",
+        "race": 9,
+        "hit": false,
+        "actual": "1-6-5",
+        "payout_yen": 6550,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260910-01-10": {
+        "key": "20260910-01-10",
+        "venue_id": "01",
+        "venue": "桐生",
+        "race": 10,
+        "hit": true,
+        "actual": "1-2-3",
+        "payout_yen": 400,
+        "stake_yen": 600,
+        "profit_yen": -200
+      },
+      "20260910-01-11": {
+        "key": "20260910-01-11",
+        "venue_id": "01",
+        "venue": "桐生",
+        "race": 11,
+        "hit": false,
+        "actual": "3-1-6",
+        "payout_yen": 4300,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260910-01-12": {
+        "key": "20260910-01-12",
+        "venue_id": "01",
+        "venue": "桐生",
+        "race": 12,
+        "hit": false,
+        "actual": "3-4-6",
+        "payout_yen": 12280,
         "stake_yen": 600,
         "profit_yen": -600
       },
@@ -32232,6 +32276,39 @@
         "stake_yen": 600,
         "profit_yen": -240
       },
+      "20260910-20-10": {
+        "key": "20260910-20-10",
+        "venue_id": "20",
+        "venue": "若松",
+        "race": 10,
+        "hit": false,
+        "actual": "3-2-5",
+        "payout_yen": 14020,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260910-20-11": {
+        "key": "20260910-20-11",
+        "venue_id": "20",
+        "venue": "若松",
+        "race": 11,
+        "hit": true,
+        "actual": "1-3-4",
+        "payout_yen": 590,
+        "stake_yen": 600,
+        "profit_yen": -10
+      },
+      "20260910-20-12": {
+        "key": "20260910-20-12",
+        "venue_id": "20",
+        "venue": "若松",
+        "race": 12,
+        "hit": true,
+        "actual": "1-3-2",
+        "payout_yen": 590,
+        "stake_yen": 600,
+        "profit_yen": -10
+      },
       "20260910-21-4": {
         "key": "20260910-21-4",
         "venue_id": "21",
@@ -32385,6 +32462,50 @@
         "payout_yen": 1150,
         "stake_yen": 600,
         "profit_yen": 550
+      },
+      "20260910-24-9": {
+        "key": "20260910-24-9",
+        "venue_id": "24",
+        "venue": "大村",
+        "race": 9,
+        "hit": true,
+        "actual": "1-3-4",
+        "payout_yen": 820,
+        "stake_yen": 600,
+        "profit_yen": 220
+      },
+      "20260910-24-10": {
+        "key": "20260910-24-10",
+        "venue_id": "24",
+        "venue": "大村",
+        "race": 10,
+        "hit": false,
+        "actual": "3-1-5",
+        "payout_yen": 9580,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260910-24-11": {
+        "key": "20260910-24-11",
+        "venue_id": "24",
+        "venue": "大村",
+        "race": 11,
+        "hit": false,
+        "actual": "1-2-6",
+        "payout_yen": 3120,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20260910-24-12": {
+        "key": "20260910-24-12",
+        "venue_id": "24",
+        "venue": "大村",
+        "race": 12,
+        "hit": false,
+        "actual": "1-4-5",
+        "payout_yen": 2740,
+        "stake_yen": 600,
+        "profit_yen": -600
       }
     },
     "venues": [
@@ -32404,34 +32525,34 @@
         "last_completed_race": 12
       },
       {
-        "venue": "桐生",
-        "samples": 8,
-        "hits": 4,
-        "hit_rate": 50.0,
-        "hit_rate_ci95": [
-          21.5,
-          78.5
-        ],
-        "net_profit_yen": 2550,
-        "profit_factor": 2.06,
-        "max_drawdown_yen": 1200,
-        "status": "好調",
-        "last_completed_race": 8
-      },
-      {
         "venue": "若松",
-        "samples": 8,
-        "hits": 3,
-        "hit_rate": 37.5,
+        "samples": 11,
+        "hits": 5,
+        "hit_rate": 45.5,
         "hit_rate_ci95": [
-          13.7,
-          69.4
+          21.3,
+          72.0
         ],
-        "net_profit_yen": -1250,
-        "profit_factor": 0.63,
+        "net_profit_yen": -1870,
+        "profit_factor": 0.53,
         "max_drawdown_yen": 2760,
         "status": "WATCH",
-        "last_completed_race": 8
+        "last_completed_race": 12
+      },
+      {
+        "venue": "桐生",
+        "samples": 12,
+        "hits": 5,
+        "hit_rate": 41.7,
+        "hit_rate_ci95": [
+          19.3,
+          68.0
+        ],
+        "net_profit_yen": 550,
+        "profit_factor": 1.12,
+        "max_drawdown_yen": 2000,
+        "status": "WATCH",
+        "last_completed_race": 12
       },
       {
         "venue": "平和島",
@@ -32464,6 +32585,21 @@
         "last_completed_race": 12
       },
       {
+        "venue": "大村",
+        "samples": 12,
+        "hits": 3,
+        "hit_rate": 25.0,
+        "hit_rate_ci95": [
+          8.9,
+          53.2
+        ],
+        "net_profit_yen": -4460,
+        "profit_factor": 0.17,
+        "max_drawdown_yen": 5230,
+        "status": "WATCH",
+        "last_completed_race": 12
+      },
+      {
         "venue": "芦屋",
         "samples": 6,
         "hits": 2,
@@ -32477,21 +32613,6 @@
         "max_drawdown_yen": 2400,
         "status": "WATCH",
         "last_completed_race": 12
-      },
-      {
-        "venue": "大村",
-        "samples": 8,
-        "hits": 2,
-        "hit_rate": 25.0,
-        "hit_rate_ci95": [
-          7.1,
-          59.1
-        ],
-        "net_profit_yen": -2880,
-        "profit_factor": 0.2,
-        "max_drawdown_yen": 3430,
-        "status": "WATCH",
-        "last_completed_race": 8
       },
       {
         "venue": "宮島",
