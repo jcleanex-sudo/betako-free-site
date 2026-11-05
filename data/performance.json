@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-05 15:52 JST",
+  "updated_at": "2026-11-06 00:29 JST",
   "evaluated": {
     "20260803-22-6": {
       "key": "20260803-22-6",
@@ -6463,6 +6463,75 @@
       "agreement": 75.0,
       "tier": "strict",
       "evaluation_version": "main6-v1"
+    },
+    "20261105-17-6": {
+      "key": "20261105-17-6",
+      "venue": "宮島",
+      "race": 6,
+      "predicted": "1-2-3",
+      "predicted_tickets": [
+        "1-2-3",
+        "1-3-2",
+        "1-2-4",
+        "1-3-4",
+        "1-4-2",
+        "1-4-3"
+      ],
+      "actual": "2-1-4",
+      "hit": false,
+      "payout_yen": 12210,
+      "stake_yen": 600,
+      "profit_yen": -600,
+      "score": 85.8,
+      "agreement": 100.0,
+      "tier": "strict",
+      "evaluation_version": "main6-v1"
+    },
+    "20261105-09-1": {
+      "key": "20261105-09-1",
+      "venue": "津",
+      "race": 1,
+      "predicted": "1-2-3",
+      "predicted_tickets": [
+        "1-2-3",
+        "1-3-2",
+        "1-2-5",
+        "1-3-5",
+        "1-5-2",
+        "1-5-3"
+      ],
+      "actual": "1-3-2",
+      "hit": true,
+      "payout_yen": 580,
+      "stake_yen": 600,
+      "profit_yen": -20,
+      "score": 81.1,
+      "agreement": 75.0,
+      "tier": "strict",
+      "evaluation_version": "main6-v1"
+    },
+    "20261105-17-9": {
+      "key": "20261105-17-9",
+      "venue": "宮島",
+      "race": 9,
+      "predicted": "1-5-2",
+      "predicted_tickets": [
+        "1-5-2",
+        "1-2-5",
+        "1-5-3",
+        "1-2-3",
+        "1-3-5",
+        "1-3-2"
+      ],
+      "actual": "1-4-2",
+      "hit": false,
+      "payout_yen": 1270,
+      "stake_yen": 600,
+      "profit_yen": -600,
+      "score": 79.9,
+      "agreement": 75.0,
+      "tier": "strict",
+      "evaluation_version": "main6-v1"
     }
   },
   "longshot_evaluated": {
@@ -10053,32 +10122,58 @@
       "payout_yen": 2430,
       "stake_yen": 400,
       "profit_yen": -400
+    },
+    "20261105-17-6-longshot": {
+      "key": "20261105-17-6-longshot",
+      "venue": "宮島",
+      "race": 6,
+      "candidate_boat": 4,
+      "candidate_name": "石田 勇斗",
+      "formation": "1-4-流し",
+      "actual": "2-1-4",
+      "hit": false,
+      "payout_yen": 12210,
+      "stake_yen": 400,
+      "profit_yen": -400
+    },
+    "20261105-09-1-longshot": {
+      "key": "20261105-09-1-longshot",
+      "venue": "津",
+      "race": 1,
+      "candidate_boat": 6,
+      "candidate_name": "中西 月輝",
+      "formation": "1-6-流し",
+      "actual": "1-3-2",
+      "hit": false,
+      "payout_yen": 580,
+      "stake_yen": 400,
+      "profit_yen": -400
     }
   },
   "summary": {
-    "samples": 281,
-    "hits": 124,
-    "hit_rate": 44.1,
+    "samples": 284,
+    "hits": 125,
+    "hit_rate": 44.0,
     "hit_rate_ci95": [
       38.4,
-      50.0
+      49.8
     ],
-    "net_profit_yen": -40210,
-    "profit_factor": 0.59,
-    "max_drawdown_yen": 43010
+    "net_profit_yen": -41430,
+    "profit_factor": 0.58,
+    "max_drawdown_yen": 43260
   },
   "tiers": {
     "strict": {
-      "samples": 281,
-      "hits": 124,
-      "hit_rate": 44.1,
+      "samples": 284,
+      "hits": 125,
+      "hit_rate": 44.0,
       "hit_rate_ci95": [
         38.4,
-        50.0
+        49.8
       ],
-      "net_profit_yen": -40210,
-      "profit_factor": 0.59,
-      "max_drawdown_yen": 43010
+      "net_profit_yen": -41430,
+      "profit_factor": 0.58,
+      "max_drawdown_yen": 43260
     },
     "experimental": {
       "samples": 0,
@@ -10091,15 +10186,15 @@
     }
   },
   "longshot_summary": {
-    "samples": 276,
+    "samples": 278,
     "hits": 48,
-    "hit_rate": 17.4,
+    "hit_rate": 17.3,
     "hit_rate_ci95": [
-      13.4,
-      22.3
+      13.3,
+      22.1
     ],
-    "net_profit_yen": -37780,
-    "profit_factor": 0.59,
+    "net_profit_yen": -38580,
+    "profit_factor": 0.58,
     "max_drawdown_yen": 40470
   },
   "daily": {
@@ -11606,6 +11701,22 @@
       "net_profit_yen": 970,
       "profit_factor": 2.62,
       "max_drawdown_yen": 600
+    },
+    "20261105": {
+      "date": "2026-11-05",
+      "published": 3,
+      "evaluated": 3,
+      "pending": 0,
+      "samples": 3,
+      "hits": 1,
+      "hit_rate": 33.3,
+      "hit_rate_ci95": [
+        6.1,
+        79.2
+      ],
+      "net_profit_yen": -1220,
+      "profit_factor": 0.0,
+      "max_drawdown_yen": 1220
     }
   },
   "market_evaluated": {
@@ -64266,6 +64377,112 @@
       "stake_yen": 1300,
       "profit_yen": -290,
       "evaluation_version": "five-market-ev-v1"
+    },
+    "20261105-15-8-fixed13": {
+      "key": "20261105-15-8-fixed13",
+      "venue_id": "15",
+      "venue": "丸亀",
+      "race": 8,
+      "strategy": "fixed13",
+      "tickets": [
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-2-4",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-4-2",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-2-5",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-2-3",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-5-2",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-4-5",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "trio",
+          "predicted": "1-2-4",
+          "actual": "1-4-6",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "trio",
+          "predicted": "1-2-5",
+          "actual": "1-4-6",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "exacta",
+          "predicted": "1-2",
+          "actual": "4-1",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "exacta",
+          "predicted": "1-4",
+          "actual": "4-1",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-2",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-4",
+          "actual": "1-4",
+          "hit": true,
+          "odds_at_prediction": null
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-5",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": null
+        }
+      ],
+      "hit": true,
+      "hit_count": 1,
+      "payout_yen": 390,
+      "stake_yen": 1300,
+      "profit_yen": -910,
+      "evaluation_version": "five-market-ev-v1"
     }
   },
   "market_summary": {
@@ -64582,16 +64799,16 @@
     }
   },
   "portfolio_summary": {
-    "samples": 466,
-    "hits": 299,
+    "samples": 467,
+    "hits": 300,
     "hit_rate": 64.2,
     "hit_rate_ci95": [
-      59.7,
-      68.4
+      59.8,
+      68.5
     ],
-    "net_profit_yen": -147300,
+    "net_profit_yen": -148210,
     "profit_factor": 0.56,
-    "max_drawdown_yen": 147300
+    "max_drawdown_yen": 148210
   },
   "portfolio_daily": {
     "20260819": {
@@ -65809,6 +66026,22 @@
       "net_profit_yen": -1250,
       "profit_factor": 0.0,
       "max_drawdown_yen": 1250
+    },
+    "20261105": {
+      "date": "2026-11-05",
+      "published": 1,
+      "evaluated": 1,
+      "pending": 0,
+      "samples": 1,
+      "hits": 1,
+      "hit_rate": 100.0,
+      "hit_rate_ci95": [
+        20.7,
+        100
+      ],
+      "net_profit_yen": -910,
+      "profit_factor": 0.0,
+      "max_drawdown_yen": 910
     }
   },
   "today_venue_performance": {
@@ -139006,32 +139239,272 @@
       "profit_yen": -290,
       "evaluation_version": "logic-v4-v5-ab-v1",
       "detail_data_rate": 80.0
+    },
+    "20261105-15-8-logic-v4": {
+      "key": "20261105-15-8-logic-v4",
+      "venue_id": "15",
+      "venue": "丸亀",
+      "race": 8,
+      "strategy": "legacy_v4",
+      "tickets": [
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-2-4",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 8.95
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-4-2",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 8.24
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-2-5",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 5.13
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-2-3",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 4.4
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-5-2",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 4.07
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-4-5",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 3.89
+        },
+        {
+          "bet_type": "trio",
+          "predicted": "1-2-4",
+          "actual": "1-4-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 25.37
+        },
+        {
+          "bet_type": "trio",
+          "predicted": "1-2-5",
+          "actual": "1-4-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 13.52
+        },
+        {
+          "bet_type": "exacta",
+          "predicted": "1-2",
+          "actual": "4-1",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 22.03
+        },
+        {
+          "bet_type": "exacta",
+          "predicted": "1-4",
+          "actual": "4-1",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 18.17
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-2",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 30.25
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-4",
+          "actual": "1-4",
+          "hit": true,
+          "odds_at_prediction": null,
+          "model_probability": 24.81
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-5",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 14.06
+        }
+      ],
+      "hit": true,
+      "hit_count": 1,
+      "payout_yen": 390,
+      "stake_yen": 1300,
+      "profit_yen": -910,
+      "evaluation_version": "logic-v4-v5-ab-v1",
+      "detail_data_rate": 80.0
+    },
+    "20261105-15-8-logic-v5": {
+      "key": "20261105-15-8-logic-v5",
+      "venue_id": "15",
+      "venue": "丸亀",
+      "race": 8,
+      "strategy": "enhanced_v5",
+      "tickets": [
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-2-4",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 9.28
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-4-2",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 8.52
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-2-5",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 5.36
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-2-3",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 4.42
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-5-2",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 4.25
+        },
+        {
+          "bet_type": "trifecta",
+          "predicted": "1-4-5",
+          "actual": "4-1-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 4.05
+        },
+        {
+          "bet_type": "trio",
+          "predicted": "1-2-4",
+          "actual": "1-4-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 25.73
+        },
+        {
+          "bet_type": "trio",
+          "predicted": "1-2-5",
+          "actual": "1-4-6",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 13.84
+        },
+        {
+          "bet_type": "exacta",
+          "predicted": "1-2",
+          "actual": "4-1",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 22.7
+        },
+        {
+          "bet_type": "exacta",
+          "predicted": "1-4",
+          "actual": "4-1",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 18.66
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-2",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 30.72
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-4",
+          "actual": "1-4",
+          "hit": true,
+          "odds_at_prediction": null,
+          "model_probability": 25.12
+        },
+        {
+          "bet_type": "quinella",
+          "predicted": "1-5",
+          "actual": "1-4",
+          "hit": false,
+          "odds_at_prediction": null,
+          "model_probability": 14.37
+        }
+      ],
+      "hit": true,
+      "hit_count": 1,
+      "payout_yen": 390,
+      "stake_yen": 1300,
+      "profit_yen": -910,
+      "evaluation_version": "logic-v4-v5-ab-v1",
+      "detail_data_rate": 80.0
     }
   },
   "logic_variant_summary": {
     "legacy_v4": {
-      "samples": 300,
-      "hits": 191,
-      "hit_rate": 63.7,
+      "samples": 301,
+      "hits": 192,
+      "hit_rate": 63.8,
       "hit_rate_ci95": [
-        58.1,
-        68.9
+        58.2,
+        69.0
       ],
-      "net_profit_yen": -86070,
+      "net_profit_yen": -86980,
       "profit_factor": 0.59,
-      "max_drawdown_yen": 104690
+      "max_drawdown_yen": 105600
     },
     "enhanced_v5": {
-      "samples": 300,
-      "hits": 195,
-      "hit_rate": 65.0,
+      "samples": 301,
+      "hits": 196,
+      "hit_rate": 65.1,
       "hit_rate_ci95": [
-        59.4,
-        70.2
+        59.6,
+        70.3
       ],
-      "net_profit_yen": -84180,
-      "profit_factor": 0.6,
-      "max_drawdown_yen": 102800
+      "net_profit_yen": -85090,
+      "profit_factor": 0.59,
+      "max_drawdown_yen": 103710
     }
   },
   "logic_variant_daily": {
@@ -139963,6 +140436,22 @@
         "net_profit_yen": -2260,
         "profit_factor": 0.0,
         "max_drawdown_yen": 2260
+      },
+      "20261105": {
+        "date": "2026-11-05",
+        "published": 1,
+        "evaluated": 1,
+        "pending": 0,
+        "samples": 1,
+        "hits": 1,
+        "hit_rate": 100.0,
+        "hit_rate_ci95": [
+          20.7,
+          100
+        ],
+        "net_profit_yen": -910,
+        "profit_factor": 0.0,
+        "max_drawdown_yen": 910
       }
     },
     "enhanced_v5": {
@@ -140893,6 +141382,22 @@
         "net_profit_yen": -1250,
         "profit_factor": 0.0,
         "max_drawdown_yen": 1250
+      },
+      "20261105": {
+        "date": "2026-11-05",
+        "published": 1,
+        "evaluated": 1,
+        "pending": 0,
+        "samples": 1,
+        "hits": 1,
+        "hit_rate": 100.0,
+        "hit_rate_ci95": [
+          20.7,
+          100
+        ],
+        "net_profit_yen": -910,
+        "profit_factor": 0.0,
+        "max_drawdown_yen": 910
       }
     }
   }
