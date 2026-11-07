@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-07 11:47 JST",
+  "updated_at": "2026-11-07 15:04 JST",
   "evaluated": {
     "20260803-22-6": {
       "key": "20260803-22-6",
@@ -66397,8 +66397,8 @@
     }
   },
   "today_venue_performance": {
-    "race_date": "2026-11-06",
-    "updated_at": "2026-11-06 15:53 JST",
+    "race_date": "2026-11-07",
+    "updated_at": "2026-11-07 15:04 JST",
     "basis": "当日朝に保存した全レース予想のうち公式結果確定済みレースのみ",
     "thresholds": {
       "minimum_samples": 5,
@@ -66407,995 +66407,797 @@
       "minimum_profit_factor": 1.2
     },
     "records": {
-      "20261106-02-1": {
-        "key": "20261106-02-1",
+      "20261107-02-1": {
+        "key": "20261107-02-1",
         "venue_id": "02",
         "venue": "戸田",
         "race": 1,
         "hit": false,
-        "actual": "4-1-5",
-        "payout_yen": 4920,
+        "actual": "1-2-3",
+        "payout_yen": 6280,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-02-2": {
-        "key": "20261106-02-2",
+      "20261107-02-2": {
+        "key": "20261107-02-2",
         "venue_id": "02",
         "venue": "戸田",
         "race": 2,
-        "hit": true,
-        "actual": "1-2-3",
-        "payout_yen": 650,
-        "stake_yen": 600,
-        "profit_yen": 50
-      },
-      "20261106-02-3": {
-        "key": "20261106-02-3",
-        "venue_id": "02",
-        "venue": "戸田",
-        "race": 3,
         "hit": false,
-        "actual": "2-4-6",
-        "payout_yen": 6030,
+        "actual": "4-2-1",
+        "payout_yen": 2370,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-02-4": {
-        "key": "20261106-02-4",
+      "20261107-02-4": {
+        "key": "20261107-02-4",
         "venue_id": "02",
         "venue": "戸田",
         "race": 4,
         "hit": false,
-        "actual": "2-1-3",
-        "payout_yen": 3960,
+        "actual": "3-1-5",
+        "payout_yen": 2420,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-02-5": {
-        "key": "20261106-02-5",
+      "20261107-02-5": {
+        "key": "20261107-02-5",
         "venue_id": "02",
         "venue": "戸田",
         "race": 5,
+        "hit": true,
+        "actual": "1-4-3",
+        "payout_yen": 990,
+        "stake_yen": 600,
+        "profit_yen": 390
+      },
+      "20261107-02-6": {
+        "key": "20261107-02-6",
+        "venue_id": "02",
+        "venue": "戸田",
+        "race": 6,
+        "hit": false,
+        "actual": "3-1-2",
+        "payout_yen": 4240,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-02-8": {
+        "key": "20261107-02-8",
+        "venue_id": "02",
+        "venue": "戸田",
+        "race": 8,
+        "hit": true,
+        "actual": "1-5-2",
+        "payout_yen": 2050,
+        "stake_yen": 600,
+        "profit_yen": 1450
+      },
+      "20261107-02-9": {
+        "key": "20261107-02-9",
+        "venue_id": "02",
+        "venue": "戸田",
+        "race": 9,
+        "hit": false,
+        "actual": "1-2-5",
+        "payout_yen": 1370,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-03-1": {
+        "key": "20261107-03-1",
+        "venue_id": "03",
+        "venue": "江戸川",
+        "race": 1,
+        "hit": false,
+        "actual": "3-4-2",
+        "payout_yen": 5360,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-03-3": {
+        "key": "20261107-03-3",
+        "venue_id": "03",
+        "venue": "江戸川",
+        "race": 3,
+        "hit": false,
+        "actual": "6-2-3",
+        "payout_yen": 6360,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-03-4": {
+        "key": "20261107-03-4",
+        "venue_id": "03",
+        "venue": "江戸川",
+        "race": 4,
+        "hit": false,
+        "actual": "3-5-2",
+        "payout_yen": 75170,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-03-5": {
+        "key": "20261107-03-5",
+        "venue_id": "03",
+        "venue": "江戸川",
+        "race": 5,
+        "hit": true,
+        "actual": "1-5-6",
+        "payout_yen": 1650,
+        "stake_yen": 600,
+        "profit_yen": 1050
+      },
+      "20261107-03-6": {
+        "key": "20261107-03-6",
+        "venue_id": "03",
+        "venue": "江戸川",
+        "race": 6,
         "hit": false,
         "actual": "3-1-4",
+        "payout_yen": 6070,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-03-7": {
+        "key": "20261107-03-7",
+        "venue_id": "03",
+        "venue": "江戸川",
+        "race": 7,
+        "hit": false,
+        "actual": "4-3-6",
+        "payout_yen": 17970,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-03-8": {
+        "key": "20261107-03-8",
+        "venue_id": "03",
+        "venue": "江戸川",
+        "race": 8,
+        "hit": false,
+        "actual": "2-3-6",
         "payout_yen": 1800,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-02-7": {
-        "key": "20261106-02-7",
-        "venue_id": "02",
-        "venue": "戸田",
-        "race": 7,
-        "hit": true,
-        "actual": "1-2-4",
-        "payout_yen": 560,
+      "20261107-03-9": {
+        "key": "20261107-03-9",
+        "venue_id": "03",
+        "venue": "江戸川",
+        "race": 9,
+        "hit": false,
+        "actual": "5-2-4",
+        "payout_yen": 43790,
         "stake_yen": 600,
-        "profit_yen": -40
+        "profit_yen": -600
       },
-      "20261106-02-8": {
-        "key": "20261106-02-8",
-        "venue_id": "02",
-        "venue": "戸田",
-        "race": 8,
+      "20261107-05-1": {
+        "key": "20261107-05-1",
+        "venue_id": "05",
+        "venue": "多摩川",
+        "race": 1,
         "hit": false,
         "actual": "2-1-6",
-        "payout_yen": 16550,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-02-9": {
-        "key": "20261106-02-9",
-        "venue_id": "02",
-        "venue": "戸田",
-        "race": 9,
-        "hit": false,
-        "actual": "1-2-3",
-        "payout_yen": 900,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-02-10": {
-        "key": "20261106-02-10",
-        "venue_id": "02",
-        "venue": "戸田",
-        "race": 10,
-        "hit": false,
-        "actual": "2-3-6",
-        "payout_yen": 15020,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-02-11": {
-        "key": "20261106-02-11",
-        "venue_id": "02",
-        "venue": "戸田",
-        "race": 11,
-        "hit": false,
-        "actual": "1-2-5",
-        "payout_yen": 2600,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-03-1": {
-        "key": "20261106-03-1",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 1,
-        "hit": true,
-        "actual": "1-3-4",
-        "payout_yen": 2990,
-        "stake_yen": 600,
-        "profit_yen": 2390
-      },
-      "20261106-03-2": {
-        "key": "20261106-03-2",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 2,
-        "hit": true,
-        "actual": "1-2-3",
-        "payout_yen": 1030,
-        "stake_yen": 600,
-        "profit_yen": 430
-      },
-      "20261106-03-3": {
-        "key": "20261106-03-3",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 3,
-        "hit": false,
-        "actual": "5-6-1",
-        "payout_yen": 3350,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-03-4": {
-        "key": "20261106-03-4",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 4,
-        "hit": false,
-        "actual": "1-4-5",
-        "payout_yen": 10690,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-03-5": {
-        "key": "20261106-03-5",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 5,
-        "hit": false,
-        "actual": "3-2-4",
-        "payout_yen": 3960,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-03-6": {
-        "key": "20261106-03-6",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 6,
-        "hit": false,
-        "actual": "1-4-5",
-        "payout_yen": 3110,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-03-8": {
-        "key": "20261106-03-8",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 8,
-        "hit": false,
-        "actual": "6-4-1",
-        "payout_yen": 3100,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-03-9": {
-        "key": "20261106-03-9",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 9,
-        "hit": false,
-        "actual": "4-5-6",
-        "payout_yen": 1720,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-03-10": {
-        "key": "20261106-03-10",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 10,
-        "hit": false,
-        "actual": "4-2-6",
-        "payout_yen": 21280,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-03-11": {
-        "key": "20261106-03-11",
-        "venue_id": "03",
-        "venue": "江戸川",
-        "race": 11,
-        "hit": false,
-        "actual": "1-5-4",
-        "payout_yen": 2030,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-05-1": {
-        "key": "20261106-05-1",
-        "venue_id": "05",
-        "venue": "多摩川",
-        "race": 1,
-        "hit": false,
-        "actual": "1-3-4",
-        "payout_yen": 4330,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-05-2": {
-        "key": "20261106-05-2",
-        "venue_id": "05",
-        "venue": "多摩川",
-        "race": 2,
-        "hit": false,
-        "actual": "6-1-3",
-        "payout_yen": 2490,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-05-4": {
-        "key": "20261106-05-4",
-        "venue_id": "05",
-        "venue": "多摩川",
-        "race": 4,
-        "hit": false,
-        "actual": "3-1-5",
-        "payout_yen": 600,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-05-5": {
-        "key": "20261106-05-5",
-        "venue_id": "05",
-        "venue": "多摩川",
-        "race": 5,
-        "hit": false,
-        "actual": "2-5-4",
-        "payout_yen": 2590,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-05-6": {
-        "key": "20261106-05-6",
-        "venue_id": "05",
-        "venue": "多摩川",
-        "race": 6,
-        "hit": false,
-        "actual": "3-4-5",
-        "payout_yen": 1010,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-05-7": {
-        "key": "20261106-05-7",
-        "venue_id": "05",
-        "venue": "多摩川",
-        "race": 7,
-        "hit": false,
-        "actual": "3-4-1",
-        "payout_yen": 790,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-05-8": {
-        "key": "20261106-05-8",
-        "venue_id": "05",
-        "venue": "多摩川",
-        "race": 8,
-        "hit": false,
-        "actual": "3-4-1",
-        "payout_yen": 1170,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-05-10": {
-        "key": "20261106-05-10",
-        "venue_id": "05",
-        "venue": "多摩川",
-        "race": 10,
-        "hit": false,
-        "actual": "1-3-5",
-        "payout_yen": 1160,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-05-11": {
-        "key": "20261106-05-11",
-        "venue_id": "05",
-        "venue": "多摩川",
-        "race": 11,
-        "hit": true,
-        "actual": "1-3-4",
-        "payout_yen": 520,
-        "stake_yen": 600,
-        "profit_yen": -80
-      },
-      "20261106-10-1": {
-        "key": "20261106-10-1",
-        "venue_id": "10",
-        "venue": "三国",
-        "race": 1,
-        "hit": true,
-        "actual": "1-3-4",
-        "payout_yen": 360,
-        "stake_yen": 600,
-        "profit_yen": -240
-      },
-      "20261106-10-2": {
-        "key": "20261106-10-2",
-        "venue_id": "10",
-        "venue": "三国",
-        "race": 2,
-        "hit": true,
-        "actual": "1-3-2",
-        "payout_yen": 730,
-        "stake_yen": 600,
-        "profit_yen": 130
-      },
-      "20261106-10-5": {
-        "key": "20261106-10-5",
-        "venue_id": "10",
-        "venue": "三国",
-        "race": 5,
-        "hit": false,
-        "actual": "3-6-4",
-        "payout_yen": 9690,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-10-6": {
-        "key": "20261106-10-6",
-        "venue_id": "10",
-        "venue": "三国",
-        "race": 6,
-        "hit": false,
-        "actual": "4-1-5",
         "payout_yen": 1710,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-10-9": {
-        "key": "20261106-10-9",
-        "venue_id": "10",
-        "venue": "三国",
-        "race": 9,
+      "20261107-05-2": {
+        "key": "20261107-05-2",
+        "venue_id": "05",
+        "venue": "多摩川",
+        "race": 2,
         "hit": false,
-        "actual": "4-3-6",
-        "payout_yen": 2580,
+        "actual": "2-3-4",
+        "payout_yen": 12050,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-10-10": {
-        "key": "20261106-10-10",
+      "20261107-05-3": {
+        "key": "20261107-05-3",
+        "venue_id": "05",
+        "venue": "多摩川",
+        "race": 3,
+        "hit": false,
+        "actual": "1-2-6",
+        "payout_yen": 8460,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-05-4": {
+        "key": "20261107-05-4",
+        "venue_id": "05",
+        "venue": "多摩川",
+        "race": 4,
+        "hit": false,
+        "actual": "4-3-1",
+        "payout_yen": 9330,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-05-6": {
+        "key": "20261107-05-6",
+        "venue_id": "05",
+        "venue": "多摩川",
+        "race": 6,
+        "hit": true,
+        "actual": "3-2-5",
+        "payout_yen": 1730,
+        "stake_yen": 600,
+        "profit_yen": 1130
+      },
+      "20261107-05-7": {
+        "key": "20261107-05-7",
+        "venue_id": "05",
+        "venue": "多摩川",
+        "race": 7,
+        "hit": true,
+        "actual": "1-2-6",
+        "payout_yen": 340,
+        "stake_yen": 600,
+        "profit_yen": -260
+      },
+      "20261107-05-8": {
+        "key": "20261107-05-8",
+        "venue_id": "05",
+        "venue": "多摩川",
+        "race": 8,
+        "hit": false,
+        "actual": "3-5-1",
+        "payout_yen": 21250,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-05-9": {
+        "key": "20261107-05-9",
+        "venue_id": "05",
+        "venue": "多摩川",
+        "race": 9,
+        "hit": false,
+        "actual": "4-5-1",
+        "payout_yen": 1970,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-05-10": {
+        "key": "20261107-05-10",
+        "venue_id": "05",
+        "venue": "多摩川",
+        "race": 10,
+        "hit": false,
+        "actual": "3-2-6",
+        "payout_yen": 53720,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-08-2": {
+        "key": "20261107-08-2",
+        "venue_id": "08",
+        "venue": "常滑",
+        "race": 2,
+        "hit": false,
+        "actual": "3-4-2",
+        "payout_yen": 3900,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-08-3": {
+        "key": "20261107-08-3",
+        "venue_id": "08",
+        "venue": "常滑",
+        "race": 3,
+        "hit": false,
+        "actual": "4-1-3",
+        "payout_yen": 19050,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-08-4": {
+        "key": "20261107-08-4",
+        "venue_id": "08",
+        "venue": "常滑",
+        "race": 4,
+        "hit": true,
+        "actual": "2-1-4",
+        "payout_yen": 1850,
+        "stake_yen": 600,
+        "profit_yen": 1250
+      },
+      "20261107-08-5": {
+        "key": "20261107-08-5",
+        "venue_id": "08",
+        "venue": "常滑",
+        "race": 5,
+        "hit": true,
+        "actual": "1-4-5",
+        "payout_yen": 990,
+        "stake_yen": 600,
+        "profit_yen": 390
+      },
+      "20261107-08-6": {
+        "key": "20261107-08-6",
+        "venue_id": "08",
+        "venue": "常滑",
+        "race": 6,
+        "hit": false,
+        "actual": "3-1-2",
+        "payout_yen": 5250,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-08-8": {
+        "key": "20261107-08-8",
+        "venue_id": "08",
+        "venue": "常滑",
+        "race": 8,
+        "hit": false,
+        "actual": "4-2-6",
+        "payout_yen": 3050,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-08-9": {
+        "key": "20261107-08-9",
+        "venue_id": "08",
+        "venue": "常滑",
+        "race": 9,
+        "hit": false,
+        "actual": "3-6-5",
+        "payout_yen": 6040,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-10-2": {
+        "key": "20261107-10-2",
+        "venue_id": "10",
+        "venue": "三国",
+        "race": 2,
+        "hit": false,
+        "actual": "1-2-4",
+        "payout_yen": 1260,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-10-3": {
+        "key": "20261107-10-3",
+        "venue_id": "10",
+        "venue": "三国",
+        "race": 3,
+        "hit": false,
+        "actual": "3-5-6",
+        "payout_yen": 3390,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-10-5": {
+        "key": "20261107-10-5",
+        "venue_id": "10",
+        "venue": "三国",
+        "race": 5,
+        "hit": true,
+        "actual": "1-2-6",
+        "payout_yen": 620,
+        "stake_yen": 600,
+        "profit_yen": 20
+      },
+      "20261107-10-8": {
+        "key": "20261107-10-8",
+        "venue_id": "10",
+        "venue": "三国",
+        "race": 8,
+        "hit": false,
+        "actual": "4-3-6",
+        "payout_yen": 3740,
+        "stake_yen": 600,
+        "profit_yen": -600
+      },
+      "20261107-10-10": {
+        "key": "20261107-10-10",
         "venue_id": "10",
         "venue": "三国",
         "race": 10,
         "hit": true,
-        "actual": "1-3-4",
-        "payout_yen": 980,
+        "actual": "1-2-3",
+        "payout_yen": 710,
         "stake_yen": 600,
-        "profit_yen": 380
+        "profit_yen": 110
       },
-      "20261106-10-11": {
-        "key": "20261106-10-11",
+      "20261107-10-11": {
+        "key": "20261107-10-11",
         "venue_id": "10",
         "venue": "三国",
         "race": 11,
-        "hit": false,
-        "actual": "1-2-5",
-        "payout_yen": 1930,
+        "hit": true,
+        "actual": "1-3-2",
+        "payout_yen": 640,
         "stake_yen": 600,
-        "profit_yen": -600
+        "profit_yen": 40
       },
-      "20261106-10-12": {
-        "key": "20261106-10-12",
+      "20261107-10-12": {
+        "key": "20261107-10-12",
         "venue_id": "10",
         "venue": "三国",
         "race": 12,
         "hit": false,
-        "actual": "4-1-5",
-        "payout_yen": 7340,
+        "actual": "1-3-6",
+        "payout_yen": 5390,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-11-1": {
-        "key": "20261106-11-1",
+      "20261107-11-1": {
+        "key": "20261107-11-1",
         "venue_id": "11",
         "venue": "びわこ",
         "race": 1,
         "hit": false,
-        "actual": "1-3-6",
-        "payout_yen": 1960,
+        "actual": "2-5-4",
+        "payout_yen": 4710,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-11-2": {
-        "key": "20261106-11-2",
+      "20261107-11-2": {
+        "key": "20261107-11-2",
         "venue_id": "11",
         "venue": "びわこ",
         "race": 2,
-        "hit": true,
-        "actual": "1-5-3",
-        "payout_yen": 960,
+        "hit": false,
+        "actual": "5-3-4",
+        "payout_yen": 3110,
         "stake_yen": 600,
-        "profit_yen": 360
+        "profit_yen": -600
       },
-      "20261106-11-3": {
-        "key": "20261106-11-3",
-        "venue_id": "11",
-        "venue": "びわこ",
-        "race": 3,
-        "hit": true,
-        "actual": "1-2-3",
-        "payout_yen": 1120,
-        "stake_yen": 600,
-        "profit_yen": 520
-      },
-      "20261106-11-4": {
-        "key": "20261106-11-4",
+      "20261107-11-4": {
+        "key": "20261107-11-4",
         "venue_id": "11",
         "venue": "びわこ",
         "race": 4,
         "hit": true,
-        "actual": "3-2-1",
-        "payout_yen": 3210,
+        "actual": "2-3-6",
+        "payout_yen": 970,
         "stake_yen": 600,
-        "profit_yen": 2610
+        "profit_yen": 370
       },
-      "20261106-11-6": {
-        "key": "20261106-11-6",
+      "20261107-11-5": {
+        "key": "20261107-11-5",
+        "venue_id": "11",
+        "venue": "びわこ",
+        "race": 5,
+        "hit": true,
+        "actual": "1-3-2",
+        "payout_yen": 1070,
+        "stake_yen": 600,
+        "profit_yen": 470
+      },
+      "20261107-11-6": {
+        "key": "20261107-11-6",
         "venue_id": "11",
         "venue": "びわこ",
         "race": 6,
-        "hit": false,
-        "actual": "1-3-2",
-        "payout_yen": 990,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-11-7": {
-        "key": "20261106-11-7",
-        "venue_id": "11",
-        "venue": "びわこ",
-        "race": 7,
         "hit": true,
-        "actual": "1-2-4",
-        "payout_yen": 3530,
+        "actual": "1-3-4",
+        "payout_yen": 590,
         "stake_yen": 600,
-        "profit_yen": 2930
+        "profit_yen": -10
       },
-      "20261106-11-8": {
-        "key": "20261106-11-8",
+      "20261107-11-8": {
+        "key": "20261107-11-8",
         "venue_id": "11",
         "venue": "びわこ",
         "race": 8,
         "hit": false,
         "actual": "2-3-5",
-        "payout_yen": 7980,
+        "payout_yen": 940,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-11-9": {
-        "key": "20261106-11-9",
+      "20261107-11-9": {
+        "key": "20261107-11-9",
         "venue_id": "11",
         "venue": "びわこ",
         "race": 9,
         "hit": false,
-        "actual": "2-6-5",
-        "payout_yen": 63130,
+        "actual": "1-2-5",
+        "payout_yen": 1350,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-11-10": {
-        "key": "20261106-11-10",
+      "20261107-11-10": {
+        "key": "20261107-11-10",
         "venue_id": "11",
         "venue": "びわこ",
         "race": 10,
-        "hit": false,
-        "actual": "4-5-6",
-        "payout_yen": 2490,
+        "hit": true,
+        "actual": "1-2-5",
+        "payout_yen": 910,
         "stake_yen": 600,
-        "profit_yen": -600
+        "profit_yen": 310
       },
-      "20261106-11-11": {
-        "key": "20261106-11-11",
-        "venue_id": "11",
-        "venue": "びわこ",
-        "race": 11,
-        "hit": false,
-        "actual": "1-5-6",
-        "payout_yen": 3280,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-12-1": {
-        "key": "20261106-12-1",
-        "venue_id": "12",
-        "venue": "住之江",
-        "race": 1,
-        "hit": false,
-        "actual": "3-1-4",
-        "payout_yen": 6200,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-14-1": {
-        "key": "20261106-14-1",
+      "20261107-14-1": {
+        "key": "20261107-14-1",
         "venue_id": "14",
         "venue": "鳴門",
         "race": 1,
         "hit": false,
-        "actual": "1-3-6",
-        "payout_yen": 2820,
+        "actual": "3-2-4",
+        "payout_yen": 16860,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-14-2": {
-        "key": "20261106-14-2",
+      "20261107-14-2": {
+        "key": "20261107-14-2",
         "venue_id": "14",
         "venue": "鳴門",
         "race": 2,
         "hit": false,
-        "actual": "2-4-6",
-        "payout_yen": 7480,
+        "actual": "3-6-5",
+        "payout_yen": 7290,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-14-3": {
-        "key": "20261106-14-3",
+      "20261107-14-3": {
+        "key": "20261107-14-3",
         "venue_id": "14",
         "venue": "鳴門",
         "race": 3,
         "hit": false,
-        "actual": "2-3-4",
-        "payout_yen": 4710,
+        "actual": "4-6-5",
+        "payout_yen": 23440,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-14-4": {
-        "key": "20261106-14-4",
+      "20261107-14-4": {
+        "key": "20261107-14-4",
         "venue_id": "14",
         "venue": "鳴門",
         "race": 4,
         "hit": false,
-        "actual": "4-6-2",
-        "payout_yen": 28710,
+        "actual": "1-3-5",
+        "payout_yen": 2420,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-14-5": {
-        "key": "20261106-14-5",
+      "20261107-14-5": {
+        "key": "20261107-14-5",
         "venue_id": "14",
         "venue": "鳴門",
         "race": 5,
-        "hit": true,
-        "actual": "1-2-3",
-        "payout_yen": 770,
-        "stake_yen": 600,
-        "profit_yen": 170
-      },
-      "20261106-14-6": {
-        "key": "20261106-14-6",
-        "venue_id": "14",
-        "venue": "鳴門",
-        "race": 6,
         "hit": false,
-        "actual": "4-1-5",
-        "payout_yen": 9550,
+        "actual": "4-3-5",
+        "payout_yen": 8300,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-14-7": {
-        "key": "20261106-14-7",
+      "20261107-14-6": {
+        "key": "20261107-14-6",
+        "venue_id": "14",
+        "venue": "鳴門",
+        "race": 6,
+        "hit": true,
+        "actual": "1-3-5",
+        "payout_yen": 1270,
+        "stake_yen": 600,
+        "profit_yen": 670
+      },
+      "20261107-14-7": {
+        "key": "20261107-14-7",
         "venue_id": "14",
         "venue": "鳴門",
         "race": 7,
         "hit": false,
-        "actual": "2-4-1",
-        "payout_yen": 2450,
+        "actual": "5-2-3",
+        "payout_yen": 11160,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-14-8": {
-        "key": "20261106-14-8",
+      "20261107-14-8": {
+        "key": "20261107-14-8",
         "venue_id": "14",
         "venue": "鳴門",
         "race": 8,
         "hit": false,
-        "actual": "2-1-6",
-        "payout_yen": 3640,
+        "actual": "4-1-6",
+        "payout_yen": 55550,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-14-9": {
-        "key": "20261106-14-9",
+      "20261107-14-9": {
+        "key": "20261107-14-9",
         "venue_id": "14",
         "venue": "鳴門",
         "race": 9,
         "hit": false,
-        "actual": "1-5-2",
-        "payout_yen": 7080,
+        "actual": "2-4-1",
+        "payout_yen": 4560,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-14-10": {
-        "key": "20261106-14-10",
-        "venue_id": "14",
-        "venue": "鳴門",
-        "race": 10,
-        "hit": false,
-        "actual": "3-4-5",
-        "payout_yen": 19380,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-14-11": {
-        "key": "20261106-14-11",
-        "venue_id": "14",
-        "venue": "鳴門",
-        "race": 11,
-        "hit": false,
-        "actual": "1-2-6",
-        "payout_yen": 1710,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-17-3": {
-        "key": "20261106-17-3",
-        "venue_id": "17",
-        "venue": "宮島",
-        "race": 3,
-        "hit": false,
-        "actual": "4-6-1",
-        "payout_yen": 5710,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-17-4": {
-        "key": "20261106-17-4",
-        "venue_id": "17",
-        "venue": "宮島",
-        "race": 4,
-        "hit": true,
-        "actual": "4-3-5",
-        "payout_yen": 5970,
-        "stake_yen": 600,
-        "profit_yen": 5370
-      },
-      "20261106-17-5": {
-        "key": "20261106-17-5",
-        "venue_id": "17",
-        "venue": "宮島",
-        "race": 5,
-        "hit": true,
-        "actual": "1-2-3",
-        "payout_yen": 590,
-        "stake_yen": 600,
-        "profit_yen": -10
-      },
-      "20261106-17-7": {
-        "key": "20261106-17-7",
-        "venue_id": "17",
-        "venue": "宮島",
-        "race": 7,
-        "hit": true,
-        "actual": "1-2-3",
-        "payout_yen": 1490,
-        "stake_yen": 600,
-        "profit_yen": 890
-      },
-      "20261106-17-9": {
-        "key": "20261106-17-9",
-        "venue_id": "17",
-        "venue": "宮島",
-        "race": 9,
-        "hit": false,
-        "actual": "4-5-6",
-        "payout_yen": 11530,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-17-10": {
-        "key": "20261106-17-10",
-        "venue_id": "17",
-        "venue": "宮島",
-        "race": 10,
-        "hit": false,
-        "actual": "2-4-6",
-        "payout_yen": 106600,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-17-11": {
-        "key": "20261106-17-11",
-        "venue_id": "17",
-        "venue": "宮島",
-        "race": 11,
-        "hit": false,
-        "actual": "1-2-5",
-        "payout_yen": 560,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-17-12": {
-        "key": "20261106-17-12",
-        "venue_id": "17",
-        "venue": "宮島",
-        "race": 12,
-        "hit": false,
-        "actual": "5-2-1",
-        "payout_yen": 44700,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-22-1": {
-        "key": "20261106-22-1",
-        "venue_id": "22",
-        "venue": "福岡",
-        "race": 1,
-        "hit": true,
-        "actual": "1-2-3",
-        "payout_yen": 380,
-        "stake_yen": 600,
-        "profit_yen": -220
-      },
-      "20261106-22-5": {
-        "key": "20261106-22-5",
-        "venue_id": "22",
-        "venue": "福岡",
-        "race": 5,
-        "hit": false,
-        "actual": "1-4-3",
-        "payout_yen": 3700,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-22-9": {
-        "key": "20261106-22-9",
-        "venue_id": "22",
-        "venue": "福岡",
-        "race": 9,
-        "hit": true,
-        "actual": "1-2-5",
-        "payout_yen": 1220,
-        "stake_yen": 600,
-        "profit_yen": 620
-      },
-      "20261106-22-10": {
-        "key": "20261106-22-10",
-        "venue_id": "22",
-        "venue": "福岡",
-        "race": 10,
-        "hit": true,
-        "actual": "1-4-2",
-        "payout_yen": 1150,
-        "stake_yen": 600,
-        "profit_yen": 550
-      },
-      "20261106-22-11": {
-        "key": "20261106-22-11",
-        "venue_id": "22",
-        "venue": "福岡",
-        "race": 11,
-        "hit": false,
-        "actual": "1-5-2",
-        "payout_yen": 3250,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-23-2": {
-        "key": "20261106-23-2",
+      "20261107-23-2": {
+        "key": "20261107-23-2",
         "venue_id": "23",
         "venue": "唐津",
         "race": 2,
         "hit": false,
-        "actual": "1-2-6",
-        "payout_yen": 2050,
+        "actual": "1-4-2",
+        "payout_yen": 5380,
         "stake_yen": 600,
         "profit_yen": -600
       },
-      "20261106-23-3": {
-        "key": "20261106-23-3",
+      "20261107-23-3": {
+        "key": "20261107-23-3",
         "venue_id": "23",
         "venue": "唐津",
         "race": 3,
         "hit": true,
-        "actual": "1-6-4",
-        "payout_yen": 3590,
+        "actual": "1-2-5",
+        "payout_yen": 1290,
         "stake_yen": 600,
-        "profit_yen": 2990
+        "profit_yen": 690
       },
-      "20261106-23-4": {
-        "key": "20261106-23-4",
-        "venue_id": "23",
-        "venue": "唐津",
-        "race": 4,
-        "hit": false,
-        "actual": "2-1-4",
-        "payout_yen": 8180,
-        "stake_yen": 600,
-        "profit_yen": -600
-      },
-      "20261106-23-5": {
-        "key": "20261106-23-5",
+      "20261107-23-5": {
+        "key": "20261107-23-5",
         "venue_id": "23",
         "venue": "唐津",
         "race": 5,
-        "hit": true,
-        "actual": "1-2-3",
-        "payout_yen": 460,
+        "hit": false,
+        "actual": "1-5-2",
+        "payout_yen": 1320,
         "stake_yen": 600,
-        "profit_yen": -140
+        "profit_yen": -600
       },
-      "20261106-23-6": {
-        "key": "20261106-23-6",
+      "20261107-23-7": {
+        "key": "20261107-23-7",
         "venue_id": "23",
         "venue": "唐津",
-        "race": 6,
-        "hit": true,
-        "actual": "1-5-2",
-        "payout_yen": 2230,
+        "race": 7,
+        "hit": false,
+        "actual": "3-1-4",
+        "payout_yen": 13950,
         "stake_yen": 600,
-        "profit_yen": 1630
+        "profit_yen": -600
       },
-      "20261106-23-10": {
-        "key": "20261106-23-10",
+      "20261107-23-10": {
+        "key": "20261107-23-10",
         "venue_id": "23",
         "venue": "唐津",
         "race": 10,
         "hit": true,
-        "actual": "1-2-3",
-        "payout_yen": 580,
+        "actual": "3-4-6",
+        "payout_yen": 1320,
         "stake_yen": 600,
-        "profit_yen": -20
+        "profit_yen": 720
       },
-      "20261106-23-11": {
-        "key": "20261106-23-11",
+      "20261107-23-11": {
+        "key": "20261107-23-11",
         "venue_id": "23",
         "venue": "唐津",
         "race": 11,
-        "hit": true,
+        "hit": false,
         "actual": "1-2-4",
-        "payout_yen": 1110,
+        "payout_yen": 1220,
         "stake_yen": 600,
-        "profit_yen": 510
+        "profit_yen": -600
       },
-      "20261106-23-12": {
-        "key": "20261106-23-12",
+      "20261107-23-12": {
+        "key": "20261107-23-12",
         "venue_id": "23",
         "venue": "唐津",
         "race": 12,
-        "hit": false,
-        "actual": "1-4-6",
-        "payout_yen": 2230,
+        "hit": true,
+        "actual": "1-3-5",
+        "payout_yen": 880,
         "stake_yen": 600,
-        "profit_yen": -600
+        "profit_yen": 280
       }
     },
     "venues": [
       {
-        "venue": "唐津",
-        "samples": 8,
-        "hits": 5,
-        "hit_rate": 62.5,
-        "hit_rate_ci95": [
-          30.6,
-          86.3
-        ],
-        "net_profit_yen": 3170,
-        "profit_factor": 2.62,
-        "max_drawdown_yen": 1200,
-        "status": "好調",
-        "last_completed_race": 12
-      },
-      {
         "venue": "びわこ",
-        "samples": 10,
+        "samples": 8,
         "hits": 4,
-        "hit_rate": 40.0,
+        "hit_rate": 50.0,
         "hit_rate_ci95": [
-          16.8,
-          68.7
+          21.5,
+          78.5
         ],
-        "net_profit_yen": 2820,
-        "profit_factor": 1.78,
-        "max_drawdown_yen": 1800,
-        "status": "好調",
-        "last_completed_race": 11
-      },
-      {
-        "venue": "福岡",
-        "samples": 5,
-        "hits": 3,
-        "hit_rate": 60.0,
-        "hit_rate_ci95": [
-          23.1,
-          88.2
-        ],
-        "net_profit_yen": -250,
-        "profit_factor": 0.82,
-        "max_drawdown_yen": 1200,
+        "net_profit_yen": -1260,
+        "profit_factor": 0.48,
+        "max_drawdown_yen": 1260,
         "status": "WATCH",
-        "last_completed_race": 11
+        "last_completed_race": 10
       },
       {
         "venue": "三国",
-        "samples": 8,
+        "samples": 7,
         "hits": 3,
-        "hit_rate": 37.5,
+        "hit_rate": 42.9,
         "hit_rate_ci95": [
-          13.7,
-          69.4
+          15.8,
+          75.0
         ],
-        "net_profit_yen": -2730,
-        "profit_factor": 0.16,
-        "max_drawdown_yen": 2870,
+        "net_profit_yen": -2230,
+        "profit_factor": 0.07,
+        "max_drawdown_yen": 2380,
         "status": "WATCH",
         "last_completed_race": 12
       },
       {
-        "venue": "宮島",
-        "samples": 8,
+        "venue": "唐津",
+        "samples": 7,
         "hits": 3,
-        "hit_rate": 37.5,
+        "hit_rate": 42.9,
         "hit_rate_ci95": [
-          13.7,
-          69.4
+          15.8,
+          75.0
         ],
-        "net_profit_yen": 3250,
-        "profit_factor": 2.08,
-        "max_drawdown_yen": 2400,
-        "status": "好調",
+        "net_profit_yen": -710,
+        "profit_factor": 0.7,
+        "max_drawdown_yen": 1430,
+        "status": "WATCH",
         "last_completed_race": 12
+      },
+      {
+        "venue": "常滑",
+        "samples": 7,
+        "hits": 2,
+        "hit_rate": 28.6,
+        "hit_rate_ci95": [
+          8.2,
+          64.1
+        ],
+        "net_profit_yen": -1360,
+        "profit_factor": 0.55,
+        "max_drawdown_yen": 1800,
+        "status": "WATCH",
+        "last_completed_race": 9
       },
       {
         "venue": "戸田",
-        "samples": 10,
+        "samples": 7,
         "hits": 2,
-        "hit_rate": 20.0,
+        "hit_rate": 28.6,
         "hit_rate_ci95": [
-          5.7,
-          51.0
+          8.2,
+          64.1
         ],
-        "net_profit_yen": -4790,
-        "profit_factor": 0.01,
-        "max_drawdown_yen": 4790,
+        "net_profit_yen": -1160,
+        "profit_factor": 0.61,
+        "max_drawdown_yen": 2010,
         "status": "WATCH",
-        "last_completed_race": 11
-      },
-      {
-        "venue": "江戸川",
-        "samples": 10,
-        "hits": 2,
-        "hit_rate": 20.0,
-        "hit_rate_ci95": [
-          5.7,
-          51.0
-        ],
-        "net_profit_yen": -1980,
-        "profit_factor": 0.59,
-        "max_drawdown_yen": 4370,
-        "status": "WATCH",
-        "last_completed_race": 11
+        "last_completed_race": 9
       },
       {
         "venue": "多摩川",
+        "samples": 9,
+        "hits": 2,
+        "hit_rate": 22.2,
+        "hit_rate_ci95": [
+          6.3,
+          54.7
+        ],
+        "net_profit_yen": -3330,
+        "profit_factor": 0.25,
+        "max_drawdown_yen": 3330,
+        "status": "WATCH",
+        "last_completed_race": 10
+      },
+      {
+        "venue": "江戸川",
+        "samples": 8,
+        "hits": 1,
+        "hit_rate": 12.5,
+        "hit_rate_ci95": [
+          2.2,
+          47.1
+        ],
+        "net_profit_yen": -3150,
+        "profit_factor": 0.25,
+        "max_drawdown_yen": 3150,
+        "status": "WATCH",
+        "last_completed_race": 9
+      },
+      {
+        "venue": "鳴門",
         "samples": 9,
         "hits": 1,
         "hit_rate": 11.1,
@@ -67403,41 +67205,11 @@
           2.0,
           43.5
         ],
-        "net_profit_yen": -4880,
-        "profit_factor": 0.0,
-        "max_drawdown_yen": 4880,
+        "net_profit_yen": -4130,
+        "profit_factor": 0.14,
+        "max_drawdown_yen": 4130,
         "status": "WATCH",
-        "last_completed_race": 11
-      },
-      {
-        "venue": "鳴門",
-        "samples": 11,
-        "hits": 1,
-        "hit_rate": 9.1,
-        "hit_rate_ci95": [
-          1.6,
-          37.7
-        ],
-        "net_profit_yen": -5830,
-        "profit_factor": 0.03,
-        "max_drawdown_yen": 5830,
-        "status": "WATCH",
-        "last_completed_race": 11
-      },
-      {
-        "venue": "住之江",
-        "samples": 1,
-        "hits": 0,
-        "hit_rate": 0.0,
-        "hit_rate_ci95": [
-          0,
-          79.3
-        ],
-        "net_profit_yen": -600,
-        "profit_factor": 0.0,
-        "max_drawdown_yen": 600,
-        "status": "サンプル不足",
-        "last_completed_race": 1
+        "last_completed_race": 9
       }
     ]
   },
