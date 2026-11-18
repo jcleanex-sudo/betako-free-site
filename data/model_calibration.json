@@ -1,26 +1,26 @@
 {
-  "updated_at": "2026-11-17 11:04 JST",
+  "updated_at": "2026-11-18 10:16 JST",
   "status": "FROZEN",
   "reason": "モデル改造停止中。データ収集と検証のみ継続",
-  "samples": 17189,
+  "samples": 17321,
   "date_range": [
     "20260726",
-    "20261116"
+    "20261117"
   ],
   "minimum_activation_samples": 800,
-  "train_samples": 13751,
-  "validation_samples": 3438,
+  "train_samples": 13856,
+  "validation_samples": 3465,
   "baseline_validation": {
-    "samples": 3438,
-    "log_loss": 1.25358,
-    "top1_accuracy": 56.69,
-    "brier": 0.60559
+    "samples": 3465,
+    "log_loss": 1.25846,
+    "top1_accuracy": 56.51,
+    "brier": 0.608
   },
   "candidate_validation": {
-    "samples": 3438,
-    "log_loss": 1.25358,
-    "top1_accuracy": 56.69,
-    "brier": 0.60559
+    "samples": 3465,
+    "log_loss": 1.25846,
+    "top1_accuracy": 56.51,
+    "brier": 0.608
   },
   "active_weights": {
     "national": 4.87961,
